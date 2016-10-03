@@ -1,0 +1,27 @@
+These are not all the steps required. This is just a guide to remind the developer of how to setup the work environment.
+
+Setup
+-----
+If you don't have Google Play setup for unity, follow the instructions at https://developers.google.com/games/services/
+
+
+TO RUN ON MOBILE DEVICES (NO SIMULATORS)
+
+To run on android
+-----------------
+1. Go to unity build settings
+2. Click on Android. If not selected, switch platform to Android
+3. Build and Run
+
+To run on IOS 
+-------------
+1. Go to unity build settings
+2. Click on IOS. If not selected, switch platform to IOS
+3. In Player Settings (for iphone), 
+	- set the architecture to universal
+	- set the target to device
+4. Build
+5. install cocoapods and run pod install in the build folder
+6. In the build folder click the xcworkspace file to open xcode
+7. Set the target device to 10.0
+8. Run
