@@ -3,10 +3,41 @@ using System.Collections;
 
 public class MovementHandler : MonoBehaviour 
 {
+
+	public static float MOVT_DAMPING = 0.5f;
+
+	private static GameObject stage;
+
 	static private Vector2 stageDimensions;
 	static private Vector2 stagePadding;
 
-	public static bool isOnStage (Vector2 playerPosition, GameObject stage){
+
+	//-------------------------------------------
+	// Setup
+	//-------------------------------------------
+
+	public static void LoadStage (GameObject _stage){
+		stage = _stage;
+	}
+
+
+	//-------------------------------------------
+	// 
+	//-------------------------------------------
+
+
+	public static void doFriction (Rigidbody2D rb) {
+		if (isOnStage (rb.position)) {
+			dampMovement (rb, MOVT_DAMPING);
+		} 
+	}
+
+	public static bool isOnStage (Vector2 playerPosition){
+
+		if (stage == null) {
+			throw new UnityException("Stage object not loaded");
+		}
+
 		bool onStage = true;
 
 		//get stage texture

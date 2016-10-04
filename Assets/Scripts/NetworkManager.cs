@@ -4,14 +4,13 @@ using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.Multiplayer;
 using UnityEngine.SocialPlatforms;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using System.Text;
 
 public class NetworkManager : MonoBehaviour {
 
-	public static string HELLO_MESSAGE  = "hello";
-	public static string MESSAGE_DIVIDER  = "->";
-	public enum MessageTypes {mvmt, item};
+	public enum MessageTypes {hello, mvmt, item, state};
 
 	static NetworkListener networkListener = new NetworkListener();
 
@@ -35,10 +34,11 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	public static void ParseMessage (string senderID, byte[] msgBytes){
-		string msg = System.Text.Encoding.Default.GetString(msgBytes);
-		Debug.Log ("new message" + msg);
+		Dictionary<string, object> msg = Utilities.Deserialize(msgBytes);
 
-		if (msg.Equals (HELLO_MESSAGE)) {
+		string msgType = msg [Communicator.MESSAGE_TYPE].ToString ();
+
+		if ( msgType.Equals (MessageTypes.hello.ToString()) ) {
 			GameManager.ChooseHost (senderID);
 			GameManager.StartGame ();
 		} else {
@@ -46,42 +46,25 @@ public class NetworkManager : MonoBehaviour {
 		}
 	}
 
-	static void RouteMessage (String msg){
-		String[] msgParts = msg.Split ( new [] {MESSAGE_DIVIDER}, 2, StringSplitOptions.None);
+	static void RouteMessage (Dictionary<string, object> msg){
 
-		MessageTypes msgType = GetMessageType (msgParts);
-		String msgContent = msgParts[1];
+		string msgType = msg [Communicator.MESSAGE_TYPE].ToString ();
 
-		if (msgType == MessageTypes.mvmt) {
-			GameControls.MoveEnemy (msgContent);
-		} else if (msgType == MessageTypes.item){
+		if ( msgType.Equals (MessageTypes.mvmt.ToString()) ) {
+			//GameControls.MoveEnemy (msgContent);
+		} else if (msgType.Equals (MessageTypes.state.ToString()) ){
 			
 		}
 	
 	}
 
-	public static new void SendMessage (String msg){
-		byte[] msgBytes = Encoding.ASCII.GetBytes (msg);
+	public static new void SendMessage (byte[] msgBytes){
 		PlayGamesPlatform.Instance.RealTime.SendMessageToAll (false, msgBytes);
 	}
-
-	public static void SendMessage (bool reliable, String msg){
-		byte[] msgBytes = Encoding.ASCII.GetBytes (msg);
-		PlayGamesPlatform.Instance.RealTime.SendMessageToAll (reliable, msgBytes);
-	}
-
 
 	//-------------------------------------------
 	// Utilities
 	//-------------------------------------------
 
-
-	static MessageTypes GetMessageType(String[] msgParts){
-		if (MessageTypes.item.ToString().Equals (msgParts [0]) ) {
-			return MessageTypes.item;
-		} else { //if (MessageTypes.mvmt.CompareTo (msgParts [0]) == 0){
-			return MessageTypes.mvmt;
-		}
-	}
 
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 public class GameControls : MonoBehaviour {
@@ -10,11 +11,13 @@ public class GameControls : MonoBehaviour {
 
 	public GameObject stage;
 	public GameObject enemy;
+	public GameObject princess;
 
 	bool touchStarted = false;
 	Vector3 movtStartPosition;
 
 	Rigidbody2D playerBody;
+	Rigidbody2D princessBody;
 
 	//static GameObject enemy;
 	static Rigidbody2D enemyBody;
@@ -23,11 +26,20 @@ public class GameControls : MonoBehaviour {
 	void Start () {
 		playerBody = GetComponent<Rigidbody2D> ();
 		enemyBody = enemy.GetComponent<Rigidbody2D> ();
+
+		MovementHandler.LoadStage (stage);
 	}
 
 	void FixedUpdate () {
+		if (GameManager.isHost) {
+			MovementHandler.doFriction (playerBody);
+			MovementHandler.doFriction (enemyBody);
+			MovementHandler.doFriction (princessBody);
 
-		if (MovementHandler.isOnStage (transform.position, stage)) {
+			Communicator.ShareState (playerBody, enemyBody, princessBody ); 
+		}
+
+		if (MovementHandler.isOnStage (transform.position)) {
 			//items and stuff
 		} 
 	}
@@ -54,16 +66,12 @@ public class GameControls : MonoBehaviour {
 
 	void MovePlayer (Vector3 launchDir){
 		Vector3 impulse = calculateImpulse (launchDir);
-		ShareMovement (impulse);
-		playerBody.AddForce (impulse, ForceMode2D.Impulse);
-	}
 
-	void ShareMovement (Vector3 impulse){
-		string msg = NetworkManager.MessageTypes.mvmt.ToString () +
-		             NetworkManager.MESSAGE_DIVIDER +
-		             Utilities.SerializeVector3 (impulse);
-
-		NetworkManager.SendMessage (msg);
+		if (GameManager.isHost) {
+			playerBody.AddForce (impulse, ForceMode2D.Impulse);
+		} else {
+			Communicator.ShareMovement (impulse);
+		}
 	}
 
 
@@ -71,8 +79,8 @@ public class GameControls : MonoBehaviour {
 	// Handle opponent input
 	//-------------------------------------------
 
-	public static void MoveEnemy (string rawImpulse){
-		Vector3 impulse = Utilities.DeserializeVector3(rawImpulse);
+	public static void MoveEnemy (Dictionary<string, object> networkData){
+		Vector3 impulse = (Vector3) networkData [Communicator.IMPULSE];
 		impulse.x  = impulse.x * -1; //enemy is placed in opp side of screen;
 		enemyBody.AddForce (impulse, ForceMode2D.Impulse);
 	}

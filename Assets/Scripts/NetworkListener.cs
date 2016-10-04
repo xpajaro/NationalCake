@@ -19,7 +19,7 @@ public class NetworkListener : RealTimeMultiplayerListener {
 	public void OnRoomConnected (bool success)
 	{
 		if (success) {
-			NetworkManager.SendMessage (NetworkManager.HELLO_MESSAGE);
+			Communicator.SayHello ();
 		} else {
 			// Error!
 			// ...show error message to user...

@@ -1,26 +1,32 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class Utilities : MonoBehaviour{
-		
-	public static string SerializeVector3 (Vector3 v)
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.Append(v.x).Append(" ").Append(v.y).Append(" ").Append(v.z) ;
 
-		return sb.ToString();
+	static BinaryFormatter binFormatter = new BinaryFormatter ();
+	static MemoryStream mStream = new MemoryStream ();
+
+	//-------------------------------------------
+	// Serialization
+	//-------------------------------------------
+
+
+	public static byte[] Serialize (object obj){
+		binFormatter.Serialize (mStream, obj);
+		return mStream.ToArray ();
 	}
 
-	public static Vector3 DeserializeVector3 (string v)
-	{
-		string[] values = v.Split(' ');
-		Vector3 result = new Vector3(float.Parse(values[0]), 
-			float.Parse(values[1]), 
-			float.Parse(values[2]));
+	public static Dictionary<string, object> Deserialize (byte[] input){	
+		mStream.Write (input, 0, input.Length);
+		mStream.Position = 0;
 
-		return result;
+		Dictionary<string, object> data = binFormatter.Deserialize(mStream) as Dictionary<string, object> ;
+		return data;
 	}
 }
 
