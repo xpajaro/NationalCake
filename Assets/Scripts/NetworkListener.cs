@@ -6,7 +6,12 @@ using UnityEngine.SocialPlatforms;
 using System.Collections;
 
 public class NetworkListener : RealTimeMultiplayerListener {
-	private bool showingWaitingRoom = false;
+	bool showingWaitingRoom = false;
+	Communicator communicator;
+
+	public NetworkListener(){
+		communicator = new Communicator ();
+	}
 
 	public void OnRoomSetupProgress(float progress) {
 		// show the default waiting room.
@@ -19,7 +24,7 @@ public class NetworkListener : RealTimeMultiplayerListener {
 	public void OnRoomConnected (bool success)
 	{
 		if (success) {
-			Communicator.SayHello ();
+			communicator.SayHello ();
 		} else {
 			// Error!
 			// ...show error message to user...
@@ -29,7 +34,8 @@ public class NetworkListener : RealTimeMultiplayerListener {
 
 	public void OnRealTimeMessageReceived (bool isReliable, string senderID, byte[] data)
 	{
-		NetworkManager.ParseMessage (senderID, data);
+		Debug.Log ("message recieved");
+		communicator.ParseMessage (senderID, data);
 	}
 
 	public void OnLeftRoom ()

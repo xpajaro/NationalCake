@@ -9,45 +9,43 @@ public class GameControls : MonoBehaviour {
 	public float MOVT_CAP = 150;
 	public float MOVT_CAP_EFFECTIVE_RATIO = 50;
 
-	public GameObject stage;
-	public GameObject enemy;
-	public GameObject princess;
+	public GameObject stage, enemy, cake;
 
 	bool touchStarted = false;
 	Vector3 movtStartPosition;
 
-	Rigidbody2D playerBody;
-	Rigidbody2D princessBody;
+	static Rigidbody2D playerBody, cakeBody, enemyBody;
 
-	//static GameObject enemy;
-	static Rigidbody2D enemyBody;
+	Communicator communicator;
 
 
 	void Start () {
 		playerBody = GetComponent<Rigidbody2D> ();
 		enemyBody = enemy.GetComponent<Rigidbody2D> ();
+		cakeBody = cake.GetComponent<Rigidbody2D> ();
 
 		MovementHandler.LoadStage (stage);
+
+		communicator = new Communicator ();
 	}
 
 	void FixedUpdate () {
 		if (GameManager.isHost) {
-			MovementHandler.doFriction (playerBody);
-			MovementHandler.doFriction (enemyBody);
-			MovementHandler.doFriction (princessBody);
-
-			Communicator.ShareState (playerBody, enemyBody, princessBody ); 
+			implementFriction ();
+			communicator.ShareActorState (playerBody, enemyBody, cakeBody ); 
 		}
 
-		if (MovementHandler.isOnStage (transform.position)) {
-			//items and stuff
-		} 
+		//remember items and stuff
 	}
 		
 
 
 	//-------------------------------------------
-	// Handle player input
+	// Handle player input -- consider making this screen touch not player touch
+	//-------------------------------------------
+	// host player decided how movement happens
+	// client player sends impulse to host and host returns game state
+	// game state contains all positions & velocities
 	//-------------------------------------------
 
 	void OnMouseDown () {
@@ -70,13 +68,13 @@ public class GameControls : MonoBehaviour {
 		if (GameManager.isHost) {
 			playerBody.AddForce (impulse, ForceMode2D.Impulse);
 		} else {
-			Communicator.ShareMovement (impulse);
+			communicator.ShareMovement (impulse);
 		}
 	}
 
 
 	//-------------------------------------------
-	// Handle opponent input
+	// Handle opponent input (host only)
 	//-------------------------------------------
 
 	public static void MoveEnemy (Dictionary<string, object> networkData){
@@ -85,12 +83,29 @@ public class GameControls : MonoBehaviour {
 		enemyBody.AddForce (impulse, ForceMode2D.Impulse);
 	}
 
+
+	//-------------------------------------------
+	// Handle new network game state (client only)
+	// actors are player, enemy and cake (movable game elements with physics)
+	//-------------------------------------------
+
+	public static void UpdateActors (Dictionary<string, object> networkData){
+		//player is host, //enemy is client
+		if (!GameManager.isHost) {
+			ActorState actorState = (ActorState) networkData [Communicator.ACTOR_STATE];
+
+			playerBody.MovePosition (actorState.EnemyPosition) ;
+			enemyBody.MovePosition (actorState.PlayerPosition) ;
+			cakeBody.MovePosition (actorState.CakePosition) ;
+		}
+
+	}
+
 	//-------------------------------------------
 	// movt calculations
 	//-------------------------------------------
 
 	Vector3 calculateLaunchDirection (Vector3 movtEndPoint){
-
 		Vector3 launchDir =  movtStartPosition - Input.mousePosition ;
 
 		if (launchDir.magnitude > MOVT_CAP) {
@@ -104,6 +119,11 @@ public class GameControls : MonoBehaviour {
 		return launchDir * MOVT_SPEED; 
 	}
 
+	void implementFriction(){
+		MovementHandler.doFriction (playerBody);
+		MovementHandler.doFriction (enemyBody);
+		MovementHandler.doFriction (cakeBody);
+	}
 
 
 }
