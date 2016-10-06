@@ -22,7 +22,7 @@ public class MovementHandler : MonoBehaviour
 
 
 	//-------------------------------------------
-	// 
+	// Logic
 	//-------------------------------------------
 
 
@@ -32,6 +32,9 @@ public class MovementHandler : MonoBehaviour
 		} 
 	}
 
+	static SpriteRenderer stageRenderer;
+	static Texture2D texture ;
+	static Color color ;
 	public static bool isOnStage (Vector2 playerPosition){
 
 		if (stage == null) {
@@ -41,11 +44,11 @@ public class MovementHandler : MonoBehaviour
 		bool onStage = true;
 
 		//get stage texture
-		SpriteRenderer renderer = stage.GetComponent<SpriteRenderer>();
-		Texture2D texture = renderer.sprite.texture ;
+		stageRenderer = stage.GetComponent<SpriteRenderer>();
+		texture = stageRenderer.sprite.texture ;
 
-		playerPosition = getLocalPlayerPosition (playerPosition, renderer, texture);
-		Color color = texture.GetPixel ((int)playerPosition.x, (int)playerPosition.y);
+		playerPosition = getLocalPlayerPosition (playerPosition, stageRenderer, texture);
+		color = texture.GetPixel ((int)playerPosition.x, (int)playerPosition.y);
 
 		if (color.a == 0){
 			onStage = false;
@@ -69,13 +72,17 @@ public class MovementHandler : MonoBehaviour
 	// Utilities
 	//-------------------------------------------
 
+	static Vector2 scaledPlayerPosition;
 	static Vector2 getLocalPlayerPosition (Vector2 playerPosition, Renderer renderer, Texture2D texture){
 		
 		//convert unity world coordinates to original stage sprite coords
 		stagePadding = getStagePadding (renderer.bounds.extents);
-		stageDimensions = getStageDimensions (renderer.transform.position);
 
-		Vector2 scaledPlayerPosition = getPositionInScale (playerPosition, texture);
+		if (stageDimensions == Vector2.zero) {
+			stageDimensions = getStageDimensions (renderer.transform.position);
+		}
+
+		scaledPlayerPosition = getPositionInScale (playerPosition, texture);
 
 		return  scaledPlayerPosition;
 
@@ -100,8 +107,9 @@ public class MovementHandler : MonoBehaviour
 		return tempStageDimensions;
 	}
 
+
+	static Vector2 positionInScale = new Vector2 ();
 	static Vector2 getPositionInScale(Vector2 position, Texture2D stageTexture){
-		Vector2 positionInScale = new Vector2 ();
 
 		position = Camera.main.WorldToScreenPoint (position);
 

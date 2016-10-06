@@ -8,13 +8,9 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 
-public class NetworkManager : MonoBehaviour {
+public class NetworkManager  {
 
-	NetworkListener networkListener ;
-
-	public NetworkManager(){
-		networkListener = new NetworkListener();
-	}
+	static NetworkListener networkListener = new NetworkListener();
 
 	public void InvitePlayer (){
 		Debug.Log ("invite player");
@@ -29,15 +25,17 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	public void CheckInbox (){
-
+		Debug.Log ("check inbox");
 		Social.localUser.Authenticate ((bool success) => {
-			PlayGamesPlatform.Instance.RealTime.AcceptFromInbox(networkListener);
+			PlayGamesPlatform.Instance.RealTime.AcceptFromInbox (networkListener);
 		});
+		Debug.Log ("check inbox done");
 	}
 
 
 	public void SendMessage (byte[] msgBytes){
 		Debug.Log ("send message");
+		//Debug.Log (Utilities.PrintBytes (msgBytes));
 		PlayGamesPlatform.Instance.RealTime.SendMessageToAll (false, msgBytes);
 		Debug.Log ("send message done");
 	}

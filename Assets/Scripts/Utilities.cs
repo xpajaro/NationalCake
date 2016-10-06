@@ -8,31 +8,52 @@ using System.IO;
 
 public class Utilities : MonoBehaviour{
 
-	static BinaryFormatter binFormatter = new BinaryFormatter ();
-	static MemoryStream mStream = new MemoryStream ();
+	public static StringBuilder ClearStringBuilder ( StringBuilder value)
+	{
+		value.Length = 0;
+		value.Capacity = 0;
 
-	//-------------------------------------------
-	// Serialization
-	//-------------------------------------------
-
-
-	public static byte[] Serialize (object obj){
-		Debug.Log ("serialize");
-		binFormatter.Serialize (mStream, obj);
-		Debug.Log ("serialize done");
-		return mStream.ToArray ();
+		return value;
 	}
 
-	public static Dictionary<string, object> Deserialize (byte[] input){	
+	public static string Vector3ToString (Vector3 v){
+		Debug.Log ("vector3 to string");
+		StringBuilder sb = new StringBuilder();
+		sb.Append(v.x).Append(" ").Append(v.y).Append(" ").Append(v.z) ;
 
-		Debug.Log ("deserialize");
-		mStream.Write (input, 0, input.Length);
-		mStream.Position = 0;
-
-		Dictionary<string, object> data = binFormatter.Deserialize(mStream) as Dictionary<string, object> ;
-
-		Debug.Log ("deserialize done");
-		return data;
+		Debug.Log ("vector3 to string done");
+		return sb.ToString();
 	}
+
+	public static void StringToVector3 (string v, ref Vector3 vectorHolder){
+		Debug.Log ("string to vector3");
+		string[] values = v.Split(' ');
+
+		vectorHolder.x = float.Parse(values[0]); 
+		vectorHolder.y = float.Parse(values[1]);
+		vectorHolder.z = float.Parse(values[2]);
+
+		Debug.Log ("string to vector3 done");
+	}
+
+	public static string PrintBytes( byte[] byteArray)
+	{
+		Debug.Log ("print bytes");
+		var sb = new StringBuilder("new byte[] { ");
+		for(var i = 0; i < byteArray.Length;i++)
+		{
+			var b = byteArray[i];
+			sb.Append(b);
+			if (i < byteArray.Length -1)
+			{
+				sb.Append(", ");
+			}
+		}
+		sb.Append(" }");
+
+		Debug.Log ("print bytes done");
+		return sb.ToString();
+	}
+
 }
 

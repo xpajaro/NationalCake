@@ -3,15 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 //massages data to and from the network interfaces
-public class Communicator : MonoBehaviour {
+public class Communicator  {
 
 	public static string MESSAGE_TYPE = "MESSAGE_TYPE" ;
 	public static string IMPULSE = "CONTENT" ;
 	public static string ACTOR_STATE = "ACTOR_STATE" ;
 
-	enum MessageTypes {hello, mvmt, item, state};
+	public enum MessageTypes {HELLO, MOVEMENT, ITEM, STATE};
 
 	NetworkManager networkManager;
+	GameUpdates gameUpdates;
 
 	public Communicator(){
 		networkManager = new NetworkManager();
@@ -22,32 +23,22 @@ public class Communicator : MonoBehaviour {
 	//-------------------------------------------
 
 	public void SayHello (){
-		Dictionary<string, object> msg = new Dictionary<string, object> ();
-		msg.Add (MESSAGE_TYPE, MessageTypes.hello.ToString() );
-
-		Debug.Log ("hello sent");
-		networkManager.SendMessage ( Utilities.Serialize(msg) );
+		Debug.Log ("say hello");
+		networkManager.SendMessage ( Serialization.SerializeHello () );
+		Debug.Log ("say hello done");
 	}
 
 	public void ShareMovement (Vector3 impulse){
-		Dictionary<string, object> msg = new Dictionary<string, object> ();
-		msg.Add (MESSAGE_TYPE, MessageTypes.mvmt);
-		msg.Add (IMPULSE, impulse);
-
-		networkManager.SendMessage ( Utilities.Serialize(msg) );
+		Debug.Log ("share movement");
+		networkManager.SendMessage ( Serialization.SerializeMovement (impulse) );
+		Debug.Log ("share movement done");
 	}
 
 	//actors are player, enemy and cake (movable game elements with physics)
-	public void ShareActorState (Rigidbody2D playerBody, Rigidbody2D enemyBody, Rigidbody2D cakeBody ){
-		Dictionary<string, object> msg = new Dictionary<string, object> ();
-
-		ActorState actorState = new ActorState ();
-		actorState.preparePayload (playerBody, enemyBody, cakeBody);
-
-		msg.Add (MESSAGE_TYPE, MessageTypes.mvmt);
-		msg.Add (ACTOR_STATE, actorState);
-
-		networkManager.SendMessage ( Utilities.Serialize(msg) );
+	public void ShareState (Rigidbody2D playerBody, Rigidbody2D enemyBody, Rigidbody2D cakeBody ){
+		Debug.Log ("share state");
+		networkManager.SendMessage ( Serialization.SerializeState ( playerBody, enemyBody, cakeBody ) );
+		Debug.Log ("share state done");
 	}
 
 
@@ -55,33 +46,39 @@ public class Communicator : MonoBehaviour {
 	// Receiving
 	//-------------------------------------------
 
+
 	public void ParseMessage (string senderID, byte[] msgBytes){
-		Dictionary<string, object> msg = Utilities.Deserialize(msgBytes);
-		Debug.Log ("parsing message");
+		Debug.Log ("parse message");
+		string msg = Serialization.Deserialize (msgBytes);
 		Debug.Log (msg);
 
-		string msgType = msg [Communicator.MESSAGE_TYPE].ToString ();
-		Debug.Log ("message type");
-		Debug.Log (msgType);
+		string[] dataFields = Serialization.GetDataFields (msg);
 
-		if ( msgType.Equals (MessageTypes.hello.ToString()) ) {
+		MessageTypes msgType = Serialization.GetMessageType (dataFields);
+		Debug.Log ("message type");
+		Debug.Log (msgType.ToString());
+
+		if ( msgType == MessageTypes.HELLO) {
 			GameManager.ChooseHost (senderID);
 			GameManager.StartGame ();
-		} else {
-			RouteMessage (msg);
+		} else { //game has started
+			gameUpdates = new GameUpdates (); //we can load game updates now, since stage is set
+			RouteMessage (msgType, dataFields);
 		}
 
-		Debug.Log ("parsing message done");
+		Debug.Log ("parse message done");
 	}
 
-	public void RouteMessage (Dictionary<string, object> msg){
+	public void RouteMessage (MessageTypes msgType, string[] dataFields ){
 		Debug.Log ("route message");
-		string msgType = msg [Communicator.MESSAGE_TYPE].ToString ();
 
-		if ( msgType.Equals (MessageTypes.mvmt.ToString()) ) {
-			GameControls.MoveEnemy (msg);
-		} else if (msgType.Equals (MessageTypes.state.ToString()) ){
-			GameControls.UpdateActors (msg);
+		if (  msgType == MessageTypes.MOVEMENT ) {
+			Vector2 impulse = Serialization.GetImpulse (dataFields);
+			gameUpdates.MoveEnemy (impulse);
+
+		} else if (msgType == MessageTypes.STATE ){
+			ActorState state = Serialization.GetState (dataFields);
+			gameUpdates.UpdateActors (state);
 		}
 		Debug.Log ("route message done");
 	}

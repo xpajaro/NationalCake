@@ -14,12 +14,21 @@ public class GameControls : MonoBehaviour {
 	bool touchStarted = false;
 	Vector3 movtStartPosition;
 
-	static Rigidbody2D playerBody, cakeBody, enemyBody;
+	Rigidbody2D playerBody, cakeBody, enemyBody;
 
 	Communicator communicator;
 
+	float _nextBroadcastTime = 0;
+
 
 	void Start () {
+
+		//store all important refs to game elements first
+		GameElements.Player = this.gameObject;
+		GameElements.Enemy = enemy;
+		GameElements.Cake = cake;
+		GameElements.Stage = stage;
+
 		playerBody = GetComponent<Rigidbody2D> ();
 		enemyBody = enemy.GetComponent<Rigidbody2D> ();
 		cakeBody = cake.GetComponent<Rigidbody2D> ();
@@ -29,10 +38,16 @@ public class GameControls : MonoBehaviour {
 		communicator = new Communicator ();
 	}
 
+	void Update () {
+		if (Time.time > _nextBroadcastTime) {
+			communicator.ShareState (playerBody, enemyBody, cakeBody); 
+			_nextBroadcastTime = Time.time + .30f;
+		}
+	}
+
 	void FixedUpdate () {
 		if (GameManager.isHost) {
 			implementFriction ();
-			communicator.ShareActorState (playerBody, enemyBody, cakeBody ); 
 		}
 
 		//remember items and stuff
@@ -73,33 +88,6 @@ public class GameControls : MonoBehaviour {
 	}
 
 
-	//-------------------------------------------
-	// Handle opponent input (host only)
-	//-------------------------------------------
-
-	public static void MoveEnemy (Dictionary<string, object> networkData){
-		Vector3 impulse = (Vector3) networkData [Communicator.IMPULSE];
-		impulse.x  = impulse.x * -1; //enemy is placed in opp side of screen;
-		enemyBody.AddForce (impulse, ForceMode2D.Impulse);
-	}
-
-
-	//-------------------------------------------
-	// Handle new network game state (client only)
-	// actors are player, enemy and cake (movable game elements with physics)
-	//-------------------------------------------
-
-	public static void UpdateActors (Dictionary<string, object> networkData){
-		//player is host, //enemy is client
-		if (!GameManager.isHost) {
-			ActorState actorState = (ActorState) networkData [Communicator.ACTOR_STATE];
-
-			playerBody.MovePosition (actorState.EnemyPosition) ;
-			enemyBody.MovePosition (actorState.PlayerPosition) ;
-			cakeBody.MovePosition (actorState.CakePosition) ;
-		}
-
-	}
 
 	//-------------------------------------------
 	// movt calculations
