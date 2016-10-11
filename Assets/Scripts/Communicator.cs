@@ -11,11 +11,17 @@ public class Communicator  {
 
 	public enum MessageTypes {HELLO, MOVEMENT, ITEM, STATE};
 
-	NetworkManager networkManager;
 	GameUpdates gameUpdates;
 
-	public Communicator(){
-		networkManager = new NetworkManager();
+	//make singleton
+	public static Communicator _instance;
+	public static Communicator Instance {
+		get {
+			if (_instance == null) {
+				_instance = new Communicator();
+			}
+			return _instance;
+		}
 	}
 
 	//-------------------------------------------
@@ -24,20 +30,20 @@ public class Communicator  {
 
 	public void SayHello (){
 		Debug.Log ("say hello");
-		networkManager.SendMessage ( Serialization.SerializeHello () );
+		NetworkManager.Instance.SendMessage ( Serialization.SerializeHello () );
 		Debug.Log ("say hello done");
 	}
 
 	public void ShareMovement (Vector3 impulse){
 		Debug.Log ("share movement");
-		networkManager.SendMessage ( Serialization.SerializeMovement (impulse) );
+		NetworkManager.Instance.SendMessage ( Serialization.SerializeMovement (impulse) );
 		Debug.Log ("share movement done");
 	}
 
 	//actors are player, enemy and cake (movable game elements with physics)
 	public void ShareState (Rigidbody2D playerBody, Rigidbody2D enemyBody, Rigidbody2D cakeBody ){
 		Debug.Log ("share state");
-		networkManager.SendMessage ( Serialization.SerializeState ( playerBody, enemyBody, cakeBody ) );
+		NetworkManager.Instance.SendMessage ( Serialization.SerializeState ( playerBody, enemyBody, cakeBody ) );
 		Debug.Log ("share state done");
 	}
 

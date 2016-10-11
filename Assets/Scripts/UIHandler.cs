@@ -5,17 +5,15 @@ using System;
 
 public class UIHandler : MonoBehaviour {
 
-	NetworkManager networkManager = new NetworkManager ();	
-
 	public void InviteUser (){
 		Debug.Log ("invite player");
-		networkManager.InvitePlayer();
+		NetworkManager.Instance.InvitePlayer ();
 		Debug.Log ("invite player done");
 	}
 
 	public void CheckInbox (){
 		Debug.Log ("check inbox");
-		networkManager.CheckInbox();
+		NetworkManager.Instance.CheckInbox ();
 		Debug.Log ("check inbox done");
 	}
 

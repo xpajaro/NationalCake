@@ -10,6 +10,7 @@ public class GameSetup : MonoBehaviour {
 
 	void Start (){
 		SetupGooglePlay ();
+		SignIn ();
 	}
 		
 	static void SetupGooglePlay (){
@@ -20,6 +21,10 @@ public class GameSetup : MonoBehaviour {
 		PlayGamesPlatform.DebugLogEnabled = true;
 		PlayGamesPlatform.Activate (); // Activate the Google Play Games platform
 		Debug.Log ("setup google play done");
+	}
+
+	static void SignIn(){
+		NetworkManager.Instance.SignIn ();
 	}
 
 }
