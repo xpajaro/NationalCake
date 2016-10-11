@@ -7,11 +7,7 @@ using System.Collections;
 
 public class NetworkListener : RealTimeMultiplayerListener {
 	bool showingWaitingRoom = false;
-	Communicator communicator;
 
-	public NetworkListener(){
-		communicator = new Communicator ();
-	}
 
 	public void OnRoomSetupProgress(float progress) {
 		// show the default waiting room.
@@ -26,7 +22,7 @@ public class NetworkListener : RealTimeMultiplayerListener {
 	{
 		Debug.Log ("on room connected");
 		if (success) {
-			communicator.SayHello ();
+			Communicator.Instance.SayHello ();
 		} else {
 			// Error!
 			// ...show error message to user...
@@ -38,7 +34,7 @@ public class NetworkListener : RealTimeMultiplayerListener {
 	{
 		Debug.Log ("on realtime message recieved");
 		//Debug.Log (System.Text.Encoding.UTF8.GetString(data));
-		communicator.ParseMessage (senderID, data);
+		Communicator.Instance.ParseMessage (senderID, data);
 	}
 
 	public void OnLeftRoom ()
