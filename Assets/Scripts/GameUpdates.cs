@@ -1,22 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameUpdates {
+public class GameUpdates : MonoBehaviour {
 
+	public GameObject player, enemy, cake;
 	Rigidbody2D playerBody, cakeBody, enemyBody;
 
-	public GameUpdates (){
-		playerBody = GameElements.Player.GetComponent<Rigidbody2D> ();
-		enemyBody = GameElements.Enemy.GetComponent<Rigidbody2D> ();
-		cakeBody = GameElements.Cake.GetComponent<Rigidbody2D> ();
+	float _nextBroadcastTime = 0;
+
+	void Start (){
+		playerBody = player.GetComponent<Rigidbody2D> ();
+		enemyBody = enemy.GetComponent<Rigidbody2D> ();
+		cakeBody = cake.GetComponent<Rigidbody2D> ();
+
+		Communicator.Instance.gameUpdates = this;
 	}
+
+
+
+	void Update () {
+		if (GameSetup.isHost) {
+			if (Time.time > _nextBroadcastTime) {
+				Communicator.Instance.ShareState (playerBody, enemyBody, cakeBody); 
+				_nextBroadcastTime = Time.time + .30f;
+			}
+		}
+	}	
+
 
 	//-------------------------------------------
 	// Handle opponent input (host only)
 	//-------------------------------------------
 
 	public void MoveEnemy (Vector3 impulse){
-		impulse.x  = impulse.x * -1; //enemy is placed in opp side of screen;
+		impulse = Utilities.FlipX (impulse); //enemy is placed in opp side of screen;
 		enemyBody.AddForce (impulse, ForceMode2D.Impulse);
 	}
 
@@ -27,8 +44,10 @@ public class GameUpdates {
 	//-------------------------------------------
 
 	public void UpdateActors (ActorState state){
-		state = FlipPlayersOnClient (state);
+		
 		if (!GameSetup.isHost) {
+			state = SwitchPlayers (state);
+
 			playerBody.MovePosition (state.PlayerPosition) ;
 			enemyBody.MovePosition (state.EnemyPosition) ;
 			cakeBody.MovePosition (state.CakePosition) ;
@@ -37,21 +56,13 @@ public class GameUpdates {
 	}
 
 
-	ActorState FlipPlayersOnClient (ActorState oldState){
-
-		ActorState state = new ActorState();
-
-		Vector3 positionHolder = oldState.EnemyPosition;
-		positionHolder.x *= -1;
-		state.PlayerPosition = positionHolder;
-		Debug.Log ("final position player " + state.PlayerPosition.ToString ("G4"));
-
+	Vector3 positionHolder;
+	ActorState SwitchPlayers (ActorState oldState){
 		positionHolder = oldState.PlayerPosition;
-		positionHolder.x *= -1;
-		state.EnemyPosition = positionHolder;
-		Debug.Log ("final position player " + state.EnemyPosition.ToString ("G4"));
+		oldState.PlayerPosition = Utilities.FlipX (oldState.EnemyPosition);
+		oldState.EnemyPosition = Utilities.FlipX (positionHolder);
 
-		return state;
+		return oldState;
 	}
 
 }

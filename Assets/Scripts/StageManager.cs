@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MovementHandler : MonoBehaviour 
+public class StageManager : MonoBehaviour 
 {
-	//TODO separate friction and onstage
-	//move onstage to some sort of world to local utility
 	public float MOVT_DAMPING = 0.5f;
-
 
 	//for elements to do friction on
 	public GameObject cake, player, enemy;
@@ -15,35 +12,32 @@ public class MovementHandler : MonoBehaviour
 	static Texture2D stageTexture;
 	static WorldConverter converter;
 
-	float _nextBroadcastTime = 0;
-
-
-
-	//-------------------------------------------
-	// Logic
-	//-------------------------------------------
 
 
 	void Start(){
-		playerBody = player.GetComponent<Rigidbody2D> ();
-		enemyBody = enemy.GetComponent<Rigidbody2D> ();
-		cakeBody = cake.GetComponent<Rigidbody2D> ();
+		if (GameSetup.isHost) {
+			playerBody = player.GetComponent<Rigidbody2D> ();
+			enemyBody = enemy.GetComponent<Rigidbody2D> ();
+			cakeBody = cake.GetComponent<Rigidbody2D> ();
 
-		converter = new WorldConverter (this.gameObject);
+			converter = new WorldConverter (this.gameObject);
 
-		stageTexture = GetComponent<SpriteRenderer> ().sprite.texture;
+			stageTexture = GetComponent<SpriteRenderer> ().sprite.texture;
+		}
 
-		StartFriction ();
 	}
 
 
 	void Update () {
-		if (Time.time > _nextBroadcastTime) {
-			Communicator.Instance.ShareState (playerBody, enemyBody, cakeBody); 
-			_nextBroadcastTime = Time.time + .30f;
+		if (GameSetup.isHost) {
+			StartFriction ();
 		}
 	}		
 
+
+	//-------------------------------------------
+	// Friction
+	//-------------------------------------------
 
 	void StartFriction () {
 		StartFrictionOnElement (playerBody);
@@ -61,8 +55,11 @@ public class MovementHandler : MonoBehaviour
 	public static bool isOnStage (Vector2 playerPosition){
 		bool onStage = true;
 		playerPosition = converter.getPositionInWorld (playerPosition);
+		Debug.Log (playerPosition);
+
 		if (Utilities.GetAlphaAtPosition (playerPosition, stageTexture) == 0){
 			onStage = false;
+			Debug.Log (onStage.ToString());
 		} 
 
 		return onStage;

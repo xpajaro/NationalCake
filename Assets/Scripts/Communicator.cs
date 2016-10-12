@@ -11,7 +11,7 @@ public class Communicator  {
 
 	public enum MessageTypes {HELLO, MOVEMENT, ITEM, STATE};
 
-	GameUpdates gameUpdates;
+	public GameUpdates gameUpdates;
 
 	//make singleton
 	public static Communicator _instance;
@@ -68,8 +68,9 @@ public class Communicator  {
 			GameSetup.ChooseHost (senderID);
 			GameSetup.StartGame ();
 		} else { //game has started
-			gameUpdates = new GameUpdates (); //we can load game updates now, since stage is set
-			RouteMessage (msgType, dataFields);
+			if (gameUpdates != null) { //we can load game updates now, since stage is set
+				RouteMessage (msgType, dataFields);
+			}
 		}
 
 		Debug.Log ("parse message done");
