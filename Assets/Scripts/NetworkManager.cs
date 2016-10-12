@@ -59,11 +59,14 @@ public class NetworkManager  {
 		Debug.Log ("check inbox done");
 	}
 
+	public void SendFastMessage (byte[] msgBytes){
+		SendMessage (msgBytes, false);
+	}
 
-	public void SendMessage (byte[] msgBytes){
+
+	public void SendMessage (byte[] msgBytes, bool reliable){
 		Debug.Log ("send message");
-		//Debug.Log (Utilities.PrintBytes (msgBytes));
-		PlayGamesPlatform.Instance.RealTime.SendMessageToAll (false, msgBytes);
+		PlayGamesPlatform.Instance.RealTime.SendMessageToAll (reliable, msgBytes);
 		Debug.Log ("send message done");
 	}
 

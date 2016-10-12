@@ -6,7 +6,8 @@ public class GameUpdates : MonoBehaviour {
 	public GameObject player, enemy, cake;
 	Rigidbody2D playerBody, cakeBody, enemyBody;
 
-	float _nextBroadcastTime = 0;
+	float nextBroadcastTime = 0;
+	float timeGap = .6f;
 
 	void Start (){
 		playerBody = player.GetComponent<Rigidbody2D> ();
@@ -18,11 +19,11 @@ public class GameUpdates : MonoBehaviour {
 
 
 
-	void Update () {
+	void FixedUpdate () {
 		if (GameSetup.isHost) {
-			if (Time.time > _nextBroadcastTime) {
+			if (Time.time > nextBroadcastTime) {
 				Communicator.Instance.ShareState (playerBody, enemyBody, cakeBody); 
-				_nextBroadcastTime = Time.time + .30f;
+				nextBroadcastTime = Time.time + timeGap;
 			}
 		}
 	}	

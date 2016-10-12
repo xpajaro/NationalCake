@@ -10,6 +10,10 @@ public class Communicator  {
 	public static string ACTOR_STATE = "ACTOR_STATE" ;
 
 	public enum MessageTypes {HELLO, MOVEMENT, ITEM, STATE};
+	public static char MESSAGE_TYPE_HELLO = 'H';
+	public static char MESSAGE_TYPE_MOVEMENT = 'M';
+	public static char MESSAGE_TYPE_ITEM = 'I';
+	public static char MESSAGE_TYPE_STATE = 'S';
 
 	public GameUpdates gameUpdates;
 
@@ -30,20 +34,20 @@ public class Communicator  {
 
 	public void SayHello (){
 		Debug.Log ("say hello");
-		NetworkManager.Instance.SendMessage ( Serialization.SerializeHello () );
+		NetworkManager.Instance.SendMessage ( Serialization.SerializeHello (), true );
 		Debug.Log ("say hello done");
 	}
 
 	public void ShareMovement (Vector3 impulse){
 		Debug.Log ("share movement");
-		NetworkManager.Instance.SendMessage ( Serialization.SerializeMovement (impulse) );
+		NetworkManager.Instance.SendFastMessage ( Serialization.SerializeMovement (impulse) );
 		Debug.Log ("share movement done");
 	}
 
 	//actors are player, enemy and cake (movable game elements with physics)
 	public void ShareState (Rigidbody2D playerBody, Rigidbody2D enemyBody, Rigidbody2D cakeBody ){
 		Debug.Log ("share state");
-		NetworkManager.Instance.SendMessage ( Serialization.SerializeState ( playerBody, enemyBody, cakeBody ) );
+		NetworkManager.Instance.SendFastMessage ( Serialization.SerializeState ( playerBody, enemyBody, cakeBody ) );
 		Debug.Log ("share state done");
 	}
 
@@ -55,37 +59,38 @@ public class Communicator  {
 
 	public void ParseMessage (string senderID, byte[] msgBytes){
 		Debug.Log ("parse message");
-		string msg = Serialization.Deserialize (msgBytes);
-		Debug.Log (msg);
 
-		string[] dataFields = Serialization.GetDataFields (msg);
+		char msgType = Deserialization.GetMessageType (msgBytes);
+		Debug.Log ("message type " + msgType.ToString());
 
-		MessageTypes msgType = Serialization.GetMessageType (dataFields);
-		Debug.Log ("message type");
-		Debug.Log (msgType.ToString());
-
-		if ( msgType == MessageTypes.HELLO) {
+		//implement some checking to make sure they start at the same time
+		if ( MESSAGE_TYPE_HELLO.Equals (msgType) ) {
 			GameSetup.ChooseHost (senderID);
 			GameSetup.StartGame ();
-		} else { //game has started
-			if (gameUpdates != null) { //we can load game updates now, since stage is set
-				RouteMessage (msgType, dataFields);
+		} else { 
+			if (gameUpdates != null) {
+				RouteMessage (msgType, msgBytes);
 			}
 		}
 
 		Debug.Log ("parse message done");
 	}
 
-	public void RouteMessage (MessageTypes msgType, string[] dataFields ){
+	int lastStateNumber = -1;
+	public void RouteMessage (char msgType, byte[] dataFields ){
 		Debug.Log ("route message");
 
-		if (  msgType == MessageTypes.MOVEMENT ) {
-			Vector2 impulse = Serialization.GetImpulse (dataFields);
+		if (MESSAGE_TYPE_MOVEMENT.Equals (msgType) ) {
+			Vector2 impulse = Deserialization.GetImpulse (dataFields);
 			gameUpdates.MoveEnemy (impulse);
 
-		} else if (msgType == MessageTypes.STATE ){
-			ActorState state = Serialization.GetState (dataFields);
-			gameUpdates.UpdateActors (state);
+		} else if (MESSAGE_TYPE_STATE.Equals (msgType) ){
+			ActorState state = Deserialization.GetState (dataFields);
+
+			if (lastStateNumber < state.StateNumber) {
+				gameUpdates.UpdateActors (state);
+				lastStateNumber = state.StateNumber;
+			} 
 		}
 		Debug.Log ("route message done");
 	}

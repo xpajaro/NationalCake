@@ -7,6 +7,10 @@ public class ActorState
 	{
 	}
 
+	public int StateNumber{
+		get; set;
+	}
+
 	public Vector3 PlayerPosition{
 		get; set;
 	}
