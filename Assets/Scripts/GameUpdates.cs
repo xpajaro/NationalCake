@@ -28,7 +28,7 @@ public class GameUpdates {
 
 	public void UpdateActors (ActorState state){
 		state = FlipPlayersOnClient (state);
-		if (!GameManager.isHost) {
+		if (!GameSetup.isHost) {
 			playerBody.MovePosition (state.PlayerPosition) ;
 			enemyBody.MovePosition (state.EnemyPosition) ;
 			cakeBody.MovePosition (state.CakePosition) ;

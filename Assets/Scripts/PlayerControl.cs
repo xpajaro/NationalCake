@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-public class GameControls : MonoBehaviour {
+public class PlayerControl : MonoBehaviour {
 
 	public float MOVT_SPEED = 5;
 	public float MOVT_CAP = 150;
@@ -14,45 +14,13 @@ public class GameControls : MonoBehaviour {
 	bool touchStarted = false;
 	Vector3 movtStartPosition;
 
-	Rigidbody2D playerBody, cakeBody, enemyBody;
+	Rigidbody2D playerBody;
 
-	Communicator communicator;
-
-	float _nextBroadcastTime = 0;
 
 
 	void Start () {
-
-		//store all important refs to game elements first
-		GameElements.Player = this.gameObject;
-		GameElements.Enemy = enemy;
-		GameElements.Cake = cake;
-		GameElements.Stage = stage;
-
 		playerBody = GetComponent<Rigidbody2D> ();
-		enemyBody = enemy.GetComponent<Rigidbody2D> ();
-		cakeBody = cake.GetComponent<Rigidbody2D> ();
-
-		MovementHandler.LoadStage (stage);
-
-		communicator = new Communicator ();
 	}
-
-	void Update () {
-		if (Time.time > _nextBroadcastTime) {
-			communicator.ShareState (playerBody, enemyBody, cakeBody); 
-			_nextBroadcastTime = Time.time + .30f;
-		}
-	}
-
-	void FixedUpdate () {
-		if (GameManager.isHost) {
-			implementFriction ();
-		}
-
-		//remember items and stuff
-	}
-		
 
 
 	//-------------------------------------------
@@ -80,10 +48,10 @@ public class GameControls : MonoBehaviour {
 	void MovePlayer (Vector3 launchDir){
 		Vector3 impulse = calculateImpulse (launchDir);
 
-		if (GameManager.isHost) {
+		if (GameSetup.isHost) {
 			playerBody.AddForce (impulse, ForceMode2D.Impulse);
 		} else {
-			communicator.ShareMovement (impulse);
+			Communicator.Instance.ShareMovement (impulse);
 		}
 	}
 
@@ -107,11 +75,6 @@ public class GameControls : MonoBehaviour {
 		return launchDir * MOVT_SPEED; 
 	}
 
-	void implementFriction(){
-		MovementHandler.doFriction (playerBody);
-		MovementHandler.doFriction (enemyBody);
-		MovementHandler.doFriction (cakeBody);
-	}
 
 
 }

@@ -8,6 +8,12 @@ using System.IO;
 
 public class Utilities : MonoBehaviour{
 
+
+	public static float GetAlphaAtPosition (Vector2 position, Texture2D texture){
+		Color color = texture.GetPixel ((int)position.x, (int)position.y);
+		return color.a;
+	}
+
 	public static StringBuilder ClearStringBuilder ( StringBuilder value)
 	{
 		value.Length = 0;

@@ -65,8 +65,8 @@ public class Communicator  {
 		Debug.Log (msgType.ToString());
 
 		if ( msgType == MessageTypes.HELLO) {
-			GameManager.ChooseHost (senderID);
-			GameManager.StartGame ();
+			GameSetup.ChooseHost (senderID);
+			GameSetup.StartGame ();
 		} else { //game has started
 			gameUpdates = new GameUpdates (); //we can load game updates now, since stage is set
 			RouteMessage (msgType, dataFields);
