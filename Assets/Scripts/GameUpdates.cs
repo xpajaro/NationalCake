@@ -6,6 +6,7 @@ public class GameUpdates : MonoBehaviour {
 	public GameObject player, enemy, cake;
 	Rigidbody2D playerBody, cakeBody, enemyBody;
 
+	//for moving the actors (cake, player, enemy) w interpolation
 	Vector3 pCurrPos, pNextPos, eCurrPos, eNextPos, cCurrPos, cNextPos;
 
 	float nextBroadcastTime = 0;
@@ -39,7 +40,7 @@ public class GameUpdates : MonoBehaviour {
 	//-------------------------------------------
 
 	public void MoveEnemy (Vector3 impulse){
-		impulse = Utilities.FlipX (impulse); //enemy is placed in opp side of screen;
+		impulse = Utilities.FlipSide (impulse); //enemy is placed in opp side of screen;
 		enemyBody.AddForce (impulse, ForceMode2D.Impulse);
 	}
 
@@ -68,6 +69,9 @@ public class GameUpdates : MonoBehaviour {
 	}
 
 
+	//-------------------------------------------
+	// implement server positions (cllient only)
+	//-------------------------------------------
 
 	void InterpolateAllMovement (){ 
 		InterpolateMovement (playerBody, pCurrPos, pNextPos);
@@ -88,8 +92,8 @@ public class GameUpdates : MonoBehaviour {
 	Vector3 positionHolder;
 	ActorState SwitchPlayers (ActorState oldState){
 		positionHolder = oldState.PlayerPosition;
-		oldState.PlayerPosition = Utilities.FlipX (oldState.EnemyPosition);
-		oldState.EnemyPosition = Utilities.FlipX (positionHolder);
+		oldState.PlayerPosition = Utilities.FlipSide (oldState.EnemyPosition);
+		oldState.EnemyPosition = Utilities.FlipSide (positionHolder);
 
 		return oldState;
 	}

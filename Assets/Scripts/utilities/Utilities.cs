@@ -14,7 +14,7 @@ public class Utilities : MonoBehaviour{
 		return color.a;
 	}
 
-	public static Vector3 FlipX (Vector3 input){
+	public static Vector3 FlipSide (Vector3 input){
 		input.x *= -1;
 		return input;
 	}

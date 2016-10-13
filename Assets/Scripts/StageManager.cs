@@ -12,6 +12,7 @@ public class StageManager : MonoBehaviour
 	static Texture2D stageTexture;
 	static WorldConverter converter;
 
+	public static bool playerOnStage, enemyOnStage, cakeOnStage;
 
 
 	void Start(){
@@ -30,6 +31,7 @@ public class StageManager : MonoBehaviour
 
 	void Update () {
 		if (GameSetup.isHost) {
+			checkIfActorsOnStage ();
 			StartFriction ();
 		}
 	}		
@@ -40,18 +42,18 @@ public class StageManager : MonoBehaviour
 	//-------------------------------------------
 
 	void StartFriction () {
-		StartFrictionOnElement (playerBody);
-		StartFrictionOnElement (enemyBody);
-		StartFrictionOnElement (cakeBody);
+		if (playerOnStage) dampMovement (playerBody, MOVT_DAMPING);
+		if (enemyOnStage) dampMovement (enemyBody, MOVT_DAMPING);
+		if (cakeOnStage) dampMovement (cakeBody, MOVT_DAMPING);
 	}
 
 
-	void StartFrictionOnElement (Rigidbody2D rb) {
-		if (isOnStage (rb.position)) {
-			dampMovement (rb, MOVT_DAMPING);
-		} 
+	void checkIfActorsOnStage (){
+		playerOnStage = isOnStage (playerBody.position);
+		enemyOnStage = isOnStage (enemyBody.position);
+		cakeOnStage = isOnStage (cakeBody.position);
 	}
-		
+
 	public static bool isOnStage (Vector2 playerPosition){
 		bool onStage = true;
 		playerPosition = converter.getPositionInWorld (playerPosition);
