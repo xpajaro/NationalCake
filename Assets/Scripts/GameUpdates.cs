@@ -6,8 +6,11 @@ public class GameUpdates : MonoBehaviour {
 	public GameObject player, enemy, cake;
 	Rigidbody2D playerBody, cakeBody, enemyBody;
 
+	Vector3 pCurrPos, pNextPos, eCurrPos, eNextPos, cCurrPos, cNextPos;
+
 	float nextBroadcastTime = 0;
 	float timeGap = .6f;
+	float lastUpdateTime;
 
 	void Start (){
 		playerBody = player.GetComponent<Rigidbody2D> ();
@@ -25,6 +28,8 @@ public class GameUpdates : MonoBehaviour {
 				Communicator.Instance.ShareState (playerBody, enemyBody, cakeBody); 
 				nextBroadcastTime = Time.time + timeGap;
 			}
+		} else {
+			InterpolateAllMovement ();
 		}
 	}	
 
@@ -49,11 +54,34 @@ public class GameUpdates : MonoBehaviour {
 		if (!GameSetup.isHost) {
 			state = SwitchPlayers (state);
 
-			playerBody.MovePosition (state.PlayerPosition) ;
-			enemyBody.MovePosition (state.EnemyPosition) ;
-			cakeBody.MovePosition (state.CakePosition) ;
+			pCurrPos = playerBody.position;
+			eCurrPos = enemyBody.position;
+			cCurrPos = cakeBody.position;
+
+			pNextPos = state.PlayerPosition ;
+			eNextPos = state.EnemyPosition ;
+			cNextPos = state.CakePosition ;
+
+			lastUpdateTime = Time.time;
 		}
 
+	}
+
+
+
+	void InterpolateAllMovement (){ 
+		InterpolateMovement (playerBody, pCurrPos, pNextPos);
+		InterpolateMovement (enemyBody, eCurrPos, eNextPos);
+		InterpolateMovement (cakeBody, cCurrPos, cNextPos);
+	}
+
+	//move smoothly between curr pos and target position
+	void InterpolateMovement (Rigidbody2D rigidBody, Vector3 start, Vector3 destination){ 
+		float pctDone = (Time.time - lastUpdateTime) / timeGap;
+
+		if (pctDone <= 1.0) {
+			rigidBody.position = Vector3.Lerp (start, destination, pctDone);
+		}  
 	}
 
 
