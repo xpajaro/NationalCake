@@ -10,7 +10,7 @@ public class Serialization
 	//byte message lengths
 	static int HELLO_MESSAGE_LENGTH = 2;
 	static int MOVEMENT_MESSAGE_LENGTH = 10;
-	static int STATE_MESSAGE_LENGTH = 46;
+	static int STATE_MESSAGE_LENGTH = 49;
 
 	//order of message sent (ignore if expired)
 	static int stateMessageNo = 0 ;
@@ -25,7 +25,7 @@ public class Serialization
 
 
 	public static byte[] SerializeHello (){
-		Debug.Log ("Serialize hello done");
+		//Debug.Log ("Serialize hello done");
 		helloMessage.Clear ();
 		helloMessage.Add (PROTOCOL_VERSION);
 		helloMessage.Add ((byte)Communicator.MESSAGE_TYPE_HELLO);
@@ -34,7 +34,7 @@ public class Serialization
 		
 
 	public static byte [] SerializeMovement (Vector3 impulse){
-		Debug.Log ("Serialize movement");
+		//Debug.Log ("Serialize movement");
 
 		movementMessage.Clear ();
 		//meta
@@ -44,13 +44,15 @@ public class Serialization
 		movementMessage.AddRange (System.BitConverter.GetBytes (impulse.x));  
 		movementMessage.AddRange (System.BitConverter.GetBytes (impulse.y)); 
 
-		Debug.Log ("Serialize movement done");
+		//Debug.Log ("Serialize movement done");
 		return movementMessage.ToArray ();
 	}
 
 
-	public static byte [] SerializeState (Rigidbody2D playerBody, Rigidbody2D enemyBody, Rigidbody2D cakeBody){
-		Debug.Log ("Serialize state");
+	public static byte [] SerializeState (Rigidbody2D playerBody, bool pFalling,
+		Rigidbody2D enemyBody, bool eFalling,
+		Rigidbody2D cakeBody, bool cFalling){
+		//Debug.Log ("Serialize state");
 
 		stateMessage.Clear ();
 		//meta
@@ -68,11 +70,16 @@ public class Serialization
 		stateMessage.AddRange (BitConverter.GetBytes (enemyBody.velocity.y));
 		stateMessage.AddRange (BitConverter.GetBytes (cakeBody.position.x));  
 		stateMessage.AddRange (BitConverter.GetBytes (cakeBody.position.y)); 
+		stateMessage.AddRange (BitConverter.GetBytes (pFalling)); 
+		stateMessage.AddRange (BitConverter.GetBytes (eFalling)); 
+		stateMessage.AddRange (BitConverter.GetBytes (cFalling)); 
 
 		Debug.Log ("player deets " + playerBody.position.ToString("G4") + " / " +  playerBody.velocity.ToString("G4") + " \n " +
-		"enemy deets " + enemyBody.position.ToString("G4") + " / " +  enemyBody.velocity.ToString("G4"));
+			"enemy deets " + enemyBody.position.ToString("G4") + " / " +  enemyBody.velocity.ToString("G4") + " \n " +
+			"cake deets " + cakeBody.position.ToString("G4") +  " \n " +
+			pFalling.ToString() + " / " + cFalling.ToString() + " / " + eFalling.ToString());
 
-		Debug.Log ("Serialize state done");
+		//Debug.Log ("Serialize state done");
 		return stateMessage.ToArray ();
 	}
 

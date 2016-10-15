@@ -33,22 +33,26 @@ public class Communicator  {
 	//-------------------------------------------
 
 	public void SayHello (){
-		Debug.Log ("say hello");
+		//Debug.Log ("say hello");
 		NetworkManager.Instance.SendMessage ( Serialization.SerializeHello (), true );
-		Debug.Log ("say hello done");
+		//Debug.Log ("say hello done");
 	}
 
 	public void ShareMovement (Vector3 impulse){
-		Debug.Log ("share movement");
+		//Debug.Log ("share movement");
 		NetworkManager.Instance.SendFastMessage ( Serialization.SerializeMovement (impulse) );
-		Debug.Log ("share movement done");
+		//Debug.Log ("share movement done");
 	}
 
 	//actors are player, enemy and cake (movable game elements with physics)
-	public void ShareState (Rigidbody2D playerBody, Rigidbody2D enemyBody, Rigidbody2D cakeBody ){
-		Debug.Log ("share state");
-		NetworkManager.Instance.SendFastMessage ( Serialization.SerializeState ( playerBody, enemyBody, cakeBody ) );
-		Debug.Log ("share state done");
+	public void ShareState (Rigidbody2D playerBody, bool pFalling, 
+		Rigidbody2D enemyBody, bool eFalling,
+		Rigidbody2D cakeBody, bool cFalling ){
+		//Debug.Log ("share state");
+		NetworkManager.Instance.SendFastMessage ( Serialization.SerializeState ( playerBody, pFalling,
+			enemyBody, eFalling,
+			cakeBody, cFalling ) );
+		//Debug.Log ("share state done");
 	}
 
 
@@ -58,10 +62,10 @@ public class Communicator  {
 
 
 	public void ParseMessage (string senderID, byte[] msgBytes){
-		Debug.Log ("parse message");
+		//Debug.Log ("parse message");
 
 		char msgType = Deserialization.GetMessageType (msgBytes);
-		Debug.Log ("message type " + msgType.ToString());
+		//Debug.Log ("message type " + msgType.ToString());
 
 		//implement some checking to make sure they start at the same time
 		if ( MESSAGE_TYPE_HELLO.Equals (msgType) ) {
@@ -73,12 +77,12 @@ public class Communicator  {
 			}
 		}
 
-		Debug.Log ("parse message done");
+		//Debug.Log ("parse message done");
 	}
 
-	int lastStateNumber = -1;
+
 	public void RouteMessage (char msgType, byte[] dataFields ){
-		Debug.Log ("route message");
+		//Debug.Log ("route message");
 
 		if (MESSAGE_TYPE_MOVEMENT.Equals (msgType) ) {
 			Vector2 impulse = Deserialization.GetImpulse (dataFields);
@@ -86,12 +90,8 @@ public class Communicator  {
 
 		} else if (MESSAGE_TYPE_STATE.Equals (msgType) ){
 			ActorState state = Deserialization.GetState (dataFields);
-
-			if (lastStateNumber < state.StateNumber) {
-				gameUpdates.UpdateActors (state);
-				lastStateNumber = state.StateNumber;
-			} 
+			gameUpdates.UpdateActors (state);
 		}
-		Debug.Log ("route message done");
+		//Debug.Log ("route message done");
 	}
 }

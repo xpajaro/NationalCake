@@ -3,7 +3,12 @@ using System.Collections;
 
 public class StageManager : MonoBehaviour 
 {
+	public static Vector3 PLAYER_START_POSITION;
+	public static Vector3 ENEMY_START_POSITION;
+	public static Vector3 CAKE_START_POSITION;
+
 	public float MOVT_DAMPING = 0.5f;
+	public float VELOCITY_CAP = 10.0f;
 
 	//for elements to do friction on
 	public GameObject cake, player, enemy;
@@ -16,7 +21,10 @@ public class StageManager : MonoBehaviour
 
 
 	void Start(){
+
 		if (GameSetup.isHost) {
+			StoreEveryStartPosition ();
+
 			playerBody = player.GetComponent<Rigidbody2D> ();
 			enemyBody = enemy.GetComponent<Rigidbody2D> ();
 			cakeBody = cake.GetComponent<Rigidbody2D> ();
@@ -29,24 +37,37 @@ public class StageManager : MonoBehaviour
 	}
 
 
-	void Update () {
+	void FixedUpdate () {
 		if (GameSetup.isHost) {
 			checkIfActorsOnStage ();
-			StartFriction ();
+			StartAllFriction ();
 		}
 	}		
 
+
+	void StoreEveryStartPosition (){
+		PLAYER_START_POSITION = player.transform.position;
+		ENEMY_START_POSITION = enemy.transform.position;
+		CAKE_START_POSITION = cake.transform.position;
+	}
 
 	//-------------------------------------------
 	// Friction
 	//-------------------------------------------
 
-	void StartFriction () {
-		if (playerOnStage) dampMovement (playerBody, MOVT_DAMPING);
-		if (enemyOnStage) dampMovement (enemyBody, MOVT_DAMPING);
-		if (cakeOnStage) dampMovement (cakeBody, MOVT_DAMPING);
+	void StartAllFriction () {
+		StartActorFriction (playerOnStage, playerBody);
+		StartActorFriction (enemyOnStage, enemyBody);
+		StartActorFriction (cakeOnStage, cakeBody);
 	}
 
+	void StartActorFriction (bool onStage, Rigidbody2D rb){
+		if (onStage) {
+			dampMovement (rb, MOVT_DAMPING);
+		} else {
+			rb.velocity = Vector3.zero;
+		}
+	}
 
 	void checkIfActorsOnStage (){
 		playerOnStage = isOnStage (playerBody.position);
@@ -54,14 +75,14 @@ public class StageManager : MonoBehaviour
 		cakeOnStage = isOnStage (cakeBody.position);
 	}
 
-	public static bool isOnStage (Vector2 playerPosition){
+	public static bool isOnStage (Vector2 actorPosition){
 		bool onStage = true;
-		playerPosition = converter.getPositionInWorld (playerPosition);
-		Debug.Log (playerPosition);
+		actorPosition = converter.getPositionInWorld (actorPosition);
+		//Debug.Log (actorPosition);
 
-		if (Utilities.GetAlphaAtPosition (playerPosition, stageTexture) == 0){
+		if (Utilities.GetAlphaAtPosition (actorPosition, stageTexture) == 0){
 			onStage = false;
-			Debug.Log (onStage.ToString());
+			//Debug.Log (onStage.ToString());
 		} 
 
 		return onStage;

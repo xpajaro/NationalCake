@@ -19,6 +19,10 @@ public class ActorState
 		get; set;
 	}
 
+	public bool PlayerFalling{
+		get; set;
+	}
+
 	public Vector3 EnemyPosition{
 		get; set;
 	}
@@ -27,7 +31,15 @@ public class ActorState
 		get; set;
 	}
 
+	public bool EnemyFalling{
+		get; set;
+	}
+
 	public Vector3 CakePosition{
+		get; set;
+	}
+
+	public bool CakeFalling{
 		get; set;
 	}
 }

@@ -9,9 +9,16 @@ public class GameUpdates : MonoBehaviour {
 	//for moving the actors (cake, player, enemy) w interpolation
 	Vector3 pCurrPos, pNextPos, eCurrPos, eNextPos, cCurrPos, cNextPos;
 
+	//for keeping falling status
+	bool pFalling, eFalling, cFalling;
+
 	float nextBroadcastTime = 0;
 	float timeGap = .6f;
 	float lastUpdateTime;
+
+	FallingAnimator pAnimator, eAnimator, cAnimator ;
+
+
 
 	void Start (){
 		playerBody = player.GetComponent<Rigidbody2D> ();
@@ -19,6 +26,13 @@ public class GameUpdates : MonoBehaviour {
 		cakeBody = cake.GetComponent<Rigidbody2D> ();
 
 		Communicator.Instance.gameUpdates = this;
+
+
+		if (!GameSetup.isHost) {
+			pAnimator = new FallingAnimator (player);
+			eAnimator = new FallingAnimator (enemy);
+			cAnimator = new FallingAnimator (cake);
+		}
 	}
 
 
@@ -26,7 +40,10 @@ public class GameUpdates : MonoBehaviour {
 	void FixedUpdate () {
 		if (GameSetup.isHost) {
 			if (Time.time > nextBroadcastTime) {
-				Communicator.Instance.ShareState (playerBody, enemyBody, cakeBody); 
+				Communicator.Instance.ShareState (playerBody, StageManager.playerOnStage, 
+					enemyBody, StageManager.enemyOnStage,
+					cakeBody, StageManager.cakeOnStage); 
+				
 				nextBroadcastTime = Time.time + timeGap;
 			}
 		} else {
@@ -50,24 +67,50 @@ public class GameUpdates : MonoBehaviour {
 	// actors are player, enemy and cake (movable game elements with physics)
 	//-------------------------------------------
 
+	int lastStateNumber = -1;
+
 	public void UpdateActors (ActorState state){
-		
+
 		if (!GameSetup.isHost) {
-			state = SwitchPlayers (state);
 
-			pCurrPos = playerBody.position;
-			eCurrPos = enemyBody.position;
-			cCurrPos = cakeBody.position;
+			if (lastStateNumber < state.StateNumber) {
+				state = SwitchPlayers (state);
 
-			pNextPos = state.PlayerPosition ;
-			eNextPos = state.EnemyPosition ;
-			cNextPos = state.CakePosition ;
+				pCurrPos = playerBody.position;
+				eCurrPos = enemyBody.position;
+				cCurrPos = cakeBody.position;
 
-			lastUpdateTime = Time.time;
+				pNextPos = state.PlayerPosition ;
+				eNextPos = state.EnemyPosition ;
+				cNextPos = state.CakePosition ;
+
+				lastUpdateTime = Time.time;
+
+				lastStateNumber = state.StateNumber;
+			}
+
+			HandleAllFalling (state.PlayerFalling, state.EnemyFalling, state.CakeFalling);
+
 		}
 
 	}
 
+
+	void HandleAllFalling (bool _pFalling, bool _cFalling, bool _eFalling){
+		HandleActorFalling (_pFalling, ref this.pFalling, pAnimator);
+		HandleActorFalling (_eFalling, ref this.eFalling, eAnimator);
+		HandleActorFalling (_cFalling, ref this.cFalling, cAnimator);
+	}
+
+	void HandleActorFalling (bool isFalling, ref bool localFallingRef, FallingAnimator animator){
+		if (isFalling && !localFallingRef) {
+			localFallingRef = true;
+			animator.Detach ();
+		} else if (!isFalling && localFallingRef){
+			localFallingRef = false;
+			animator.Revive ();
+		}
+	}
 
 	//-------------------------------------------
 	// implement server positions (cllient only)

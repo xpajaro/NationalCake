@@ -28,28 +28,28 @@ public class Utilities : MonoBehaviour{
 	}
 
 	public static string Vector3ToString (Vector3 v){
-		Debug.Log ("vector3 to string");
+		//Debug.Log ("vector3 to string");
 		StringBuilder sb = new StringBuilder();
 		sb.Append(v.x).Append(" ").Append(v.y).Append(" ").Append(v.z) ;
 
-		Debug.Log ("vector3 to string done");
+		//Debug.Log ("vector3 to string done");
 		return sb.ToString();
 	}
 
 	public static void StringToVector3 (string v, ref Vector3 vectorHolder){
-		Debug.Log ("string to vector3");
+		//Debug.Log ("string to vector3");
 		string[] values = v.Split(' ');
 
 		vectorHolder.x = float.Parse(values[0]); 
 		vectorHolder.y = float.Parse(values[1]);
 		vectorHolder.z = float.Parse(values[2]);
 
-		Debug.Log ("string to vector3 done");
+		//Debug.Log ("string to vector3 done");
 	}
 
 	public static string PrintBytes( byte[] byteArray)
 	{
-		Debug.Log ("print bytes");
+		//Debug.Log ("print bytes");
 		var sb = new StringBuilder("new byte[] { ");
 		for(var i = 0; i < byteArray.Length;i++)
 		{
@@ -62,7 +62,7 @@ public class Utilities : MonoBehaviour{
 		}
 		sb.Append(" }");
 
-		Debug.Log ("print bytes done");
+		//Debug.Log ("print bytes done");
 		return sb.ToString();
 	}
 

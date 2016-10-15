@@ -24,18 +24,18 @@ public class NetworkManager  {
 	NetworkListener networkListener = new NetworkListener();
 
 	public void SignIn (){
-		Debug.Log ("sign in");
+		//Debug.Log ("sign in");
 
 		if (! Social.localUser.authenticated) {
 			Social.localUser.Authenticate((bool success) => {
 				if (success) {
-					Debug.Log ("We're signed in! Welcome " + Social.localUser.userName);
+					//Debug.Log ("We're signed in! Welcome " + Social.localUser.userName);
 				} else {
-					Debug.Log ("Oh... we're not signed in.");
+					//Debug.Log ("Oh... we're not signed in.");
 				}
 			});
 		} else {
-			Debug.Log ("You're already signed in.");
+			//Debug.Log ("You're already signed in.");
 		}
 	}
 
@@ -44,19 +44,19 @@ public class NetworkManager  {
 	}
 
 	public void InvitePlayer (){
-		Debug.Log ("invite player");
+		//Debug.Log ("invite player");
 		const int MinOpponents = 1 , MaxOpponents= 1;
 		const int GameVariant = 0;
 
 		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (MinOpponents, MaxOpponents,
 			GameVariant, networkListener);
-		Debug.Log ("invite player done");
+		//Debug.Log ("invite player done");
 	}
 
 	public void CheckInbox (){
-		Debug.Log ("check inbox");
+		//Debug.Log ("check inbox");
 		PlayGamesPlatform.Instance.RealTime.AcceptFromInbox (networkListener);
-		Debug.Log ("check inbox done");
+		//Debug.Log ("check inbox done");
 	}
 
 	public void SendFastMessage (byte[] msgBytes){
@@ -65,9 +65,9 @@ public class NetworkManager  {
 
 
 	public void SendMessage (byte[] msgBytes, bool reliable){
-		Debug.Log ("send message");
+		//Debug.Log ("send message");
 		PlayGamesPlatform.Instance.RealTime.SendMessageToAll (reliable, msgBytes);
-		Debug.Log ("send message done");
+		//Debug.Log ("send message done");
 	}
 
 	//-------------------------------------------
