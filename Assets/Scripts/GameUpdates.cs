@@ -10,14 +10,14 @@ public class GameUpdates : MonoBehaviour {
 	Vector3 pCurrPos, pNextPos, eCurrPos, eNextPos, cCurrPos, cNextPos;
 
 	//for keeping falling status
-	bool pFalling, eFalling, cFalling;
+	bool pFalling, eFalling, cFalling; //receiving networked game updates
+	bool useInterpolation = true;
 
 	float nextBroadcastTime = 0;
-	float timeGap = .6f;
+	float timeGap = .16f;
 	float lastUpdateTime;
 
 	FallingAnimator pAnimator, eAnimator, cAnimator ;
-
 
 
 	void Start (){
@@ -40,14 +40,16 @@ public class GameUpdates : MonoBehaviour {
 	void FixedUpdate () {
 		if (GameSetup.isHost) {
 			if (Time.time > nextBroadcastTime) {
-				Communicator.Instance.ShareState (playerBody, StageManager.playerOnStage, 
-					enemyBody, StageManager.enemyOnStage,
-					cakeBody, StageManager.cakeOnStage); 
+				Communicator.Instance.ShareState (playerBody, Falling.pFalling, 
+					enemyBody, Falling.eFalling,
+					cakeBody, Falling.cFalling); 
 				
 				nextBroadcastTime = Time.time + timeGap;
 			}
 		} else {
-			InterpolateAllMovement ();
+			if (useInterpolation) {
+				InterpolateAllMovement ();
+			}
 		}
 	}	
 
@@ -57,7 +59,6 @@ public class GameUpdates : MonoBehaviour {
 	//-------------------------------------------
 
 	public void MoveEnemy (Vector3 impulse){
-		impulse = Utilities.FlipSide (impulse); //enemy is placed in opp side of screen;
 		enemyBody.AddForce (impulse, ForceMode2D.Impulse);
 	}
 
@@ -74,29 +75,33 @@ public class GameUpdates : MonoBehaviour {
 		if (!GameSetup.isHost) {
 
 			if (lastStateNumber < state.StateNumber) {
-				state = SwitchPlayers (state);
-
-				pCurrPos = playerBody.position;
-				eCurrPos = enemyBody.position;
-				cCurrPos = cakeBody.position;
-
-				pNextPos = state.PlayerPosition ;
-				eNextPos = state.EnemyPosition ;
-				cNextPos = state.CakePosition ;
+				state = SwitchPlayers (state); 
+				UpdatePositions (state);
 
 				lastUpdateTime = Time.time;
 
 				lastStateNumber = state.StateNumber;
 			}
 
-			HandleAllFalling (state.PlayerFalling, state.EnemyFalling, state.CakeFalling);
+			HandleAllFalling (state.EnemyFalling, state.PlayerFalling, state.CakeFalling);
 
 		}
 
 	}
 
 
-	void HandleAllFalling (bool _pFalling, bool _cFalling, bool _eFalling){
+	void UpdatePositions (ActorState state){
+		pCurrPos = player.transform.position;
+		eCurrPos = enemy.transform.position;
+		cCurrPos = cake.transform.position;
+
+		pNextPos = state.PlayerPosition ;
+		eNextPos = state.EnemyPosition ;
+		cNextPos = state.CakePosition ;
+	}
+
+
+	void HandleAllFalling (bool _pFalling, bool _eFalling, bool _cFalling){
 		HandleActorFalling (_pFalling, ref this.pFalling, pAnimator);
 		HandleActorFalling (_eFalling, ref this.eFalling, eAnimator);
 		HandleActorFalling (_cFalling, ref this.cFalling, cAnimator);
@@ -108,26 +113,28 @@ public class GameUpdates : MonoBehaviour {
 			animator.Detach ();
 		} else if (!isFalling && localFallingRef){
 			localFallingRef = false;
+			useInterpolation = false;
 			animator.Revive ();
+			useInterpolation = true;
 		}
 	}
 
 	//-------------------------------------------
-	// implement server positions (cllient only)
+	// implement server positions (client only)
 	//-------------------------------------------
 
 	void InterpolateAllMovement (){ 
-		InterpolateMovement (playerBody, pCurrPos, pNextPos);
-		InterpolateMovement (enemyBody, eCurrPos, eNextPos);
-		InterpolateMovement (cakeBody, cCurrPos, cNextPos);
+		InterpolateMovement (player, pCurrPos, pNextPos);
+		InterpolateMovement (enemy, eCurrPos, eNextPos);
+		InterpolateMovement (cake, cCurrPos, cNextPos);
 	}
 
 	//move smoothly between curr pos and target position
-	void InterpolateMovement (Rigidbody2D rigidBody, Vector3 start, Vector3 destination){ 
+	void InterpolateMovement (GameObject actor, Vector3 start, Vector3 destination){ 
 		float pctDone = (Time.time - lastUpdateTime) / timeGap;
 
 		if (pctDone <= 1.0) {
-			rigidBody.position = Vector3.Lerp (start, destination, pctDone);
+			actor.transform.position = Vector3.Lerp (start, destination, pctDone);
 		}  
 	}
 
@@ -135,8 +142,8 @@ public class GameUpdates : MonoBehaviour {
 	Vector3 positionHolder;
 	ActorState SwitchPlayers (ActorState oldState){
 		positionHolder = oldState.PlayerPosition;
-		oldState.PlayerPosition = Utilities.FlipSide (oldState.EnemyPosition);
-		oldState.EnemyPosition = Utilities.FlipSide (positionHolder);
+		oldState.PlayerPosition = oldState.EnemyPosition ;
+		oldState.EnemyPosition = positionHolder ;
 
 		return oldState;
 	}

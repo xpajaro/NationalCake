@@ -32,6 +32,9 @@ public class StageManager : MonoBehaviour
 			converter = new WorldConverter (this.gameObject);
 
 			stageTexture = GetComponent<SpriteRenderer> ().sprite.texture;
+		} else {
+			SwitchSides ();
+			RemoveClientPhysics ();
 		}
 
 	}
@@ -49,6 +52,36 @@ public class StageManager : MonoBehaviour
 		PLAYER_START_POSITION = player.transform.position;
 		ENEMY_START_POSITION = enemy.transform.position;
 		CAKE_START_POSITION = cake.transform.position;
+	}
+
+	void SwitchSides (){
+		player.transform.position = ENEMY_START_POSITION;
+		enemy.transform.position = PLAYER_START_POSITION;
+
+		TurnAround (player);
+		TurnAround (enemy);
+	}
+
+	void TurnAround (GameObject actor){
+		Vector3 theScale = actor.transform.localScale;
+		theScale.x *= -1;
+		actor.transform.localScale = theScale;
+	}
+
+	void RemoveClientPhysics(){
+		Destroy (playerBody);
+		Destroy (enemyBody);
+		Destroy (cakeBody);
+		DestroyColliders (player);
+		DestroyColliders (cake);
+		DestroyColliders (enemy);
+	}
+
+	void DestroyColliders (GameObject actor){
+		Collider[] colliders = actor.GetComponents<Collider> ();
+		foreach (Collider c in colliders){
+			Destroy (c);
+		}
 	}
 
 	//-------------------------------------------

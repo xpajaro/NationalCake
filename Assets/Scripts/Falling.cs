@@ -7,7 +7,7 @@ public class Falling : MonoBehaviour {
 	public GameObject cake, player, enemy;
 	SpriteRenderer cakeRenderer, playerRenderer, enemyRenderer;
 
-	bool pFalling, eFalling, cFalling ;
+	public static bool pFalling, eFalling, cFalling ;
 
 	FallingAnimator pAnimator, eAnimator, cAnimator ;
 

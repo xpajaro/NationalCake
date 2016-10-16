@@ -107,8 +107,8 @@ public class FallingAnimator {
 	}
 
 	public void Detach (){
-		RemoveFromRig ();
 		stopCollisions ();
+		RemoveFromRig ();
 	}
 
 
