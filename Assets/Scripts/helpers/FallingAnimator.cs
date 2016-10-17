@@ -11,8 +11,9 @@ public class FallingAnimator {
 	string SORTING_LAYER_RIG_TOP = "rig-top" ;
 
 	//no of frames for drop and drown animations
-	int DROP_ANIMATION_TIME = 35; 
-	int DROWN_ANIMATION_TIME = 120;
+	int DROP_ANIMATION_TIME = 30; 
+	int DROWN_ANIMATION_TIME = 60;
+	int REVIVE_ANIMATION_TIME = 30;
 	int animationSpan; 
 
 	//fall adjustments (how far)
@@ -31,32 +32,32 @@ public class FallingAnimator {
 	SpriteRenderer actorRenderer ;
 
 	int animationCounter;
-	float dropProgress = 0, drownProgress = 0;
+	float dropProgress = 0, drownProgress=0, reviveProgress =0;
 
 
 	public FallingAnimator (GameObject _actor){
 		actor = _actor;
 		actorRenderer = actor.GetComponent<SpriteRenderer> ();
 
-		animationSpan  = DROP_ANIMATION_TIME + DROWN_ANIMATION_TIME;  
+		animationSpan  = DROP_ANIMATION_TIME + DROWN_ANIMATION_TIME + REVIVE_ANIMATION_TIME;  
 	}
 
 	//called on updates of implementing classes
 	public void animateFall (){
-		PrepareForDropAndDrown ();
+		Prepare ();
 
-		if (animationCounter < animationSpan) {
-			DropAndDrown ();
+		if (animationCounter <= animationSpan) {
+			DropDrownRevive ();
 		} else {
 			FallCompleted = true;
-			Revive ();
+			Reattach ();
 			Debug.Log ("counter revive");
 		}
 
 		animationCounter++; //drives animation
 	}
 
-	void PrepareForDropAndDrown (){
+	void Prepare (){
 
 		if (!fallStarted) {
 			Detach ();
@@ -72,14 +73,16 @@ public class FallingAnimator {
 	}
 
 
-	void DropAndDrown (){
+	void DropDrownRevive (){
 		Debug.Log ("counter " + animationCounter + " drop progress " + dropProgress 
 			+ " drown progress " + drownProgress);
 
 		if (dropProgress < 1) {
 			dropProgress = Drop ();
-		} else {
+		} else if (drownProgress < 1) {
 			drownProgress = Drown ();
+		} else {
+			reviveProgress = Revive ();
 		}
 	}
 
@@ -93,6 +96,11 @@ public class FallingAnimator {
 		return Interpolate (actor, dropDestination, drownDestination, pctDone);
 	}
 
+	float Revive  (){
+		float pctDone = (float)(animationCounter - (DROP_ANIMATION_TIME + DROWN_ANIMATION_TIME)) / REVIVE_ANIMATION_TIME; 
+		return Interpolate (actor, drownDestination, GetHomePosition (), pctDone);
+	}
+
 	float Interpolate (GameObject actor, Vector3 start, Vector3 destination, float  pctDone){
 		if (pctDone <= 1.0) {
 			actor.transform.position = Vector3.Lerp (start, destination, pctDone);
@@ -100,8 +108,7 @@ public class FallingAnimator {
 		return pctDone;
 	}
 
-	public void Revive (){
-		ReturnToHome ();
+	public void Reattach (){
 		ReturnToRig ();
 		startCollisions ();
 	}
@@ -118,14 +125,18 @@ public class FallingAnimator {
 	//-------------------------------------------
 
 
-	void ReturnToHome (){
+	Vector3 GetHomePosition (){
+		Vector3 home = new Vector3();
+
 		if (actor.name.Equals ("player")) {
-			actor.transform.position = StageManager.PLAYER_START_POSITION ;
+			home = StageManager.PLAYER_START_POSITION ;
 		} else if (actor.name.Equals ("enemy")) {
-			actor.transform.position = StageManager.ENEMY_START_POSITION ;
+			home = StageManager.ENEMY_START_POSITION ;
 		} else  if (actor.name.Equals ("cake")) {
-			actor.transform.position = StageManager.CAKE_START_POSITION ;
+			home = StageManager.CAKE_START_POSITION ;
 		}
+
+		return home;
 	}
 
 	void ReturnToRig (){

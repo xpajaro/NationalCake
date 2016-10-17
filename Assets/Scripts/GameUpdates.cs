@@ -11,7 +11,6 @@ public class GameUpdates : MonoBehaviour {
 
 	//for keeping falling status
 	bool pFalling, eFalling, cFalling; //receiving networked game updates
-	bool useInterpolation = true;
 
 	float nextBroadcastTime = 0;
 	float timeGap = .16f;
@@ -47,9 +46,7 @@ public class GameUpdates : MonoBehaviour {
 				nextBroadcastTime = Time.time + timeGap;
 			}
 		} else {
-			if (useInterpolation) {
-				InterpolateAllMovement ();
-			}
+			InterpolateAllMovement ();
 		}
 	}	
 
@@ -113,9 +110,7 @@ public class GameUpdates : MonoBehaviour {
 			animator.Detach ();
 		} else if (!isFalling && localFallingRef){
 			localFallingRef = false;
-			useInterpolation = false;
-			animator.Revive ();
-			useInterpolation = true;
+			animator.Reattach ();
 		}
 	}
 
