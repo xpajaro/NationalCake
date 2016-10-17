@@ -3,13 +3,6 @@ using System.Collections;
 
 public class FallingAnimator {
 
-	int GAME_LAYER = 0 ;
-	int COLLISION_FREE_LAYER_ACTOR = 8 ;
-	int COLLISION_FREE_LAYER_ENEMY = 9 ;
-	int COLLISION_FREE_LAYER_CAKE = 10 ;
-	string SORTING_LAYER_WATER_TOP = "water-top" ;
-	string SORTING_LAYER_RIG_TOP = "rig-top" ;
-
 	//no of frames for drop and drown animations
 	int DROP_ANIMATION_TIME = 30; 
 	int DROWN_ANIMATION_TIME = 60;
@@ -47,10 +40,10 @@ public class FallingAnimator {
 		Prepare ();
 
 		if (animationCounter <= animationSpan) {
-			DropDrownRevive ();
+			FallDrownRevive ();
 		} else {
 			FallCompleted = true;
-			Reattach ();
+			Presenter.Attach (actor, actorRenderer);
 			Debug.Log ("counter revive");
 		}
 
@@ -60,7 +53,7 @@ public class FallingAnimator {
 	void Prepare (){
 
 		if (!fallStarted) {
-			Detach ();
+			Presenter.Detach (actor, actorRenderer);
 			CalculateMilestones ();
 
 			Debug.Log ("start pos " + start.ToString("G4") + 
@@ -73,12 +66,12 @@ public class FallingAnimator {
 	}
 
 
-	void DropDrownRevive (){
+	void FallDrownRevive (){
 		Debug.Log ("counter " + animationCounter + " drop progress " + dropProgress 
 			+ " drown progress " + drownProgress);
 
 		if (dropProgress < 1) {
-			dropProgress = Drop ();
+			dropProgress = Fall ();
 		} else if (drownProgress < 1) {
 			drownProgress = Drown ();
 		} else {
@@ -86,7 +79,7 @@ public class FallingAnimator {
 		}
 	}
 
-	float Drop (){
+	float Fall (){
 		float pctDone = (float)animationCounter / DROP_ANIMATION_TIME; //prevent integer division
 		return Interpolate (actor, start, dropDestination, pctDone);
 	}
@@ -108,17 +101,6 @@ public class FallingAnimator {
 		return pctDone;
 	}
 
-	public void Reattach (){
-		ReturnToRig ();
-		startCollisions ();
-	}
-
-	public void Detach (){
-		stopCollisions ();
-		RemoveFromRig ();
-	}
-
-
 
 	//-------------------------------------------
 	// utilities
@@ -139,30 +121,7 @@ public class FallingAnimator {
 		return home;
 	}
 
-	void ReturnToRig (){
-		actorRenderer.sortingLayerName = SORTING_LAYER_RIG_TOP;
-	}
 
-
-	void RemoveFromRig (){
-		actorRenderer.sortingLayerName = SORTING_LAYER_WATER_TOP;
-	}
-
-
-	void stopCollisions (){
-		if (actor.name.Equals ("player")) {
-			actor.layer = COLLISION_FREE_LAYER_ACTOR ;
-		} else if (actor.name.Equals ("enemy")) {
-			actor.layer = COLLISION_FREE_LAYER_ENEMY ;
-		} else  if (actor.name.Equals ("cake")) {
-			actor.layer = COLLISION_FREE_LAYER_CAKE ;
-		}
-	}
-
-
-	void startCollisions (){
-		actor.layer = GAME_LAYER ;
-	}
 
 	void CalculateMilestones (){
 		start = actor.transform.position;

@@ -5,6 +5,7 @@ public class GameUpdates : MonoBehaviour {
 
 	public GameObject player, enemy, cake;
 	Rigidbody2D playerBody, cakeBody, enemyBody;
+	SpriteRenderer playerRenderer, enemyRenderer, cakeRenderer;
 
 	//for moving the actors (cake, player, enemy) w interpolation
 	Vector3 pCurrPos, pNextPos, eCurrPos, eNextPos, cCurrPos, cNextPos;
@@ -16,25 +17,29 @@ public class GameUpdates : MonoBehaviour {
 	float timeGap = .16f;
 	float lastUpdateTime;
 
-	FallingAnimator pAnimator, eAnimator, cAnimator ;
 
 
 	void Start (){
-		playerBody = player.GetComponent<Rigidbody2D> ();
-		enemyBody = enemy.GetComponent<Rigidbody2D> ();
-		cakeBody = cake.GetComponent<Rigidbody2D> ();
+		LoadRigidBodies ();
 
 		Communicator.Instance.gameUpdates = this;
 
-
 		if (!GameSetup.isHost) {
-			pAnimator = new FallingAnimator (player);
-			eAnimator = new FallingAnimator (enemy);
-			cAnimator = new FallingAnimator (cake);
+			LoadRenderers ();
 		}
 	}
 
+	void LoadRigidBodies (){
+		playerBody = player.GetComponent<Rigidbody2D> ();
+		enemyBody = enemy.GetComponent<Rigidbody2D> ();
+		cakeBody = cake.GetComponent<Rigidbody2D> ();
+	}
 
+	void LoadRenderers (){
+		playerRenderer = player.GetComponent<SpriteRenderer> ();
+		enemyRenderer = enemy.GetComponent<SpriteRenderer> ();
+		cakeRenderer = cake.GetComponent<SpriteRenderer> ();
+	}
 
 	void FixedUpdate () {
 		if (GameSetup.isHost) {
@@ -99,18 +104,18 @@ public class GameUpdates : MonoBehaviour {
 
 
 	void HandleAllFalling (bool _pFalling, bool _eFalling, bool _cFalling){
-		HandleActorFalling (_pFalling, ref this.pFalling, pAnimator);
-		HandleActorFalling (_eFalling, ref this.eFalling, eAnimator);
-		HandleActorFalling (_cFalling, ref this.cFalling, cAnimator);
+		HandleActorFalling (_pFalling, ref this.pFalling, player, playerRenderer);
+		HandleActorFalling (_eFalling, ref this.eFalling, enemy, enemyRenderer);
+		HandleActorFalling (_cFalling, ref this.cFalling, cake, cakeRenderer);
 	}
 
-	void HandleActorFalling (bool isFalling, ref bool localFallingRef, FallingAnimator animator){
+	void HandleActorFalling (bool isFalling, ref bool localFallingRef, GameObject actor, SpriteRenderer renderer){
 		if (isFalling && !localFallingRef) {
 			localFallingRef = true;
-			animator.Detach ();
+			Presenter.Detach (actor, renderer);
 		} else if (!isFalling && localFallingRef){
 			localFallingRef = false;
-			animator.Reattach ();
+			Presenter.Attach (actor, renderer);
 		}
 	}
 
