@@ -41,7 +41,7 @@ public class Deserialization {
 
 		val.x = System.BitConverter.ToSingle(dataFields, 38);
 		val.y = System.BitConverter.ToSingle(dataFields, 42);
-		state.EnemyVelocity = new Vector3(val.x, val.y, 0);
+		state.CakePosition = new Vector3(val.x, val.y, 0);
 
 		state.PlayerFalling = System.BitConverter.ToBoolean(dataFields, 46);
 		state.EnemyFalling = System.BitConverter.ToBoolean(dataFields, 47);
