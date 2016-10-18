@@ -72,14 +72,12 @@ public class StageManager : MonoBehaviour
 		Destroy (playerBody);
 		Destroy (enemyBody);
 		Destroy (cakeBody);
-		DestroyColliders (player);
 		DestroyColliders (cake);
-		DestroyColliders (enemy);
 	}
 
 	void DestroyColliders (GameObject actor){
-		Collider[] colliders = actor.GetComponents<Collider> ();
-		foreach (Collider c in colliders){
+		Collider2D[] colliders = actor.GetComponents<Collider2D> ();
+		foreach (Collider2D c in colliders){
 			Destroy (c);
 		}
 	}

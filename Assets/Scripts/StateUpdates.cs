@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameUpdates : MonoBehaviour {
+public class StateUpdates : MonoBehaviour {
 
 	public GameObject player, enemy, cake;
 	Rigidbody2D playerBody, cakeBody, enemyBody;
@@ -20,12 +20,12 @@ public class GameUpdates : MonoBehaviour {
 
 
 	void Start (){
-		LoadRigidBodies ();
-
-		Communicator.Instance.gameUpdates = this;
+		Communicator.Instance.stateUpdates = this;
 
 		if (!GameSetup.isHost) {
 			LoadRenderers ();
+		} else {
+			LoadRigidBodies ();
 		}
 	}
 
@@ -44,7 +44,7 @@ public class GameUpdates : MonoBehaviour {
 	void FixedUpdate () {
 		if (GameSetup.isHost) {
 			if (Time.time > nextBroadcastTime) {
-				Communicator.Instance.ShareState (playerBody, Falling.pFalling, 
+				Communicator.Instance.ShareActorState (playerBody, Falling.pFalling, 
 					enemyBody, Falling.eFalling,
 					cakeBody, Falling.cFalling); 
 				

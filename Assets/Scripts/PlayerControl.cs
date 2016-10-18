@@ -9,8 +9,6 @@ public class PlayerControl : MonoBehaviour {
 	public float MOVT_CAP = 150;
 	public float MOVT_CAP_EFFECTIVE_RATIO = 50;
 
-	public GameObject stage, enemy, cake;
-
 	bool touchStarted = false;
 	Vector3 movtStartPosition;
 

@@ -32,7 +32,7 @@ public class Presenter {
 			actor.layer = Constants.COLLISION_FREE_LAYER_ENEMY;
 		} else if (actor.name.Equals ("cake")) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_CAKE;
-		} else if (actor.name.Equals ("wine")) {
+		} else if (actor.name.Contains ("wine")) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_WINE;
 		}
 	}

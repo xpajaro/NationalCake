@@ -3,10 +3,8 @@ using System.Collections;
 
 public class Deserialization {
 
-
-
-	static Vector3 impulse = new Vector3 ();
 	public static Vector3 GetImpulse (byte[] dataFields){
+		Vector3 impulse = new Vector3 ();
 		//Debug.Log ("Get Impulse ");
 		impulse.x = System.BitConverter.ToSingle(dataFields, 2);
 		impulse.y = System.BitConverter.ToSingle(dataFields, 6);
@@ -16,7 +14,16 @@ public class Deserialization {
 	}
 
 
-	public static ActorState GetState (byte[] dataFields){
+	public static WineState GetWineState (byte[] dataFields){
+		WineState state = new WineState ();
+		state.TagNo = System.BitConverter.ToInt32(dataFields, 2);
+		state.Action = System.BitConverter.ToInt32(dataFields, 6);
+
+		return state;
+	}
+
+
+	public static ActorState GetActorState (byte[] dataFields){
 		ActorState state = new ActorState ();
 		//Debug.Log ("get state");
 		Vector3 val = new Vector3 ();

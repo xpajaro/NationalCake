@@ -13,9 +13,11 @@ public class Communicator  {
 	public static char MESSAGE_TYPE_HELLO = 'H';
 	public static char MESSAGE_TYPE_MOVEMENT = 'M';
 	public static char MESSAGE_TYPE_ITEM = 'I';
+	public static char MESSAGE_TYPE_WINE = 'W';
 	public static char MESSAGE_TYPE_STATE = 'S';
 
-	public GameUpdates gameUpdates;
+	public StateUpdates stateUpdates;
+	public ItemUpdates itemUpdates;
 
 	//make singleton
 	public static Communicator _instance;
@@ -45,14 +47,18 @@ public class Communicator  {
 	}
 
 	//actors are player, enemy and cake (movable game elements with physics)
-	public void ShareState (Rigidbody2D playerBody, bool pFalling, 
+	public void ShareActorState (Rigidbody2D playerBody, bool pFalling, 
 		Rigidbody2D enemyBody, bool eFalling,
 		Rigidbody2D cakeBody, bool cFalling ){
 		//Debug.Log ("share state");
-		NetworkManager.Instance.SendFastMessage ( Serialization.SerializeState ( playerBody, pFalling,
+		NetworkManager.Instance.SendFastMessage ( Serialization.SerializeActorState ( playerBody, pFalling,
 			enemyBody, eFalling,
 			cakeBody, cFalling ) );
 		//Debug.Log ("share state done");
+	}
+
+	public void ShareWineState (int tagNo, int action){
+		NetworkManager.Instance.SendMessage (Serialization.SerializeWineState (tagNo, action), true);
 	}
 
 
@@ -72,7 +78,7 @@ public class Communicator  {
 			GameSetup.ChooseHost (senderID);
 			GameSetup.StartGame ();
 		} else { 
-			if (gameUpdates != null) {
+			if (stateUpdates != null) {
 				RouteMessage (msgType, msgBytes);
 			}
 		}
@@ -83,14 +89,17 @@ public class Communicator  {
 
 	public void RouteMessage (char msgType, byte[] dataFields ){
 		//Debug.Log ("route message");
-
 		if (MESSAGE_TYPE_MOVEMENT.Equals (msgType) ) {
-			Vector2 impulse = Deserialization.GetImpulse (dataFields);
-			gameUpdates.MoveEnemy (impulse);
+			Vector3 impulse = Deserialization.GetImpulse (dataFields);
+			stateUpdates.MoveEnemy (impulse);
+
+		} else if (MESSAGE_TYPE_WINE.Equals (msgType) ) {
+			WineState wineState = Deserialization.GetWineState (dataFields);
+			itemUpdates.UpdateWine (wineState);
 
 		} else if (MESSAGE_TYPE_STATE.Equals (msgType) ){
-			ActorState state = Deserialization.GetState (dataFields);
-			gameUpdates.UpdateActors (state);
+			ActorState state = Deserialization.GetActorState (dataFields);
+			stateUpdates.UpdateActors (state);
 		}
 		//Debug.Log ("route message done");
 	}
