@@ -9,6 +9,14 @@ using System.IO;
 public class Utilities : MonoBehaviour{
 
 
+
+	public static float Interpolate (GameObject actor, Vector3 start, Vector3 destination, float  pctDone){
+		if (pctDone <= 1.0) {
+			actor.transform.position = Vector3.Lerp (start, destination, pctDone);
+		}
+		return pctDone;
+	}
+
 	public static float GetAlphaAtPosition (Vector2 position, Texture2D texture){
 		Color color = texture.GetPixel ((int)position.x, (int)position.y);
 		return color.a;

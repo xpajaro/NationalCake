@@ -81,25 +81,19 @@ public class FallingAnimator {
 
 	float Fall (){
 		float pctDone = (float)animationCounter / DROP_ANIMATION_TIME; //prevent integer division
-		return Interpolate (actor, start, dropDestination, pctDone);
+		return Utilities.Interpolate (actor, start, dropDestination, pctDone);
 	}
 
 	float Drown  (){
 		float pctDone = (float)(animationCounter - DROP_ANIMATION_TIME) / DROWN_ANIMATION_TIME; //dropping ends, progress starts at 1
-		return Interpolate (actor, dropDestination, drownDestination, pctDone);
+		return Utilities.Interpolate (actor, dropDestination, drownDestination, pctDone);
 	}
 
 	float Revive  (){
 		float pctDone = (float)(animationCounter - (DROP_ANIMATION_TIME + DROWN_ANIMATION_TIME)) / REVIVE_ANIMATION_TIME; 
-		return Interpolate (actor, drownDestination, GetHomePosition (), pctDone);
+		return Utilities.Interpolate (actor, drownDestination, GetHomePosition (), pctDone);
 	}
 
-	float Interpolate (GameObject actor, Vector3 start, Vector3 destination, float  pctDone){
-		if (pctDone <= 1.0) {
-			actor.transform.position = Vector3.Lerp (start, destination, pctDone);
-		}
-		return pctDone;
-	}
 
 
 	//-------------------------------------------

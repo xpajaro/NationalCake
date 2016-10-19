@@ -22,6 +22,7 @@ public class PlayerControl : MonoBehaviour {
 		playerBody = GetComponent<Rigidbody2D> ();
 	}
 
+	//void Update ()
 
 	//-------------------------------------------
 	// Handle player input -- consider making this screen touch not player touch

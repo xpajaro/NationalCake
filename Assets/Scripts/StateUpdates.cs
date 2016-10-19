@@ -13,8 +13,8 @@ public class StateUpdates : MonoBehaviour {
 	//for keeping falling status
 	bool pFalling, eFalling, cFalling; //receiving networked game updates
 
+	float TIME_GAP = .16f;
 	float nextBroadcastTime = 0;
-	float timeGap = .16f;
 	float lastUpdateTime;
 
 
@@ -48,7 +48,7 @@ public class StateUpdates : MonoBehaviour {
 					enemyBody, Falling.eFalling,
 					cakeBody, Falling.cFalling); 
 				
-				nextBroadcastTime = Time.time + timeGap;
+				nextBroadcastTime = Time.time + TIME_GAP;
 			}
 		} else {
 			InterpolateAllMovement ();
@@ -125,20 +125,14 @@ public class StateUpdates : MonoBehaviour {
 	//-------------------------------------------
 
 	void InterpolateAllMovement (){ 
-		InterpolateMovement (player, pCurrPos, pNextPos);
-		InterpolateMovement (enemy, eCurrPos, eNextPos);
-		InterpolateMovement (cake, cCurrPos, cNextPos);
+		Utilities.Interpolate (player, pCurrPos, pNextPos, GetMovementProgresss () );
+		Utilities.Interpolate (enemy, eCurrPos, eNextPos, GetMovementProgresss () );
+		Utilities.Interpolate (cake, cCurrPos, cNextPos, GetMovementProgresss () );
 	}
 
-	//move smoothly between curr pos and target position
-	void InterpolateMovement (GameObject actor, Vector3 start, Vector3 destination){ 
-		float pctDone = (Time.time - lastUpdateTime) / timeGap;
-
-		if (pctDone <= 1.0) {
-			actor.transform.position = Vector3.Lerp (start, destination, pctDone);
-		}  
+	float GetMovementProgresss (){
+		return (Time.time - lastUpdateTime) / TIME_GAP;
 	}
-
 
 	Vector3 positionHolder;
 	ActorState SwitchPlayers (ActorState oldState){
