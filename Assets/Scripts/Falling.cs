@@ -30,9 +30,11 @@ public class Falling : MonoBehaviour {
 		//animate only if player is not on stage and fall animation hasn't started
 		if (!StageManager.playerOnStage && !pFalling) {
 			pFalling = true;
+			WineBuzzLevel.PlayerBuzz = WineBuzzLevel.DEFAULT_LEVEL;
 		}
 		if (!StageManager.enemyOnStage && !pFalling) {
 			eFalling = true; 
+			WineBuzzLevel.EnemyBuzz = WineBuzzLevel.DEFAULT_LEVEL;
 		}
 		if (!StageManager.cakeOnStage && !pFalling) {
 			cFalling = true;

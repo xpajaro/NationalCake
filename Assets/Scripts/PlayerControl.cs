@@ -49,7 +49,7 @@ public class PlayerControl : MonoBehaviour {
 		Vector3 impulse = CalculateImpulse (launchDir);
 
 		if (GameSetup.isHost) {
-			Vector3 drunkImpulse = CalculateWineImpulse (impulse, WineLevel.PlayerLevel) ;
+			Vector3 drunkImpulse = CalculateWineImpulse (impulse, WineBuzzLevel.PlayerBuzz) ;
 			playerBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
 		} else {
 			Communicator.Instance.ShareMovement (impulse);

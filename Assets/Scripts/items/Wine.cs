@@ -43,9 +43,9 @@ public class Wine : MonoBehaviour {
 
 	void GoFaster (string actorName){
 		if (actorName == "player") {
-			WineLevel.PlayerLevel = Math.Min( BUZZ_MAX, WineLevel.PlayerLevel + BUZZ );
+			WineBuzzLevel.PlayerBuzz = Math.Min( BUZZ_MAX, WineBuzzLevel.PlayerBuzz + BUZZ );
 		} else if ( actorName == "enemy") {
-			WineLevel.EnemyLevel =  Math.Min( BUZZ_MAX, WineLevel.EnemyLevel + BUZZ );
+			WineBuzzLevel.EnemyBuzz =  Math.Min( BUZZ_MAX, WineBuzzLevel.EnemyBuzz + BUZZ );
 		}
 	}
 
