@@ -10,7 +10,6 @@ public class Serialization
 	//byte message lengths
 	static int HELLO_MESSAGE_LENGTH = 2;
 	static int MOVEMENT_MESSAGE_LENGTH = 10;
-	static int WINE_STATE_MESSAGE_LENGTH = 10;
 	static int ACTOR_STATE_MESSAGE_LENGTH = 49;
 
 	//order of message sent (ignore if expired)
@@ -18,7 +17,6 @@ public class Serialization
 
 	static List<byte> helloMessage  = new List<byte> (HELLO_MESSAGE_LENGTH);
 	static List<byte> movementMessage  = new List<byte> (MOVEMENT_MESSAGE_LENGTH);
-	static List<byte> wineStateMessage  = new List<byte> (WINE_STATE_MESSAGE_LENGTH);
 	static List<byte> actorStateMessage  = new List<byte> (ACTOR_STATE_MESSAGE_LENGTH);
 
 	//-------------------------------------------
@@ -49,23 +47,7 @@ public class Serialization
 		//Debug.Log ("Serialize movement done");
 		return movementMessage.ToArray ();
 	}
-
-
-	public static byte [] SerializeWineState (int tagNo, int action){
-		//Debug.Log ("Serialize wine state");
-
-		wineStateMessage.Clear ();
-		//meta
-		wineStateMessage.Add (PROTOCOL_VERSION);
-		wineStateMessage.Add ((byte)Communicator.MESSAGE_TYPE_WINE);
-		//data
-		wineStateMessage.AddRange (System.BitConverter.GetBytes (tagNo)); 
-		wineStateMessage.AddRange (System.BitConverter.GetBytes (action)); 
-
-		//Debug.Log ("Serialize wine state done");
-		return wineStateMessage.ToArray ();
-	}
-
+		
 
 	public static byte [] SerializeActorState (Rigidbody2D playerBody, bool pFalling,
 		Rigidbody2D enemyBody, bool eFalling,

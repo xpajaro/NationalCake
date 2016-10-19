@@ -61,7 +61,8 @@ public class StateUpdates : MonoBehaviour {
 	//-------------------------------------------
 
 	public void MoveEnemy (Vector3 impulse){
-		enemyBody.AddForce (impulse, ForceMode2D.Impulse);
+		Vector3 drunkImpulse =  PlayerControl.CalculateWineImpulse (impulse, WineLevel.EnemyLevel) ;
+		enemyBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
 	}
 
 

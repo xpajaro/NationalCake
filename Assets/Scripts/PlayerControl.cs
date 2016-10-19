@@ -5,9 +5,11 @@ using System.Text;
 
 public class PlayerControl : MonoBehaviour {
 
-	public float MOVT_SPEED = 5;
+	public float MOVT_SPEED = 8;
 	public float MOVT_CAP = 150;
 	public float MOVT_CAP_EFFECTIVE_RATIO = 50;
+
+	public 
 
 	bool touchStarted = false;
 	Vector3 movtStartPosition;
@@ -38,16 +40,17 @@ public class PlayerControl : MonoBehaviour {
 
 	void OnMouseUp () {
 		touchStarted = false;
-		Vector3 launchDir = calculateLaunchDirection (Input.mousePosition);
+		Vector3 launchDir = CalculateLaunchDirection (Input.mousePosition);
 		launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
 		MovePlayer (launchDir);
 	}
 
 	void MovePlayer (Vector3 launchDir){
-		Vector3 impulse = calculateImpulse (launchDir);
+		Vector3 impulse = CalculateImpulse (launchDir);
 
 		if (GameSetup.isHost) {
-			playerBody.AddForce (impulse, ForceMode2D.Impulse);
+			Vector3 drunkImpulse = CalculateWineImpulse (impulse, WineLevel.PlayerLevel) ;
+			playerBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
 		} else {
 			Communicator.Instance.ShareMovement (impulse);
 		}
@@ -59,7 +62,7 @@ public class PlayerControl : MonoBehaviour {
 	// movt calculations
 	//-------------------------------------------
 
-	Vector3 calculateLaunchDirection (Vector3 movtEndPoint){
+	Vector3 CalculateLaunchDirection (Vector3 movtEndPoint){
 		Vector3 launchDir =  movtStartPosition - Input.mousePosition ;
 
 		if (launchDir.magnitude > MOVT_CAP) {
@@ -68,9 +71,13 @@ public class PlayerControl : MonoBehaviour {
 
 		return launchDir;
 	}
- 
-	Vector3 calculateImpulse (Vector3 launchDir){
+
+	Vector3 CalculateImpulse (Vector3 launchDir){
 		return launchDir * MOVT_SPEED; 
+	}
+
+	public static Vector3 CalculateWineImpulse (Vector3 impulse, float wineLevel){
+		return impulse * wineLevel;
 	}
 
 

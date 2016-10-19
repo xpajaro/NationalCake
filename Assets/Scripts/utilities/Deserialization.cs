@@ -14,15 +14,6 @@ public class Deserialization {
 	}
 
 
-	public static WineState GetWineState (byte[] dataFields){
-		WineState state = new WineState ();
-		state.TagNo = System.BitConverter.ToInt32(dataFields, 2);
-		state.Action = System.BitConverter.ToInt32(dataFields, 6);
-
-		return state;
-	}
-
-
 	public static ActorState GetActorState (byte[] dataFields){
 		ActorState state = new ActorState ();
 		//Debug.Log ("get state");

@@ -13,7 +13,6 @@ public class Communicator  {
 	public static char MESSAGE_TYPE_HELLO = 'H';
 	public static char MESSAGE_TYPE_MOVEMENT = 'M';
 	public static char MESSAGE_TYPE_ITEM = 'I';
-	public static char MESSAGE_TYPE_WINE = 'W';
 	public static char MESSAGE_TYPE_STATE = 'S';
 
 	public StateUpdates stateUpdates;
@@ -57,11 +56,6 @@ public class Communicator  {
 		//Debug.Log ("share state done");
 	}
 
-	public void ShareWineState (int tagNo, int action){
-		NetworkManager.Instance.SendMessage (Serialization.SerializeWineState (tagNo, action), true);
-	}
-
-
 	//-------------------------------------------
 	// Receiving
 	//-------------------------------------------
@@ -92,10 +86,6 @@ public class Communicator  {
 		if (MESSAGE_TYPE_MOVEMENT.Equals (msgType) ) {
 			Vector3 impulse = Deserialization.GetImpulse (dataFields);
 			stateUpdates.MoveEnemy (impulse);
-
-		} else if (MESSAGE_TYPE_WINE.Equals (msgType) ) {
-			WineState wineState = Deserialization.GetWineState (dataFields);
-			itemUpdates.UpdateWine (wineState);
 
 		} else if (MESSAGE_TYPE_STATE.Equals (msgType) ){
 			ActorState state = Deserialization.GetActorState (dataFields);
