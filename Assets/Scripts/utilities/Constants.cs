@@ -10,6 +10,8 @@ public class Constants {
 	public static int COLLISION_FREE_LAYER_WINE = 11 ;
 	public static string SORTING_LAYER_WATER_TOP = "water-top" ;
 	public static string SORTING_LAYER_RIG_TOP = "rig-top" ;
+	public static int SORTING_ORDER_FRONT = 3 ;
+	public static int SORTING_ORDER_BACK = 1 ;
 
 
 }

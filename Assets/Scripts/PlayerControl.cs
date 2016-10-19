@@ -9,20 +9,20 @@ public class PlayerControl : MonoBehaviour {
 	public float MOVT_CAP = 150;
 	public float MOVT_CAP_EFFECTIVE_RATIO = 50;
 
-	public 
 
 	bool touchStarted = false;
 	Vector3 movtStartPosition;
 
 	Rigidbody2D playerBody;
+	SpriteRenderer spriteRenderer;
 
 
 
 	void Start () {
 		playerBody = GetComponent<Rigidbody2D> ();
+		spriteRenderer = GetComponent<SpriteRenderer> (); 
 	}
 
-	//void Update ()
 
 	//-------------------------------------------
 	// Handle player input -- consider making this screen touch not player touch
@@ -80,7 +80,6 @@ public class PlayerControl : MonoBehaviour {
 	public static Vector3 CalculateWineImpulse (Vector3 impulse, float wineLevel){
 		return impulse * wineLevel;
 	}
-
 
 
 }

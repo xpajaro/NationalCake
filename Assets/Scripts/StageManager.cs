@@ -13,6 +13,7 @@ public class StageManager : MonoBehaviour
 	//for elements to do friction on
 	public GameObject cake, player, enemy;
 	Rigidbody2D playerBody, enemyBody, cakeBody;
+	SpriteRenderer pRenderer, eRenderer;
 
 	static Texture2D stageTexture;
 	static WorldConverter converter;
@@ -29,6 +30,9 @@ public class StageManager : MonoBehaviour
 			enemyBody = enemy.GetComponent<Rigidbody2D> ();
 			cakeBody = cake.GetComponent<Rigidbody2D> ();
 
+			pRenderer = player.GetComponent<SpriteRenderer> ();
+			eRenderer = enemy.GetComponent<SpriteRenderer> ();
+
 			converter = new WorldConverter (this.gameObject);
 
 			stageTexture = GetComponent<SpriteRenderer> ().sprite.texture;
@@ -41,12 +45,23 @@ public class StageManager : MonoBehaviour
 
 
 	void FixedUpdate () {
+		SortAppearance (player, pRenderer);
+		SortAppearance (enemy, eRenderer);
+
 		if (GameSetup.isHost) {
 			checkIfActorsOnStage ();
 			StartAllFriction ();
 		}
 	}		
 
+
+	void SortAppearance (GameObject actor, SpriteRenderer _renderer){
+		if (actor.transform.position.y > cake.transform.position.y) {
+			_renderer.sortingOrder = Constants.SORTING_ORDER_BACK;
+		} else {
+			_renderer.sortingOrder = Constants.SORTING_ORDER_FRONT;
+		}
+	}
 
 	void StoreEveryStartPosition (){
 		PLAYER_START_POSITION = player.transform.position;
