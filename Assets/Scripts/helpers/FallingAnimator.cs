@@ -6,12 +6,12 @@ public class FallingAnimator {
 	//no of frames for drop and drown animations
 	int DROP_ANIMATION_TIME = 30; 
 	int DROWN_ANIMATION_TIME = 60;
-	int REVIVE_ANIMATION_TIME = 30;
+	int REVIVE_ANIMATION_TIME = 0;
 	int animationSpan; 
 
 	//fall adjustments (how far)
 	Vector3 DROP_VECTOR = new Vector3 (0, -2.0f, 0);
-	Vector3 DROWN_VECTOR =  new Vector3 (-20.0f, 0, 0);
+	public static Vector3 DROWN_VECTOR =  new Vector3 (-20.0f, 0, 0);
 
 	Vector3 start, dropDestination, drownDestination;
 
@@ -40,11 +40,12 @@ public class FallingAnimator {
 		Prepare ();
 
 		if (animationCounter <= animationSpan) {
-			FallDrownRevive ();
+			FallDrown ();
 		} else {
+			Revive ();
 			FallCompleted = true;
 			Presenter.Attach (actor, actorRenderer);
-			Debug.Log ("counter revive");
+//			Debug.Log ("counter revive");
 		}
 
 		animationCounter++; //drives animation
@@ -56,9 +57,9 @@ public class FallingAnimator {
 			Presenter.Detach (actor, actorRenderer);
 			CalculateMilestones ();
 
-			Debug.Log ("start pos " + start.ToString("G4") + 
-				" drop dest " + dropDestination.ToString("G4") +
-				" drown dest " + drownDestination.ToString("G4"));
+//			Debug.Log ("start pos " + start.ToString("G4") + 
+//				" drop dest " + dropDestination.ToString("G4") +
+//				" drown dest " + drownDestination.ToString("G4"));
 
 			fallStarted = true;
 			FallCompleted = false;
@@ -66,16 +67,17 @@ public class FallingAnimator {
 	}
 
 
-	void FallDrownRevive (){
-		Debug.Log ("counter " + animationCounter + " drop progress " + dropProgress 
-			+ " drown progress " + drownProgress);
+	void FallDrown (){
+		//Debug.Log ("counter " + animationCounter + " drop progress " + dropProgress 
+		//	+ " drown progress " + drownProgress);
 
 		if (dropProgress < 1) {
 			dropProgress = Fall ();
 		} else if (drownProgress < 1) {
 			drownProgress = Drown ();
-		} else {
-			reviveProgress = Revive ();
+		} 
+		else {
+			Revive ();
 		}
 	}
 
@@ -89,9 +91,10 @@ public class FallingAnimator {
 		return Utilities.Interpolate (actor, dropDestination, drownDestination, pctDone);
 	}
 
-	float Revive  (){
-		float pctDone = (float)(animationCounter - (DROP_ANIMATION_TIME + DROWN_ANIMATION_TIME)) / REVIVE_ANIMATION_TIME; 
-		return Utilities.Interpolate (actor, drownDestination, GetHomePosition (), pctDone);
+	void Revive  (){
+		actor.transform.position = GetHomePosition ();
+		//float pctDone = (float)(animationCounter - (DROP_ANIMATION_TIME + DROWN_ANIMATION_TIME)) / REVIVE_ANIMATION_TIME; 
+		//return Utilities.Interpolate (actor, drownDestination, GetHomePosition (), pctDone);
 	}
 
 

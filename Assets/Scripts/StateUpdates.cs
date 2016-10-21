@@ -7,6 +7,8 @@ public class StateUpdates : MonoBehaviour {
 	Rigidbody2D playerBody, cakeBody, enemyBody;
 	SpriteRenderer playerRenderer, enemyRenderer, cakeRenderer;
 
+	float outOfScreen = -10f;
+
 	//for moving the actors (cake, player, enemy) w interpolation
 	Vector3 pCurrPos, pNextPos, eCurrPos, eNextPos, cCurrPos, cNextPos;
 
@@ -90,7 +92,6 @@ public class StateUpdates : MonoBehaviour {
 	//-------------------------------------------
 
 	int lastStateNumber = -1;
-
 	public void UpdateActors (ActorState state){
 
 		if (!GameSetup.isHost) {
@@ -143,9 +144,18 @@ public class StateUpdates : MonoBehaviour {
 	//-------------------------------------------
 
 	void InterpolateAllMovement (){ 
-		Utilities.Interpolate (player, pCurrPos, pNextPos, GetMovementProgresss () );
-		Utilities.Interpolate (enemy, eCurrPos, eNextPos, GetMovementProgresss () );
-		Utilities.Interpolate (cake, cCurrPos, cNextPos, GetMovementProgresss () );
+		InterpolateUnlessReviving (player, pCurrPos, pNextPos);
+		InterpolateUnlessReviving (enemy, eCurrPos, eNextPos);
+		InterpolateUnlessReviving (cake, cCurrPos, cNextPos);
+	}
+
+	void InterpolateUnlessReviving (GameObject actor, Vector3 currPos, Vector3 nextPos ){
+		if (currPos.x > outOfScreen ) {
+			Utilities.Interpolate (actor, currPos, nextPos, GetMovementProgresss ());
+		} else {
+			Debug.Log ("revive "+ currPos.ToString());
+			actor.transform.position = nextPos;
+		}
 	}
 
 	float GetMovementProgresss (){
