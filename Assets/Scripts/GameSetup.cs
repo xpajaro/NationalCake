@@ -10,6 +10,8 @@ using System;
 public class GameSetup : MonoBehaviour {
 
 	public static bool isHost;
+	static int GAME_SCENE = 1;
+	static int ENG_GAME_SCENE = 2;
 
 	void Start (){
 		SetupGooglePlay ();
@@ -43,8 +45,13 @@ public class GameSetup : MonoBehaviour {
 
 	public static void StartGame (){
 		//Debug.Log ("start game");
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene(GAME_SCENE);
 		//Debug.Log ("start game done");
+	}
+
+
+	public static void EndGame(){
+		SceneManager.LoadScene (ENG_GAME_SCENE);
 	}
 
 }

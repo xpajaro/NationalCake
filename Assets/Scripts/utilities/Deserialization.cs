@@ -14,6 +14,14 @@ public class Deserialization {
 	}
 
 
+	public static void UpdateGameState (byte[] dataFields){
+		//Debug.Log ("Update game state ");
+		GameState.GameEnded = System.BitConverter.ToBoolean (dataFields, 2);
+		GameState.GameWon = !System.BitConverter.ToBoolean (dataFields, 3);
+
+		//Debug.Log ("Update Game state");
+	}
+
 	public static ActorState GetActorState (byte[] dataFields){
 		ActorState state = new ActorState ();
 		//Debug.Log ("get state");

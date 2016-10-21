@@ -47,6 +47,10 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	void MovePlayer (Vector3 launchDir){
+		if (GameState.GameEnded) {
+			return;
+		}
+		
 		Vector3 impulse = CalculateImpulse (launchDir);
 
 		if (GameSetup.isHost) {

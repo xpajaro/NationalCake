@@ -41,6 +41,7 @@ public class GoalManager : MonoBehaviour {
 		}
 	}
 
+
 	void Prepare(){
 		pStart = pGoal.transform.position;
 		eStart = eGoal.transform.position;

@@ -13,7 +13,8 @@ public class Communicator  {
 	public static char MESSAGE_TYPE_HELLO = 'H';
 	public static char MESSAGE_TYPE_MOVEMENT = 'M';
 	public static char MESSAGE_TYPE_ITEM = 'I';
-	public static char MESSAGE_TYPE_STATE = 'S';
+	public static char MESSAGE_TYPE_ACTOR_STATE = 'A';
+	public static char MESSAGE_TYPE_GAME_STATE = 'G';
 
 	public StateUpdates stateUpdates;
 	public ItemUpdates itemUpdates;
@@ -43,6 +44,12 @@ public class Communicator  {
 		//Debug.Log ("share movement");
 		NetworkManager.Instance.SendFastMessage ( Serialization.SerializeMovement (impulse) );
 		//Debug.Log ("share movement done");
+	}
+
+	public void ShareGameState (){
+		//Debug.Log ("share game state");
+		NetworkManager.Instance.SendMessage ( Serialization.SerializeGameState (), true );
+		//Debug.Log ("share game state");
 	}
 
 	//actors are player, enemy and cake (movable game elements with physics)
@@ -87,9 +94,13 @@ public class Communicator  {
 			Vector3 impulse = Deserialization.GetImpulse (dataFields);
 			stateUpdates.MoveEnemy (impulse);
 
-		} else if (MESSAGE_TYPE_STATE.Equals (msgType) ){
+		} else if (MESSAGE_TYPE_ACTOR_STATE.Equals (msgType) ){
 			ActorState state = Deserialization.GetActorState (dataFields);
 			stateUpdates.UpdateActors (state);
+
+		} else if (MESSAGE_TYPE_GAME_STATE.Equals (msgType) ){
+			Deserialization.UpdateGameState (dataFields);
+			stateUpdates.EndGame ();
 		}
 		//Debug.Log ("route message done");
 	}

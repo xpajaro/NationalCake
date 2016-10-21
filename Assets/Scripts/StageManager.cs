@@ -22,16 +22,12 @@ public class StageManager : MonoBehaviour
 
 
 	void Start(){
+		LoadRenderers ();
 
 		if (GameSetup.isHost) {
 			StoreEveryStartPosition ();
 
-			playerBody = player.GetComponent<Rigidbody2D> ();
-			enemyBody = enemy.GetComponent<Rigidbody2D> ();
-			cakeBody = cake.GetComponent<Rigidbody2D> ();
-
-			pRenderer = player.GetComponent<SpriteRenderer> ();
-			eRenderer = enemy.GetComponent<SpriteRenderer> ();
+			LoadRigidBodies ();
 
 			converter = new WorldConverter (this.gameObject);
 
@@ -43,6 +39,16 @@ public class StageManager : MonoBehaviour
 
 	}
 
+	void LoadRenderers (){
+		pRenderer = player.GetComponent<SpriteRenderer> ();
+		eRenderer = enemy.GetComponent<SpriteRenderer> ();
+	}
+
+	void LoadRigidBodies (){
+		playerBody = player.GetComponent<Rigidbody2D> ();
+		enemyBody = enemy.GetComponent<Rigidbody2D> ();
+		cakeBody = cake.GetComponent<Rigidbody2D> ();
+	}
 
 	void FixedUpdate () {
 		SortAppearance (player, pRenderer);

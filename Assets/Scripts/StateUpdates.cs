@@ -47,7 +47,8 @@ public class StateUpdates : MonoBehaviour {
 				Communicator.Instance.ShareActorState (playerBody, Falling.pFalling, 
 					enemyBody, Falling.eFalling,
 					cakeBody, Falling.cFalling); 
-				
+
+
 				nextBroadcastTime = Time.time + TIME_GAP;
 			}
 		} else {
@@ -61,10 +62,27 @@ public class StateUpdates : MonoBehaviour {
 	//-------------------------------------------
 
 	public void MoveEnemy (Vector3 impulse){
+		if (GameState.GameEnded) {
+			return;
+		}
+
 		Vector3 drunkImpulse =  PlayerControl.CalculateWineImpulse (impulse, WineBuzzLevel.EnemyBuzz) ;
 		enemyBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
 	}
 
+
+	//-------------------------------------------
+	// End game
+	//-------------------------------------------
+
+	public void EndGame(){
+		Invoke ("LeaveScene", 5f);
+	}
+
+
+	void LeaveScene(){
+		GameSetup.EndGame ();
+	}
 
 	//-------------------------------------------
 	// Handle new network game state (client only)

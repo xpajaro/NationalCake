@@ -11,6 +11,7 @@ public class Serialization
 	static int HELLO_MESSAGE_LENGTH = 2;
 	static int MOVEMENT_MESSAGE_LENGTH = 10;
 	static int ACTOR_STATE_MESSAGE_LENGTH = 49;
+	static int GAME_STATE_MESSAGE_LENGTH = 4;
 
 	//order of message sent (ignore if expired)
 	static int stateMessageNo = 0 ;
@@ -18,6 +19,7 @@ public class Serialization
 	static List<byte> helloMessage  = new List<byte> (HELLO_MESSAGE_LENGTH);
 	static List<byte> movementMessage  = new List<byte> (MOVEMENT_MESSAGE_LENGTH);
 	static List<byte> actorStateMessage  = new List<byte> (ACTOR_STATE_MESSAGE_LENGTH);
+	static List<byte> gameStateMessage  = new List<byte> (GAME_STATE_MESSAGE_LENGTH);
 
 	//-------------------------------------------
 	// Serialize
@@ -47,7 +49,23 @@ public class Serialization
 		//Debug.Log ("Serialize movement done");
 		return movementMessage.ToArray ();
 	}
-		
+
+
+	public static byte [] SerializeGameState (){
+		//Debug.Log ("Serialize movement");
+
+		gameStateMessage.Clear ();
+		//meta
+		gameStateMessage.Add (PROTOCOL_VERSION);
+		gameStateMessage.Add ((byte)Communicator.MESSAGE_TYPE_GAME_STATE);
+		//data
+		gameStateMessage.AddRange (System.BitConverter.GetBytes (GameState.GameEnded));  
+		gameStateMessage.AddRange (System.BitConverter.GetBytes (GameState.GameWon)); 
+
+		//Debug.Log ("Serialize movement done");
+		return gameStateMessage.ToArray ();
+	}
+
 
 	public static byte [] SerializeActorState (Rigidbody2D playerBody, bool pFalling,
 		Rigidbody2D enemyBody, bool eFalling,
@@ -57,7 +75,7 @@ public class Serialization
 		actorStateMessage.Clear ();
 		//meta
 		actorStateMessage.Add (PROTOCOL_VERSION);
-		actorStateMessage.Add ((byte)Communicator.MESSAGE_TYPE_STATE);
+		actorStateMessage.Add ((byte)Communicator.MESSAGE_TYPE_ACTOR_STATE);
 		//data
 		actorStateMessage.AddRange (BitConverter.GetBytes (++stateMessageNo)); 
 		actorStateMessage.AddRange (BitConverter.GetBytes (playerBody.position.x));  
