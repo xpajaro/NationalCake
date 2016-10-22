@@ -24,6 +24,10 @@ public class GoalManager : MonoBehaviour {
 	void FixedUpdate (){
 		if (timesMoved < TIMES_TO_MOVE) {
 			if (animationCounter >= WHEN_TO_MOVE) {
+				if (Gong.swapped) {
+					return;
+				}
+
 				float pctDone = (float) (animationCounter - WHEN_TO_MOVE) / ANIMATION_DURATION;
 
 				if (pctDone == 0) {
@@ -40,6 +44,7 @@ public class GoalManager : MonoBehaviour {
 			animationCounter++;
 		}
 	}
+
 
 
 	void Prepare(){
