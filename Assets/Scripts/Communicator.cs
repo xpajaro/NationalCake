@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,6 +12,7 @@ public class Communicator  {
 
 	public enum MessageTypes {HELLO, MOVEMENT, ITEM, STATE};
 	public static char MESSAGE_TYPE_HELLO = 'H';
+	public static char MESSAGE_TYPE_HI = 'h';
 	public static char MESSAGE_TYPE_MOVEMENT = 'M';
 	public static char MESSAGE_TYPE_ITEM = 'I';
 	public static char MESSAGE_TYPE_ACTOR_STATE = 'A';
@@ -18,6 +20,8 @@ public class Communicator  {
 
 	public StateUpdates stateUpdates;
 	public ItemUpdates itemUpdates;
+
+	bool gameStarted;
 
 	//make singleton
 	public static Communicator _instance;
@@ -36,7 +40,10 @@ public class Communicator  {
 
 	public void SayHello (){
 		//Debug.Log ("say hello");
-		NetworkManager.Instance.SendMessage ( Serialization.SerializeHello (), true );
+
+		for (int i = 0; i < 3; i++) { // make sure it gets there
+			NetworkManager.Instance.SendFastMessage (Serialization.SerializeHello ());
+		}
 		//Debug.Log ("say hello done");
 	}
 
@@ -76,8 +83,11 @@ public class Communicator  {
 
 		//implement some checking to make sure they start at the same time
 		if ( MESSAGE_TYPE_HELLO.Equals (msgType) ) {
-			GameSetup.ChooseHost (senderID);
-			GameSetup.StartGame ();
+			if (!gameStarted ){
+				gameStarted = true;
+				GameSetup.ChooseHost (senderID);
+				GameSetup.StartGame ();
+			}
 		} else { 
 			if (stateUpdates != null) {
 				RouteMessage (msgType, msgBytes);

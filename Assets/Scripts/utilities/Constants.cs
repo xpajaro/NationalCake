@@ -15,5 +15,6 @@ public class Constants {
 	public static int SORTING_ORDER_FRONT = 3 ;
 	public static int SORTING_ORDER_BACK = 1 ;
 
+	public static string GAME_SCENE = "Main";
 
 }

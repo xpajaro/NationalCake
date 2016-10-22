@@ -23,6 +23,7 @@ public class NetworkListener : RealTimeMultiplayerListener {
 		//Debug.Log ("on room connected");
 		if (success) {
 			Communicator.Instance.SayHello ();
+
 		} else {
 			// Error!
 			// ...show error message to user...

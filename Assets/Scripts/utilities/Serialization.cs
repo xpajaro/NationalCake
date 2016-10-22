@@ -33,7 +33,6 @@ public class Serialization
 		helloMessage.Add ((byte)Communicator.MESSAGE_TYPE_HELLO);
 		return helloMessage.ToArray ();
 	}
-		
 
 	public static byte [] SerializeMovement (Vector3 impulse){
 		//Debug.Log ("Serialize movement");

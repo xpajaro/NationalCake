@@ -36,10 +36,7 @@ public class GameSetup : MonoBehaviour {
 		//Debug.Log ("choose host");
 		if (String.Compare (PlayGamesPlatform.Instance.RealTime.GetSelf().ParticipantId, otherPlayerID) < 0) {
 			isHost = true;
-			Debug.Log ("host chosen - me");
-		} else {
-			Debug.Log ("host chosen - not me");
-		}
+		} 
 		//Debug.Log ("choose host done");
 	}
 
