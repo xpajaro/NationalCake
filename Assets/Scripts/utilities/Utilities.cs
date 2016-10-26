@@ -8,6 +8,25 @@ using System.IO;
 
 public class Utilities : MonoBehaviour{
 
+	public static Vector3 GetRandomStagePosition() {
+		Vector3 pos = GetRandomCoordinates ();
+
+		while (!StageManager.isOnStage (pos)) {
+			pos = GetRandomCoordinates ();
+		}
+
+		return pos;
+	} 
+
+	static Vector3 GetRandomCoordinates () {
+
+		System.Random r = new System.Random();
+
+		float randomX = (float)( r.NextDouble() * 10) - 5;
+		float randomY = (float)( r.NextDouble() * 6) - 3;
+
+		return new Vector3 (randomX, randomY, 0f);
+	}
 
 
 	public static float Interpolate (GameObject actor, Vector3 start, Vector3 destination, float  pctDone){

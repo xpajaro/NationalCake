@@ -17,4 +17,8 @@ public class Constants {
 
 	public static string GAME_SCENE = "Main";
 
+	public static int ITEM_BARREL = 0;
+	public static int ITEM_SPILL = 1;
+	public static int ITEM_JUJU = 2;
+
 }

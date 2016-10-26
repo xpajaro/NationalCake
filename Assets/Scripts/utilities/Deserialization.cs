@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Deserialization {
+	public static string ITEM_KEY = "item";
+	public static string POSITION_KEY = "pos";
 
 	public static Vector3 GetImpulse (byte[] dataFields){
 		Vector3 impulse = new Vector3 ();
@@ -11,6 +14,38 @@ public class Deserialization {
 
 		//Debug.Log ("Get Impulse done");
 		return impulse;
+	}
+
+	public static Dictionary<string, object> GetItemDrop (byte[] dataFields){
+		//Debug.Log ("Get item drop ");
+		Dictionary<string, object> itemDrop = new Dictionary<string, object>();
+
+		int item = System.BitConverter.ToInt32(dataFields, 2);
+		itemDrop.Add (ITEM_KEY, item);
+
+		Vector3 pos = new Vector3 ();
+		pos.x = System.BitConverter.ToSingle(dataFields, 6);
+		pos.y = System.BitConverter.ToSingle(dataFields, 10);
+		itemDrop.Add (POSITION_KEY, pos);
+
+		//Debug.Log ("Get item drop done");
+		return itemDrop;
+	}
+
+	public static Dictionary<string, object> GetItemUse (byte[] dataFields){
+		//Debug.Log ("Get item use ");
+		Dictionary<string, object> itemUse = new Dictionary<string, object>();
+
+		int item = System.BitConverter.ToInt32(dataFields, 2);
+		itemUse.Add (ITEM_KEY, item);
+
+		Vector3 pos = new Vector3 ();
+		pos.x = System.BitConverter.ToSingle(dataFields, 6);
+		pos.y = System.BitConverter.ToSingle(dataFields, 10);
+		itemUse.Add (POSITION_KEY, pos);
+
+		//Debug.Log ("Get item use done");
+		return itemUse;
 	}
 
 

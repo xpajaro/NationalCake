@@ -10,6 +10,8 @@ public class Serialization
 	//byte message lengths
 	static int HELLO_MESSAGE_LENGTH = 2;
 	static int MOVEMENT_MESSAGE_LENGTH = 10;
+	static int ITEM_DROP_MESSAGE_LENGTH = 14;
+	static int ITEM_USE_MESSAGE_LENGTH = 14;
 	static int ACTOR_STATE_MESSAGE_LENGTH = 49;
 	static int GAME_STATE_MESSAGE_LENGTH = 4;
 
@@ -18,6 +20,8 @@ public class Serialization
 
 	static List<byte> helloMessage  = new List<byte> (HELLO_MESSAGE_LENGTH);
 	static List<byte> movementMessage  = new List<byte> (MOVEMENT_MESSAGE_LENGTH);
+	static List<byte> itemDropMessage  = new List<byte> (ITEM_DROP_MESSAGE_LENGTH);
+	static List<byte> itemUseMessage  = new List<byte> (ITEM_USE_MESSAGE_LENGTH);
 	static List<byte> actorStateMessage  = new List<byte> (ACTOR_STATE_MESSAGE_LENGTH);
 	static List<byte> gameStateMessage  = new List<byte> (GAME_STATE_MESSAGE_LENGTH);
 
@@ -48,6 +52,39 @@ public class Serialization
 		//Debug.Log ("Serialize movement done");
 		return movementMessage.ToArray ();
 	}
+
+	public static byte [] SerializeItemDrop (int itemID, Vector3 pos){
+		//Debug.Log ("Serialize item drop");
+
+		itemDropMessage.Clear ();
+		//meta
+		itemDropMessage.Add (PROTOCOL_VERSION);
+		itemDropMessage.Add ((byte)Communicator.MESSAGE_TYPE_ITEM_DROP);
+		//data
+		itemDropMessage.AddRange (System.BitConverter.GetBytes (itemID));  
+		itemDropMessage.AddRange (System.BitConverter.GetBytes (pos.x));  
+		itemDropMessage.AddRange (System.BitConverter.GetBytes (pos.y)); 
+
+		//Debug.Log ("Serialize item drop done");
+		return itemDropMessage.ToArray ();
+	}
+
+	public static byte [] SerializeItemUse (int itemID, Vector3 pos){
+		//Debug.Log ("Serialize item use");
+
+		itemUseMessage.Clear ();
+		//meta
+		itemUseMessage.Add (PROTOCOL_VERSION);
+		itemUseMessage.Add ((byte)Communicator.MESSAGE_TYPE_ITEM_USE);
+		//data
+		itemUseMessage.AddRange (System.BitConverter.GetBytes (itemID));  
+		itemUseMessage.AddRange (System.BitConverter.GetBytes (pos.x));  
+		itemUseMessage.AddRange (System.BitConverter.GetBytes (pos.y)); 
+
+		//Debug.Log ("Serialize item use done");
+		return itemUseMessage.ToArray ();
+	}
+
 
 
 	public static byte [] SerializeGameState (){

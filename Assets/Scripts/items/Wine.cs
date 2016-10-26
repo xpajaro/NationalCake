@@ -24,7 +24,7 @@ public class Wine : MonoBehaviour {
 	void OnCollisionEnter2D (Collision2D col)
 	{	
 		string actorName = col.gameObject.name;
-		if (actorName == "player" || actorName == "enemy") {
+		if (actorName.Equals("player") || actorName.Equals("enemy") ) {
 
 			//hide
 			Presenter.Detach (this.gameObject, spriteRenderer);
@@ -42,7 +42,7 @@ public class Wine : MonoBehaviour {
 	}
 
 	void GoFaster (string actorName){
-		if (actorName == "player") {
+		if (actorName.Equals("player") ) {
 			WineBuzzLevel.PlayerBuzz = Math.Min( BUZZ_MAX, WineBuzzLevel.PlayerBuzz + BUZZ );
 		} else if ( actorName == "enemy") {
 			WineBuzzLevel.EnemyBuzz =  Math.Min( BUZZ_MAX, WineBuzzLevel.EnemyBuzz + BUZZ );

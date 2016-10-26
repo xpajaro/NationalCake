@@ -23,7 +23,7 @@ public class Gong : MonoBehaviour {
 	{	
 		if (!swapped) {
 			string actorName = col.gameObject.name;
-			if (actorName == "player" || actorName == "enemy") {
+			if (actorName.Equals("player") || actorName.Equals( "enemy")) {
 
 				SwapSides ();
 				Darken ();

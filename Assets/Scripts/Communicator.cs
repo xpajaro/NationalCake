@@ -12,9 +12,9 @@ public class Communicator  {
 
 	public enum MessageTypes {HELLO, MOVEMENT, ITEM, STATE};
 	public static char MESSAGE_TYPE_HELLO = 'H';
-	public static char MESSAGE_TYPE_HI = 'h';
 	public static char MESSAGE_TYPE_MOVEMENT = 'M';
-	public static char MESSAGE_TYPE_ITEM = 'I';
+	public static char MESSAGE_TYPE_ITEM_DROP = 'D';
+	public static char MESSAGE_TYPE_ITEM_USE = 'U';
 	public static char MESSAGE_TYPE_ACTOR_STATE = 'A';
 	public static char MESSAGE_TYPE_GAME_STATE = 'G';
 
@@ -57,6 +57,18 @@ public class Communicator  {
 		//Debug.Log ("share game state");
 		NetworkManager.Instance.SendMessage ( Serialization.SerializeGameState (), true );
 		//Debug.Log ("share game state");
+	}
+
+	public void ShareItemDrop (int item, Vector3 pos){
+		//Debug.Log ("share item drop");
+		NetworkManager.Instance.SendMessage ( Serialization.SerializeItemDrop (item, pos), true );
+		//Debug.Log ("share item drop");
+	}
+
+	public void ShareItemUse (int item, Vector3 pos){
+		//Debug.Log ("share item use");
+		NetworkManager.Instance.SendMessage ( Serialization.SerializeItemUse (item, pos), true );
+		//Debug.Log ("share item use");
 	}
 
 	//actors are player, enemy and cake (movable game elements with physics)
@@ -107,6 +119,14 @@ public class Communicator  {
 		} else if (MESSAGE_TYPE_ACTOR_STATE.Equals (msgType) ){
 			ActorState state = Deserialization.GetActorState (dataFields);
 			stateUpdates.UpdateActors (state);
+
+		} else if (MESSAGE_TYPE_ITEM_DROP.Equals (msgType) ){
+			Dictionary<string, object> itemDropped = Deserialization.GetItemDrop (dataFields);
+			itemUpdates.ShowDroppedItem (itemDropped);
+
+		} else if (MESSAGE_TYPE_ITEM_USE.Equals (msgType) ){
+			//ActorState state = Deserialization.GetActorState (dataFields);
+			//stateUpdates.UpdateActors (state);
 
 		} else if (MESSAGE_TYPE_GAME_STATE.Equals (msgType) ){
 			Deserialization.UpdateGameState (dataFields);
