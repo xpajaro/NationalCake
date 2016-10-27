@@ -5,7 +5,7 @@ public class ItemManager : MonoBehaviour {
 	public GameObject holder1, holder2;
 
 	static Vector3 holder1Pos, holder2Pos;
-	static bool holder1Occupied = true, holder2Occupied = true;
+	static bool holder1Occupied = false, holder2Occupied = false; //change to true once we test use
 
 	float DROP_ITEM_COOLDOWN = 10f; //change to 40
 
@@ -48,7 +48,7 @@ public class ItemManager : MonoBehaviour {
 		string pickupName = "itemPickups/" ;
 
 		if (ID == 0) {
-			pickupName += "boxPickup";
+			pickupName += "barrelPickup";
 		} else if (ID == 1) {
 			pickupName += "spillPickup";
 		} else if (ID == 2) {
@@ -62,7 +62,7 @@ public class ItemManager : MonoBehaviour {
 		string controllerName = "itemIcons/";
 
 		if (ID == 0) {
-			controllerName += "boxIcon";
+			controllerName += "barrelIcon";
 		} else if (ID == 1) {
 			controllerName += "spillIcon";
 		} else if (ID == 2) {
