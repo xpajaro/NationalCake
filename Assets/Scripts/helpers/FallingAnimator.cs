@@ -25,7 +25,7 @@ public class FallingAnimator {
 	SpriteRenderer actorRenderer ;
 
 	int animationCounter;
-	float dropProgress = 0, drownProgress=0, reviveProgress =0;
+	float dropProgress = 0, drownProgress=0 ;
 
 
 	public FallingAnimator (GameObject _actor){

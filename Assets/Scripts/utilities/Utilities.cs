@@ -8,6 +8,34 @@ using System.IO;
 
 public class Utilities : MonoBehaviour{
 
+
+	public static void FaceCorrectDirection (GameObject actor, Vector3 impulse, ref bool facingHomeBase, bool leftIsHome){
+
+		if (leftIsHome) {
+			TurnByImpulse (actor, impulse.x, ref facingHomeBase);
+		} else {
+			TurnByImpulse (actor, (impulse.x * -1), ref facingHomeBase);
+		}
+	}
+
+	static void TurnByImpulse (GameObject actor, float direction, ref bool facingHomeBase){
+		if (direction > 0 && facingHomeBase) {
+			Utilities.TurnAround (actor);
+			facingHomeBase = false;
+
+		} else if (direction < 0 && !facingHomeBase) {
+			Utilities.TurnAround (actor);
+			facingHomeBase = true;
+		}
+	}
+
+	public static void TurnAround (GameObject actor){
+		Vector3 theScale = actor.transform.localScale;
+		theScale.x *= -1;
+		actor.transform.localScale = theScale;
+	}
+
+
 	public static Vector3 GetRandomStagePosition() {
 		Vector3 pos = GetRandomCoordinates ();
 
@@ -36,15 +64,18 @@ public class Utilities : MonoBehaviour{
 		return pctDone;
 	}
 
+
 	public static float GetAlphaAtPosition (Vector2 position, Texture2D texture){
 		Color color = texture.GetPixel ((int)position.x, (int)position.y);
 		return color.a;
 	}
 
+
 	public static Vector3 FlipSide (Vector3 input){
 		input.x *= -1;
 		return input;
 	}
+
 
 	public static StringBuilder ClearStringBuilder ( StringBuilder value)
 	{

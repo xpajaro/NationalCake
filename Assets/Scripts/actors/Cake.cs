@@ -40,6 +40,6 @@ public class Cake : MonoBehaviour {
 	}
 
 	void LeaveScene(){
-		GameSetup.EndGame ();
+		GameSetup.LeaveGame ();
 	}
 }

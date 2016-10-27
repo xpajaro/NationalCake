@@ -7,7 +7,7 @@ public class ItemManager : MonoBehaviour {
 	static Vector3 holder1Pos, holder2Pos;
 	static bool holder1Occupied = false, holder2Occupied = false; //change to true once we test use
 
-	float DROP_ITEM_COOLDOWN = 10f; //change to 40
+	float DROP_ITEM_COOLDOWN = 40f; //change to 40
 
 	// Use this for initialization
 	void Start () {
@@ -21,15 +21,19 @@ public class ItemManager : MonoBehaviour {
 
 
 	public static void SaveItem (int itemType){
-		GameObject itemIcon = (GameObject) Instantiate ( Resources.Load( GetIconNameByID(itemType) ));
 		if (!holder1Occupied) {
-			itemIcon.transform.position = holder1Pos;
+			SpawnNewItem (itemType, holder1Pos);
 			holder1Occupied = true;
 			
 		} else if (!holder2Occupied) {
-			itemIcon.transform.position = holder2Pos;
+			SpawnNewItem (itemType, holder2Pos);
 			holder2Occupied = true;
 		}
+	}
+
+	static void SpawnNewItem (int itemType, Vector3 position){
+		GameObject itemIcon = (GameObject) Instantiate ( Resources.Load( GetIconNameByID(itemType) ));
+		itemIcon.transform.position = position;
 	}
 
 	public void DropItem (){

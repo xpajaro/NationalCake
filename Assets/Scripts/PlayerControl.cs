@@ -12,13 +12,11 @@ public class PlayerControl : MonoBehaviour {
 	Vector3 movtStartPosition;
 
 	Rigidbody2D playerBody;
-	SpriteRenderer spriteRenderer;
 
-
+	bool facingHomeBase = false; // default position
 
 	void Start () {
 		playerBody = GetComponent<Rigidbody2D> ();
-		spriteRenderer = GetComponent<SpriteRenderer> (); 
 	}
 
 	void Update (){
@@ -68,7 +66,11 @@ public class PlayerControl : MonoBehaviour {
 
 		if (GameSetup.isHost) {
 			Vector3 drunkImpulse = CalculateWineImpulse (impulse, WineBuzzLevel.PlayerBuzz) ;
+
+			Utilities.FaceCorrectDirection (this.gameObject, drunkImpulse, ref facingHomeBase, true);
+
 			playerBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
+
 		} else {
 			Communicator.Instance.ShareMovement (impulse);
 		}

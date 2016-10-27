@@ -62,13 +62,16 @@ public class StateUpdates : MonoBehaviour {
 	//-------------------------------------------
 	// Handle opponent input (host only)
 	//-------------------------------------------
-
+	bool enemyFacingHomeBase_Host = false;
 	public void MoveEnemy (Vector3 impulse){
 		if (GameState.GameEnded) {
 			return;
 		}
 
 		Vector3 drunkImpulse =  PlayerControl.CalculateWineImpulse (impulse, WineBuzzLevel.EnemyBuzz) ;
+
+		Utilities.FaceCorrectDirection (enemy, drunkImpulse, ref enemyFacingHomeBase_Host, false);
+
 		enemyBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
 	}
 
@@ -83,7 +86,7 @@ public class StateUpdates : MonoBehaviour {
 
 
 	void LeaveScene(){
-		GameSetup.EndGame ();
+		GameSetup.LeaveGame ();
 	}
 
 	//-------------------------------------------
@@ -98,10 +101,11 @@ public class StateUpdates : MonoBehaviour {
 
 			if (lastStateNumber < state.StateNumber) {
 				state = SwitchPlayers (state); 
+
 				UpdatePositions (state);
+				FaceCorrectDirection ();
 
 				lastUpdateTime = Time.time;
-
 				lastStateNumber = state.StateNumber;
 			}
 
@@ -109,6 +113,27 @@ public class StateUpdates : MonoBehaviour {
 
 		}
 
+	}
+
+	bool enemyFacingHomeBase_Client = false, playerFacingHomeBase_Client = false;
+	void FaceCorrectDirection (){
+		if (pCurrPos.x > pNextPos.x && playerFacingHomeBase_Client) { //going left
+			Utilities.TurnAround (player);
+			playerFacingHomeBase_Client = false;
+
+		} else if (pCurrPos.x < pNextPos.x && !playerFacingHomeBase_Client) {
+			Utilities.TurnAround (player);
+			playerFacingHomeBase_Client = true;
+		}
+
+		if (eCurrPos.x > eNextPos.x && !enemyFacingHomeBase_Client) { //going left
+			Utilities.TurnAround (enemy);
+			enemyFacingHomeBase_Client = true;
+
+		} else if (eCurrPos.x < eNextPos.x && enemyFacingHomeBase_Client) {
+			Utilities.TurnAround (enemy);
+			enemyFacingHomeBase_Client = false;
+		}
 	}
 
 

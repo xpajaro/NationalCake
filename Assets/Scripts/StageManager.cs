@@ -69,6 +69,7 @@ public class StageManager : MonoBehaviour
 		}
 	}
 
+
 	void StoreEveryStartPosition (){
 		PLAYER_START_POSITION = player.transform.position;
 		ENEMY_START_POSITION = enemy.transform.position;
@@ -79,15 +80,10 @@ public class StageManager : MonoBehaviour
 		player.transform.position = ENEMY_START_POSITION;
 		enemy.transform.position = PLAYER_START_POSITION;
 
-		TurnAround (player);
-		TurnAround (enemy);
+		Utilities.TurnAround (player);
+		Utilities.TurnAround (enemy);
 	}
 
-	void TurnAround (GameObject actor){
-		Vector3 theScale = actor.transform.localScale;
-		theScale.x *= -1;
-		actor.transform.localScale = theScale;
-	}
 
 	void RemoveClientPhysics(){
 		Destroy (playerBody);
