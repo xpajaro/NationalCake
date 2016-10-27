@@ -47,7 +47,7 @@ public class GameSetup : MonoBehaviour {
 	}
 
 
-	public static void EndGame(){
+	public static void LeaveGame(){
 		SceneManager.LoadScene (ENG_GAME_SCENE);
 	}
 

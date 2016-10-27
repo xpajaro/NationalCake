@@ -88,11 +88,11 @@ public class Deserialization {
 		state.EnemyFalling = System.BitConverter.ToBoolean(dataFields, 47);
 		state.CakeFalling = System.BitConverter.ToBoolean(dataFields, 48);
 
-		Debug.Log ("player deets " + state.PlayerPosition.ToString("G4") + " / " +  state.PlayerVelocity.ToString("G4") + " \n " +
-			"enemy deets " + state.EnemyPosition.ToString("G4") + " / " +  state.EnemyVelocity.ToString("G4") + " \n " +
-			"cake deets " + state.CakePosition.ToString("G4") +" \n " +
-			"falling deets " + state.PlayerFalling + " / " + state.EnemyFalling + " / " + state.CakeFalling);
-
+//		Debug.Log ("player deets " + state.PlayerPosition.ToString("G4") + " / " +  state.PlayerVelocity.ToString("G4") + " \n " +
+//			"enemy deets " + state.EnemyPosition.ToString("G4") + " / " +  state.EnemyVelocity.ToString("G4") + " \n " +
+//			"cake deets " + state.CakePosition.ToString("G4") +" \n " +
+//			"falling deets " + state.PlayerFalling + " / " + state.EnemyFalling + " / " + state.CakeFalling);
+//
 		//Debug.Log ("get state done");
 		return state;
 	}

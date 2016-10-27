@@ -19,6 +19,7 @@ public class Cake : MonoBehaviour {
 					GameState.GameWon = false;
 				}
 
+				GameState.GameEnded = true;
 				Communicator.Instance.ShareGameState ();
 
 				StopMoving ();

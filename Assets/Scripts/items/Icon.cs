@@ -2,11 +2,9 @@
 using System.Collections;
 
 public class Icon : MonoBehaviour {
+	public int itemType;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
+
 	
 	// Update is called once per frame
 	void Update () {

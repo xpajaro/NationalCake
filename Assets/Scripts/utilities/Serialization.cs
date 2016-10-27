@@ -128,10 +128,10 @@ public class Serialization
 		actorStateMessage.AddRange (BitConverter.GetBytes (eFalling)); 
 		actorStateMessage.AddRange (BitConverter.GetBytes (cFalling)); 
 
-		Debug.Log ("player deets " + playerBody.position.ToString("G4") + " / " +  playerBody.velocity.ToString("G4") + " \n " +
-			"enemy deets " + enemyBody.position.ToString("G4") + " / " +  enemyBody.velocity.ToString("G4") + " \n " +
-			"cake deets " + cakeBody.position.ToString("G4") +  " \n " +
-			"falling deets " + pFalling.ToString() + " / " + cFalling.ToString() + " / " + eFalling.ToString());
+//		Debug.Log ("player deets " + playerBody.position.ToString("G4") + " / " +  playerBody.velocity.ToString("G4") + " \n " +
+//			"enemy deets " + enemyBody.position.ToString("G4") + " / " +  enemyBody.velocity.ToString("G4") + " \n " +
+//			"cake deets " + cakeBody.position.ToString("G4") +  " \n " +
+//			"falling deets " + pFalling.ToString() + " / " + cFalling.ToString() + " / " + eFalling.ToString());
 
 		//Debug.Log ("Serialize state done");
 		return actorStateMessage.ToArray ();

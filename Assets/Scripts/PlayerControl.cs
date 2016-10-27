@@ -9,8 +9,6 @@ public class PlayerControl : MonoBehaviour {
 	public float MOVT_CAP = 150;
 	public float MOVT_CAP_EFFECTIVE_RATIO = 50;
 
-
-	bool touchStarted = false;
 	Vector3 movtStartPosition;
 
 	Rigidbody2D playerBody;
@@ -23,6 +21,9 @@ public class PlayerControl : MonoBehaviour {
 		spriteRenderer = GetComponent<SpriteRenderer> (); 
 	}
 
+	void Update (){
+		HandleTouch ();
+	}
 
 	//-------------------------------------------
 	// Handle player input -- consider making this screen touch not player touch
@@ -32,18 +33,30 @@ public class PlayerControl : MonoBehaviour {
 	// game state contains all positions & velocities
 	//-------------------------------------------
 
-	void OnMouseDown () {
-		if (!touchStarted) {
-			movtStartPosition = Input.mousePosition;
-			touchStarted = true;
+	void HandleTouch(){
+		foreach ( Touch touch in Input.touches) {
+			if (touch.phase == TouchPhase.Began) {
+				TouchStarted (touch);
+			} else if (touch.phase == TouchPhase.Ended) {
+				TouchEnded (touch);
+			} else if (touch.phase == TouchPhase.Canceled) {
+				TouchCanceled ();
+			}
 		}
 	}
 
-	void OnMouseUp () {
-		touchStarted = false;
-		Vector3 launchDir = CalculateLaunchDirection (Input.mousePosition);
+	void TouchStarted (Touch touch) {
+			movtStartPosition = touch.position;
+	}
+
+	void TouchEnded (Touch touch) {
+		Vector3 launchDir = CalculateLaunchDirection (touch.position);
 		launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
 		MovePlayer (launchDir);
+	}
+
+	void TouchCanceled () {
+		
 	}
 
 	void MovePlayer (Vector3 launchDir){
