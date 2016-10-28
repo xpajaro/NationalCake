@@ -2,11 +2,11 @@
 
 public class GameState
 {
-	public static bool GameEnded {
+	public static bool gameEnded {
 		get; set;
 	}
 
-	public static bool GameWon {
+	public static bool gameWon {
 		get; set;
 	}
 

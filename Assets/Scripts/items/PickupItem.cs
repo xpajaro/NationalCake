@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Pickup : MonoBehaviour {
+public class PickupItem : MonoBehaviour {
 	public int itemType ;
 	GameObject cake;
 	public float LIFETIME = 7f;

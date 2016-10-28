@@ -95,8 +95,8 @@ public class Serialization
 		gameStateMessage.Add (PROTOCOL_VERSION);
 		gameStateMessage.Add ((byte)Communicator.MESSAGE_TYPE_GAME_STATE);
 		//data
-		gameStateMessage.AddRange (System.BitConverter.GetBytes (GameState.GameEnded));  
-		gameStateMessage.AddRange (System.BitConverter.GetBytes (GameState.GameWon)); 
+		gameStateMessage.AddRange (System.BitConverter.GetBytes (GameState.gameEnded));  
+		gameStateMessage.AddRange (System.BitConverter.GetBytes (GameState.gameWon)); 
 
 		//Debug.Log ("Serialize movement done");
 		return gameStateMessage.ToArray ();

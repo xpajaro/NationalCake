@@ -9,6 +9,19 @@ using System.IO;
 public class Utilities : MonoBehaviour{
 
 
+	static float OVERLAP_RADIUS = 1.2f;
+	public static GameObject GetOverLappingItem (Vector3 pos, int layerMask){
+		GameObject collisionObject = null;
+
+		Collider2D collider = Physics2D.OverlapCircle (pos, OVERLAP_RADIUS, layerMask);
+		if (collider != null) {
+			collisionObject = collider.gameObject;
+			Debug.Log ("icon collision "+ collisionObject.name);
+		}
+
+		return collisionObject;
+	}
+
 	public static void FaceCorrectDirection (GameObject actor, Vector3 impulse, ref bool facingHomeBase, bool leftIsHome){
 
 		if (leftIsHome) {
@@ -50,8 +63,8 @@ public class Utilities : MonoBehaviour{
 
 		System.Random r = new System.Random();
 
-		float randomX = (float)( r.NextDouble() * 10) - 5;
-		float randomY = (float)( r.NextDouble() * 6) - 3;
+		float randomX = (float)( r.NextDouble() * 9f) - 4.5f;
+		float randomY = (float)( r.NextDouble() * 5.5f) - 2.25f;
 
 		return new Vector3 (randomX, randomY, 0f);
 	}

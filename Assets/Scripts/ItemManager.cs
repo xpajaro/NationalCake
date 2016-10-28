@@ -3,49 +3,78 @@ using System.Collections;
 
 public class ItemManager : MonoBehaviour {
 	public GameObject holder1, holder2;
+	static public IconHolderState holder1State, holder2State;
 
-	static Vector3 holder1Pos, holder2Pos;
-	static bool holder1Occupied = false, holder2Occupied = false; //change to true once we test use
-
-	float DROP_ITEM_COOLDOWN = 40f; //change to 40
+	float DROP_ITEM_COOLDOWN = 10f; //change to 40
 
 	// Use this for initialization
 	void Start () {
-		holder1Pos = holder1.transform.position;
-		holder2Pos = holder2.transform.position;
+		holder1State = new IconHolderState (holder1);
+		holder2State = new IconHolderState (holder2);
 
 		if (GameSetup.isHost) {
 			InvokeRepeating ("DropItem", 0.0f, DROP_ITEM_COOLDOWN);
 		}
+		GameControls.itemManager = this;
 	}
 
 
 	public static void SaveItem (int itemType){
-		if (!holder1Occupied) {
-			SpawnNewItem (itemType, holder1Pos);
-			holder1Occupied = true;
+		if (holder1State.icon == null) {
+			holder1State.icon = SpawnNewItem (itemType, holder1State.holder.transform.position);
 			
-		} else if (!holder2Occupied) {
-			SpawnNewItem (itemType, holder2Pos);
-			holder2Occupied = true;
+		} else if (holder1State.icon == null) {
+			holder2State.icon = SpawnNewItem (itemType, holder2State.holder.transform.position);
 		}
 	}
 
-	static void SpawnNewItem (int itemType, Vector3 position){
+	static GameObject SpawnNewItem (int itemType, Vector3 position){
 		GameObject itemIcon = (GameObject) Instantiate ( Resources.Load( GetIconNameByID(itemType) ));
 		itemIcon.transform.position = position;
+
+		return itemIcon;
+	}
+
+	public IconHolderState GetItemHolder (GameObject icon){
+		IconHolderState holderState = null;
+
+		if (icon == holder1State.icon) {
+			holderState =  holder1State;
+
+		} else if (icon == holder1State.icon) {
+			holderState =  holder2State;
+		}
+
+		return holderState;
+	}
+
+	public void FreeHolder (GameObject icon){
+		if ( icon == holder1State.icon ) {
+			holder1State.icon = null;
+		} else if ( icon == holder2State.icon) {
+			holder2State.icon = null;
+		}
 	}
 
 	public void DropItem (){
 		System.Random r = new System.Random();
-		int rInt = r.Next(0, 3); //for ints
+		int rInt = r.Next(2, Constants.ITEM_JUJU); //for ints
 
-		Vector3 newPos = Utilities.GetRandomStagePosition ();
+		Vector3 newPos = GetRandomStagePosition ();
 
 		GameObject newItem = (GameObject) Instantiate ( Resources.Load( GetPickupNameByID(rInt) ));
 		newItem.transform.position = newPos;
 
 		Communicator.Instance.ShareItemDrop (rInt, newPos);
+	}
+
+	Vector3 GetRandomStagePosition(){
+		Vector3 newPos = Utilities.GetRandomStagePosition ();
+
+		while (!StageManager.isOnStage (newPos)){
+			newPos = Utilities.GetRandomStagePosition ();
+		}
+		return newPos;
 	}
 
 	public static string GetPickupNameByID (int ID){

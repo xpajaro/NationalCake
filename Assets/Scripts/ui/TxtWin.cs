@@ -11,7 +11,7 @@ public class TxtWin : MonoBehaviour {
 
 	string GetWinnerMessage(){
 		string winStatus;
-		if (GameState.GameWon) {
+		if (GameState.gameWon) {
 			winStatus = "You win!";
 		} else {
 			winStatus = "You lose!";

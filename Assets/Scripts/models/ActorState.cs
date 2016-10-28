@@ -7,39 +7,39 @@ public class ActorState
 	{
 	}
 
-	public int StateNumber{
+	public int stateNumber{
 		get; set;
 	}
 
-	public Vector3 PlayerPosition{
+	public Vector3 playerPosition{
 		get; set;
 	}
 
-	public Vector3 PlayerVelocity{
+	public Vector3 playerVelocity{
 		get; set;
 	}
 
-	public bool PlayerFalling{
+	public bool playerFalling{
 		get; set;
 	}
 
-	public Vector3 EnemyPosition{
+	public Vector3 enemyPosition{
 		get; set;
 	}
 
-	public Vector3 EnemyVelocity{
+	public Vector3 enemyVelocity{
 		get; set;
 	}
 
-	public bool EnemyFalling{
+	public bool enemyFalling{
 		get; set;
 	}
 
-	public Vector3 CakePosition{
+	public Vector3 cakePosition{
 		get; set;
 	}
 
-	public bool CakeFalling{
+	public bool cakeFalling{
 		get; set;
 	}
 }

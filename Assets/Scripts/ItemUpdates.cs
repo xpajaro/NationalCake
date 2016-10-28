@@ -4,8 +4,11 @@ using System.Collections.Generic;
 
 public class ItemUpdates : MonoBehaviour {
 
+	public GameObject cake, cakeEffigy;
+	ActivateItem itemActivator;
 
 	void Start (){
+		itemActivator = new ActivateItem (cake, cakeEffigy);
 		Communicator.Instance.itemUpdates = this;
 	}
 
@@ -15,5 +18,26 @@ public class ItemUpdates : MonoBehaviour {
 
 		GameObject newItem = (GameObject) Instantiate ( Resources.Load( ItemManager.GetPickupNameByID(itemID) ));
 		newItem.transform.position = pos;
+	}
+
+	public void UseItem (Dictionary<string, object> itemUsed){
+
+		int itemID = (int) itemUsed [Deserialization.ITEM_KEY];
+
+		if (itemID == Constants.ITEM_JUJU) {
+			itemActivator. ActivateJuju ();
+			Invoke ("DeactivateJuju", ActivateItem.JUJU_COOLDOWN);
+
+		} else{
+//			Vector3 pos = (Vector3)itemUsed [Deserialization.POSITION_KEY];
+//
+//			GameObject newItem = (GameObject)Instantiate (Resources.Load (ItemManager.GetPickupNameByID (itemID)));
+//			newItem.transform.position = pos;
+		}
+	}
+
+
+	void DeactivateJuju (){
+		itemActivator.DeactivateJuju ();
 	}
 }

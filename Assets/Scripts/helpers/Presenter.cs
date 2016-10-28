@@ -28,19 +28,23 @@ public class Presenter {
 	public static void StopCollisions (GameObject actor){
 		if (actor.name.Equals ("player")) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_ACTOR;
+		
 		} else if (actor.name.Equals ("enemy")) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_ENEMY;
-		} else if (actor.name.Equals ("cake")) {
+		
+		} else if (actor.name.Equals ("cake") || actor.name.Equals ("cakeEffigy")) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_CAKE;
+		
 		} else if (actor.name.Contains ("wine")) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_OTHERS;
+		
 		}
 	}
 
 
 	public static void StartCollisions (GameObject actor){
 
-		if (actor.name.Equals ("cake")) {
+		if (actor.name.Equals ("cake") || actor.name.Equals ("cakeEffigy")) {
 			actor.layer = Constants.COLLISION_CAKE;
 		} else {
 			actor.layer = Constants.GAME_LAYER;

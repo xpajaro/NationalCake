@@ -19,10 +19,13 @@ public class StateUpdates : MonoBehaviour {
 	float nextBroadcastTime = 0;
 	float lastUpdateTime;
 
+	Moving moveEnemy;
 
 
 	void Start (){
 		Communicator.Instance.stateUpdates = this;
+
+		moveEnemy = new Moving (enemy);
 
 		if (!GameSetup.isHost) {
 			LoadRenderers ();
@@ -62,17 +65,12 @@ public class StateUpdates : MonoBehaviour {
 	//-------------------------------------------
 	// Handle opponent input (host only)
 	//-------------------------------------------
-	bool enemyFacingHomeBase_Host = false;
 	public void MoveEnemy (Vector3 impulse){
-		if (GameState.GameEnded) {
+		if (GameState.gameEnded) {
 			return;
 		}
 
-		Vector3 drunkImpulse =  PlayerControl.CalculateWineImpulse (impulse, WineBuzzLevel.EnemyBuzz) ;
-
-		Utilities.FaceCorrectDirection (enemy, drunkImpulse, ref enemyFacingHomeBase_Host, false);
-
-		enemyBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
+		moveEnemy.NetworkImpulseReceived (impulse, WineBuzzLevel.EnemyBuzz);
 	}
 
 
@@ -99,17 +97,17 @@ public class StateUpdates : MonoBehaviour {
 
 		if (!GameSetup.isHost) {
 
-			if (lastStateNumber < state.StateNumber) {
+			if (lastStateNumber < state.stateNumber) {
 				state = SwitchPlayers (state); 
 
 				UpdatePositions (state);
 				FaceCorrectDirection ();
 
 				lastUpdateTime = Time.time;
-				lastStateNumber = state.StateNumber;
+				lastStateNumber = state.stateNumber;
 			}
 
-			HandleAllFalling (state.EnemyFalling, state.PlayerFalling, state.CakeFalling);
+			HandleAllFalling (state.enemyFalling, state.playerFalling, state.cakeFalling);
 
 		}
 
@@ -117,22 +115,26 @@ public class StateUpdates : MonoBehaviour {
 
 	bool enemyFacingHomeBase_Client = false, playerFacingHomeBase_Client = false;
 	void FaceCorrectDirection (){
-		if (pCurrPos.x > pNextPos.x && playerFacingHomeBase_Client) { //going left
-			Utilities.TurnAround (player);
-			playerFacingHomeBase_Client = false;
+		if (!pNextPos.Equals( Vector3.zero) ) {
+			if (pCurrPos.x > pNextPos.x && playerFacingHomeBase_Client) { //going left
+				Utilities.TurnAround (player);
+				playerFacingHomeBase_Client = false;
 
-		} else if (pCurrPos.x < pNextPos.x && !playerFacingHomeBase_Client) {
-			Utilities.TurnAround (player);
-			playerFacingHomeBase_Client = true;
+			} else if (pCurrPos.x < pNextPos.x && !playerFacingHomeBase_Client) {
+				Utilities.TurnAround (player);
+				playerFacingHomeBase_Client = true;
+			}
 		}
 
-		if (eCurrPos.x > eNextPos.x && !enemyFacingHomeBase_Client) { //going left
-			Utilities.TurnAround (enemy);
-			enemyFacingHomeBase_Client = true;
+		if (!eNextPos.Equals (Vector3.zero)) {
+			if (eCurrPos.x > eNextPos.x && !enemyFacingHomeBase_Client) { //going left
+				Utilities.TurnAround (enemy);
+				enemyFacingHomeBase_Client = true;
 
-		} else if (eCurrPos.x < eNextPos.x && enemyFacingHomeBase_Client) {
-			Utilities.TurnAround (enemy);
-			enemyFacingHomeBase_Client = false;
+			} else if (eCurrPos.x < eNextPos.x && enemyFacingHomeBase_Client) {
+				Utilities.TurnAround (enemy);
+				enemyFacingHomeBase_Client = false;
+			}
 		}
 	}
 
@@ -142,9 +144,9 @@ public class StateUpdates : MonoBehaviour {
 		eCurrPos = enemy.transform.position;
 		cCurrPos = cake.transform.position;
 
-		pNextPos = state.PlayerPosition ;
-		eNextPos = state.EnemyPosition ;
-		cNextPos = state.CakePosition ;
+		pNextPos = state.playerPosition ;
+		eNextPos = state.enemyPosition ;
+		cNextPos = state.cakePosition ;
 	}
 
 
@@ -189,9 +191,9 @@ public class StateUpdates : MonoBehaviour {
 
 	Vector3 positionHolder;
 	ActorState SwitchPlayers (ActorState oldState){
-		positionHolder = oldState.PlayerPosition;
-		oldState.PlayerPosition = oldState.EnemyPosition ;
-		oldState.EnemyPosition = positionHolder ;
+		positionHolder = oldState.playerPosition;
+		oldState.playerPosition = oldState.enemyPosition ;
+		oldState.enemyPosition = positionHolder ;
 
 		return oldState;
 	}

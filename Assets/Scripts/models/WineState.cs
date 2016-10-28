@@ -7,11 +7,11 @@ public class WineState
 	{
 	}
 
-	public int TagNo {
+	public int tagNo {
 		get; set;
 	}
 
-	public int Action {
+	public int action {
 		get; set;
 	}
 

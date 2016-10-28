@@ -14,12 +14,12 @@ public class Cake : MonoBehaviour {
 			if (cause.Equals (PLAYER_GOAL) || cause.Equals (ENEMY_GOAL)) {	
 			
 				if (cause.Equals (PLAYER_GOAL)) {
-					GameState.GameWon = true;
+					GameState.gameWon = true;
 				} else {	
-					GameState.GameWon = false;
+					GameState.gameWon = false;
 				}
 
-				GameState.GameEnded = true;
+				GameState.gameEnded = true;
 				Communicator.Instance.ShareGameState ();
 
 				StopMoving ();

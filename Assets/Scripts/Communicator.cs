@@ -125,8 +125,8 @@ public class Communicator  {
 			itemUpdates.ShowDroppedItem (itemDropped);
 
 		} else if (MESSAGE_TYPE_ITEM_USE.Equals (msgType) ){
-			//ActorState state = Deserialization.GetActorState (dataFields);
-			//stateUpdates.UpdateActors (state);
+			Dictionary<string, object> itemUsed = Deserialization.GetItemUse (dataFields);
+			itemUpdates.UseItem (itemUsed);
 
 		} else if (MESSAGE_TYPE_GAME_STATE.Equals (msgType) ){
 			Deserialization.UpdateGameState (dataFields);
