@@ -32,7 +32,7 @@ public class Moving {
 		actorBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
 	}
 
-	public void MovemenInputEnded(Vector3 endPos){
+	public void MovementInputEnded(Vector3 endPos){
 		Vector3 launchDir = CalculateLaunchDirection (endPos);
 		launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
 		MoveActor (launchDir);

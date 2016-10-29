@@ -23,7 +23,7 @@ public class ItemManager : MonoBehaviour {
 		if (holder1State.icon == null) {
 			holder1State.icon = SpawnNewItem (itemType, holder1State.holder.transform.position);
 			
-		} else if (holder1State.icon == null) {
+		} else if (holder2State.icon == null) {
 			holder2State.icon = SpawnNewItem (itemType, holder2State.holder.transform.position);
 		}
 	}
@@ -35,30 +35,62 @@ public class ItemManager : MonoBehaviour {
 		return itemIcon;
 	}
 
+	public static void ActivateHolder (GameObject holder){
+		ChangeHolderColor (holder, 0.8f);
+	}
+
+	public static void DectivateHolder (GameObject holder){
+		ChangeHolderColor (holder, 1.25f);
+	}
+
+
+	public static void ChangeHolderColor (GameObject holder, float factor){
+		SpriteRenderer _renderer = holder.GetComponent<SpriteRenderer>();
+
+		Color color = _renderer.color;
+		color.g = color.g * factor;
+		color.b = color.b * factor;
+
+		_renderer.color = color;
+	}
+
 	public IconHolderState GetItemHolder (GameObject icon){
 		IconHolderState holderState = null;
 
 		if (icon == holder1State.icon) {
 			holderState =  holder1State;
 
-		} else if (icon == holder1State.icon) {
+		} else if (icon == holder2State.icon) {
 			holderState =  holder2State;
 		}
 
 		return holderState;
 	}
 
-	public void FreeHolder (GameObject icon){
-		if ( icon == holder1State.icon ) {
+	public static GameObject GetIconByHolder (GameObject holder){
+		GameObject icon = null;
+
+		if (holder1State.holder.name.Equals( holder.name)) {
+			icon =  holder1State.icon;
+
+		} else if (holder2State.holder.name.Equals(holder.name)) {
+			icon =  holder2State.icon;
+		}
+
+		return icon;
+	}
+
+	public void FreeHolder (GameObject holder){
+		if ( holder == holder1State.holder ) {
 			holder1State.icon = null;
-		} else if ( icon == holder2State.icon) {
+		} else if ( holder == holder2State.holder) {
 			holder2State.icon = null;
 		}
 	}
 
 	public void DropItem (){
 		System.Random r = new System.Random();
-		int rInt = r.Next(2, Constants.ITEM_JUJU); //for ints
+		int rInt = r.Next(1, Constants.ITEM_JUJU); //for ints
 
 		Vector3 newPos = GetRandomStagePosition ();
 
@@ -101,6 +133,18 @@ public class ItemManager : MonoBehaviour {
 		} else if (ID == 2) {
 			controllerName += "jujuIcon";
 		} 
+
+		return controllerName;
+	}
+
+	public static string GetItemNameByID (int ID){
+		string controllerName = "items/";
+
+		if (ID == 0) {
+			controllerName += "barrel1";
+		} else if (ID == 1) {
+			controllerName += "spill";
+		}
 
 		return controllerName;
 	}

@@ -4,9 +4,9 @@ using System;
 
 public class Wine : MonoBehaviour {
 
-	public float RESPAWN_TIME = 5f; 
-	public float BUZZ = 3.5f;
-	public float BUZZ_MAX = 20f;
+	float RESPAWN_TIME = 10f; 
+	float BUZZ = 3.5f;
+	float BUZZ_MAX = 20f;
 
 	SpriteRenderer spriteRenderer;
 

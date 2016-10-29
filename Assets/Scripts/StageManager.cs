@@ -23,16 +23,12 @@ public class StageManager : MonoBehaviour
 
 	void Start(){
 		LoadRenderers ();
-
-		if (GameSetup.isHost) {
-			StoreEveryStartPosition ();
-
-			LoadRigidBodies ();
-
-			converter = new WorldConverter (this.gameObject);
+		StoreEveryStartPosition ();
+		LoadRigidBodies ();
+		converter = new WorldConverter (this.gameObject);
 
 			stageTexture = GetComponent<SpriteRenderer> ().sprite.texture;
-		} else {
+		if (!GameSetup.isHost) {
 			SwitchSides ();
 			RemoveClientPhysics ();
 		}
@@ -86,8 +82,8 @@ public class StageManager : MonoBehaviour
 
 
 	void RemoveClientPhysics(){
-		Destroy (playerBody);
-		Destroy (enemyBody);
+		//Destroy (playerBody);
+		//Destroy (enemyBody);
 		Destroy (cakeBody);
 		DestroyColliders (cake);
 	}

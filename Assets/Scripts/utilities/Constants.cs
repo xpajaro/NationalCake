@@ -22,6 +22,10 @@ public class Constants {
 	public static int ITEM_SPILL = 1;
 	public static int ITEM_JUJU = 2;
 
+	public static string ITEM_NAME_BARREL = "barrel";
+	public static string ITEM_NAME_SPILL = "spill";
+	public static string ITEM_NAME_JUJU = "juju";
+
 	public static string ICON_BARREL_NAME = "barrelIcon";
 	public static string ICON_SPILL_NAME = "spillIcon";
 	public static string ICON_JUJU_NAME = "jujuIcon";

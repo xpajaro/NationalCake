@@ -6,7 +6,7 @@ using System.Text;
 public class GameControls : MonoBehaviour {
 
 	public GameObject cake, cakeEffigy;
-	GameObject iconTouched, holder;
+	GameObject iconTouched;
 
 
 	Rigidbody2D playerBody;
@@ -22,7 +22,7 @@ public class GameControls : MonoBehaviour {
 		movePlayer = new Moving (gameObject);
 	}
 
-	void Update (){
+	void FixedUpdate (){
 		HandleTouch ();
 	}
 
@@ -41,9 +41,6 @@ public class GameControls : MonoBehaviour {
 			if (touch.phase == TouchPhase.Began) {
 				TouchStarted (touch);
 
-			} else if (touch.phase == TouchPhase.Moved){
-				TouchMoving (touch);
-
 			} else if (touch.phase == TouchPhase.Ended) {
 				TouchEnded (touch);
 
@@ -55,50 +52,61 @@ public class GameControls : MonoBehaviour {
 
 
 	void TouchStarted (Touch touch){
-		iconTouched = GetIconTouched (touch);
 
-		if (iconTouched == null) {
-			movePlayer.MovementInputStarted (touch.position) ;
-			moving = true;
-		}
-	}
+		if (iconTouched != null ) { //touched before, activate item
+			HandleItemActivation (touch.position);
 
-	void TouchMoving (Touch touch){
-		if (iconTouched != null) {
-			DragMovableIcons (touch);
+		} else {
+			GameObject holderTouched = GetHolderTouched (touch);
+
+			if (holderTouched != null) {
+				iconTouched = ItemManager.GetIconByHolder (holderTouched); 
+
+				if (iconTouched != null) {
+					ItemManager.ActivateHolder (holderTouched);
+				} 
+			}
+			else {
+				movePlayer.MovementInputStarted (touch.position);
+				moving = true;
+			}
 		}
 	}
 
 	void TouchEnded (Touch touch) {
-		if (iconTouched !=  null) {
-			HandleItemActivation ();
-		} else if (moving) {
-			movePlayer.MovemenInputEnded (touch.position);
+		if (moving) {
+			movePlayer.MovementInputEnded (touch.position);
+			moving = false;
 		}
-
-		Cleanup ();
 	}
 
 	void TouchCanceled () {
-		Cleanup ();
-	}
-
-
-	void Cleanup (){
 		moving = false;
-		itemManager.FreeHolder (iconTouched);
-		iconTouched = null;
 	}
+		
 
 
 	//-------------------------------------------
 	// item/icon logic
 	//-------------------------------------------
-	void HandleItemActivation (){
-		int itemType = itemActivator.activate (iconTouched);
+	void HandleItemActivation (Vector3 position){
+		int itemType = itemActivator.Activate (iconTouched, Camera.main.ScreenToWorldPoint(position) );
 
 		if (itemType == Constants.ITEM_JUJU) {
 			Invoke ("DeactivateJuju", ActivateItem.JUJU_COOLDOWN);
+		}
+
+		CleanupItem (itemType);
+	}
+
+	void CleanupItem (int itemType){
+		if (itemType != -1) {
+			GameObject holder = itemManager.GetItemHolder (iconTouched).holder;
+
+			itemManager.FreeHolder (holder);
+			ItemManager.DectivateHolder (holder);
+
+			iconTouched = null;
 		}
 	}
 
@@ -106,19 +114,16 @@ public class GameControls : MonoBehaviour {
 		itemActivator.DeactivateJuju ();
 	}
 
-	GameObject GetIconTouched (Touch touch){
+	GameObject GetHolderTouched (Touch touch){
 		int layerMask = 1 << Constants.ITEM_ICONS_LAYER;
-		GameObject objectTouched = Utilities.GetOverLappingItem (
+		GameObject holderTouched = Utilities.GetOverLappingItem (
 			Camera.main.ScreenToWorldPoint(touch.position), layerMask);
 
-		return objectTouched;
+		return holderTouched ;
 	}
 
-	void DragMovableIcons (Touch touch){
-		if (!iconTouched.name.Equals (Constants.ICON_JUJU_NAME)) {
-			iconTouched.transform.position =  Camera.main.ScreenToWorldPoint(touch.position);
-		}
+	GameObject GetIconTouched (GameObject holderTouched){
+		return ItemManager.GetIconByHolder (holderTouched);
 	}
-
 
 }

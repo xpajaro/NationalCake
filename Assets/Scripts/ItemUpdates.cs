@@ -25,14 +25,12 @@ public class ItemUpdates : MonoBehaviour {
 		int itemID = (int) itemUsed [Deserialization.ITEM_KEY];
 
 		if (itemID == Constants.ITEM_JUJU) {
-			itemActivator. ActivateJuju ();
+			itemActivator.ActivateJuju ();
 			Invoke ("DeactivateJuju", ActivateItem.JUJU_COOLDOWN);
 
-		} else{
-//			Vector3 pos = (Vector3)itemUsed [Deserialization.POSITION_KEY];
-//
-//			GameObject newItem = (GameObject)Instantiate (Resources.Load (ItemManager.GetPickupNameByID (itemID)));
-//			newItem.transform.position = pos;
+		} else if (itemID == Constants.ITEM_SPILL){
+			Vector3 pos = (Vector3) itemUsed [Deserialization.POSITION_KEY];
+			itemActivator.ActivateSpill (pos);
 		}
 	}
 
