@@ -10,10 +10,10 @@ public class FallingAnimator {
 	int animationSpan; 
 
 	//fall adjustments (how far)
-	Vector3 DROP_VECTOR = new Vector3 (0, -2.0f, 0);
-	public static Vector3 DROWN_VECTOR =  new Vector3 (-20.0f, 0, 0);
+	Vector2 DROP_VECTOR = new Vector2 (0, -2.0f);
+	public static Vector2 DROWN_VECTOR =  new Vector2 (-20.0f, 0);
 
-	Vector3 start, dropDestination, drownDestination;
+	Vector2 start, dropDestination, drownDestination;
 
 	bool fallStarted;
 
@@ -104,8 +104,8 @@ public class FallingAnimator {
 	//-------------------------------------------
 
 
-	Vector3 GetHomePosition (){
-		Vector3 home = new Vector3();
+	Vector2 GetHomePosition (){
+		Vector2 home = new Vector2();
 
 		if (actor.name.Equals ("player")) {
 			home = StageManager.PLAYER_START_POSITION ;

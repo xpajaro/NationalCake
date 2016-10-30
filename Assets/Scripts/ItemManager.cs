@@ -15,7 +15,6 @@ public class ItemManager : MonoBehaviour {
 		if (GameSetup.isHost) {
 			InvokeRepeating ("DropItem", 0.0f, DROP_ITEM_COOLDOWN);
 		}
-		GameControls.itemManager = this;
 	}
 
 
@@ -28,18 +27,18 @@ public class ItemManager : MonoBehaviour {
 		}
 	}
 
-	static GameObject SpawnNewItem (int itemType, Vector3 position){
+	static GameObject SpawnNewItem (int itemType, Vector2 position){
 		GameObject itemIcon = (GameObject) Instantiate ( Resources.Load( GetIconNameByID(itemType) ));
 		itemIcon.transform.position = position;
 
 		return itemIcon;
 	}
 
-	public static void ActivateHolder (GameObject holder){
+	public static void HighlightHolder (GameObject holder){
 		ChangeHolderColor (holder, 0.8f);
 	}
 
-	public static void DectivateHolder (GameObject holder){
+	public static void RemoveHolderHighlight (GameObject holder){
 		ChangeHolderColor (holder, 1.25f);
 	}
 
@@ -54,7 +53,7 @@ public class ItemManager : MonoBehaviour {
 		_renderer.color = color;
 	}
 
-	public IconHolderState GetItemHolder (GameObject icon){
+	public static IconHolderState GetItemHolder (GameObject icon){
 		IconHolderState holderState = null;
 
 		if (icon == holder1State.icon) {
@@ -70,17 +69,17 @@ public class ItemManager : MonoBehaviour {
 	public static GameObject GetIconByHolder (GameObject holder){
 		GameObject icon = null;
 
-		if (holder1State.holder.name.Equals( holder.name)) {
+		if (holder1State.holder == holder ) {
 			icon =  holder1State.icon;
 
-		} else if (holder2State.holder.name.Equals(holder.name)) {
+		} else if (holder2State.holder == holder ) {
 			icon =  holder2State.icon;
 		}
 
 		return icon;
 	}
 
-	public void FreeHolder (GameObject holder){
+	public static void RemoveHolderIcon (GameObject holder){
 		if ( holder == holder1State.holder ) {
 			holder1State.icon = null;
 		} else if ( holder == holder2State.holder) {
@@ -92,7 +91,7 @@ public class ItemManager : MonoBehaviour {
 		System.Random r = new System.Random();
 		int rInt = r.Next(1, Constants.ITEM_JUJU); //for ints
 
-		Vector3 newPos = GetRandomStagePosition ();
+		Vector2 newPos = GetRandomStagePosition ();
 
 		GameObject newItem = (GameObject) Instantiate ( Resources.Load( GetPickupNameByID(rInt) ));
 		newItem.transform.position = newPos;
@@ -100,8 +99,8 @@ public class ItemManager : MonoBehaviour {
 		Communicator.Instance.ShareItemDrop (rInt, newPos);
 	}
 
-	Vector3 GetRandomStagePosition(){
-		Vector3 newPos = Utilities.GetRandomStagePosition ();
+	Vector2 GetRandomStagePosition(){
+		Vector2 newPos = Utilities.GetRandomStagePosition ();
 
 		while (!StageManager.isOnStage (newPos)){
 			newPos = Utilities.GetRandomStagePosition ();

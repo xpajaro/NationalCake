@@ -47,7 +47,7 @@ public class Communicator  {
 		//Debug.Log ("say hello done");
 	}
 
-	public void ShareMovement (Vector3 impulse){
+	public void ShareMovement (Vector2 impulse){
 		//Debug.Log ("share movement");
 		NetworkManager.Instance.SendFastMessage ( Serialization.SerializeMovement (impulse) );
 		//Debug.Log ("share movement done");
@@ -59,13 +59,13 @@ public class Communicator  {
 		//Debug.Log ("share game state");
 	}
 
-	public void ShareItemDrop (int item, Vector3 pos){
+	public void ShareItemDrop (int item, Vector2 pos){
 		//Debug.Log ("share item drop");
 		NetworkManager.Instance.SendMessage ( Serialization.SerializeItemDrop (item, pos), true );
 		//Debug.Log ("share item drop");
 	}
 
-	public void ShareItemUse (int item, Vector3 pos){
+	public void ShareItemUse (int item, Vector2 pos){
 		//Debug.Log ("share item use");
 		NetworkManager.Instance.SendMessage ( Serialization.SerializeItemUse (item, pos), true );
 		//Debug.Log ("share item use");
@@ -113,7 +113,7 @@ public class Communicator  {
 	public void RouteMessage (char msgType, byte[] dataFields ){
 		//Debug.Log ("route message");
 		if (MESSAGE_TYPE_MOVEMENT.Equals (msgType) ) {
-			Vector3 impulse = Deserialization.GetImpulse (dataFields);
+			Vector2 impulse = Deserialization.GetImpulse (dataFields);
 			stateUpdates.MoveEnemy (impulse);
 
 		} else if (MESSAGE_TYPE_ACTOR_STATE.Equals (msgType) ){

@@ -5,7 +5,7 @@ using System.Text;
 
 public class GameControls : MonoBehaviour {
 
-	public GameObject cake, cakeEffigy;
+	public GameObject cake, cakeEffigy, spillPrefab ;
 	GameObject iconTouched;
 
 
@@ -13,13 +13,13 @@ public class GameControls : MonoBehaviour {
 
 	Moving movePlayer;
 	ActivateItem itemActivator;
-	public static ItemManager itemManager; //instantiated in the start of ItemManager class
 
 	bool moving;
 
 	void Start () {
 		itemActivator = new ActivateItem (cake, cakeEffigy);
 		movePlayer = new Moving (gameObject);
+
 	}
 
 	void FixedUpdate (){
@@ -52,7 +52,6 @@ public class GameControls : MonoBehaviour {
 
 
 	void TouchStarted (Touch touch){
-
 		if (iconTouched != null ) { //touched before, activate item
 			HandleItemActivation (touch.position);
 
@@ -63,7 +62,7 @@ public class GameControls : MonoBehaviour {
 				iconTouched = ItemManager.GetIconByHolder (holderTouched); 
 
 				if (iconTouched != null) {
-					ItemManager.ActivateHolder (holderTouched);
+					ItemManager.HighlightHolder (holderTouched);
 				} 
 			}
 			else {
@@ -89,25 +88,27 @@ public class GameControls : MonoBehaviour {
 	//-------------------------------------------
 	// item/icon logic
 	//-------------------------------------------
-	void HandleItemActivation (Vector3 position){
-		int itemType = itemActivator.Activate (iconTouched, Camera.main.ScreenToWorldPoint(position) );
+	void HandleItemActivation (Vector2 position){
+		Vector2 scaledPosition = Camera.main.ScreenToWorldPoint (position);
+		int itemType = itemActivator.Activate (iconTouched,  scaledPosition);
 
 		if (itemType == Constants.ITEM_JUJU) {
 			Invoke ("DeactivateJuju", ActivateItem.JUJU_COOLDOWN);
-		}
+		} 
 
-		CleanupItem (itemType);
+		CleanupHolder (itemType);
 	}
 
-	void CleanupItem (int itemType){
-		if (itemType != -1) {
-			GameObject holder = itemManager.GetItemHolder (iconTouched).holder;
+	void CleanupHolder (int itemType){
+		GameObject holder = ItemManager.GetItemHolder (iconTouched).holder;
 
-			itemManager.FreeHolder (holder);
-			ItemManager.DectivateHolder (holder);
+		ItemManager.RemoveHolderHighlight (holder);
 
-			iconTouched = null;
-		}
+		if (itemType != ActivateItem.INVALID_ICON) {
+			ItemManager.RemoveHolderIcon (holder);
+		} 
+
+		iconTouched = null;
 	}
 
 	void DeactivateJuju (){

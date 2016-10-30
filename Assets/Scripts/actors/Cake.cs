@@ -36,7 +36,7 @@ public class Cake : MonoBehaviour {
 	}
 
 	void StopMoving (){
-		GetComponent<Rigidbody2D> ().velocity = Vector3.zero;
+		GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
 	}
 
 	void LeaveScene(){

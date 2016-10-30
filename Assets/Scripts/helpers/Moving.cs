@@ -11,7 +11,7 @@ public class Moving {
 	GameObject actor;
 	Rigidbody2D actorBody;
 
-	Vector3 movtStartPosition;
+	Vector2 movtStartPosition;
 	bool facingHomeBase = false; // default position
 
 	public Moving (GameObject _actor){
@@ -20,33 +20,33 @@ public class Moving {
 	}
 
 
-	public void MovementInputStarted (Vector3 startPos){
+	public void MovementInputStarted (Vector2 startPos){
 		movtStartPosition = startPos;
 	}
 
-	public void NetworkImpulseReceived (Vector3 impulse, float buzz){
-		Vector3 drunkImpulse =  CalculateWineImpulse (impulse, buzz) ;
+	public void NetworkImpulseReceived (Vector2 impulse, float buzz){
+		Vector2 drunkImpulse =  CalculateWineImpulse (impulse, buzz) ;
 
 		Utilities.FaceCorrectDirection (actor, drunkImpulse, ref facingHomeBase, false);
 
 		actorBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
 	}
 
-	public void MovementInputEnded(Vector3 endPos){
-		Vector3 launchDir = CalculateLaunchDirection (endPos);
+	public void MovementInputEnded(Vector2 endPos){
+		Vector2 launchDir = CalculateLaunchDirection (endPos);
 		launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
 		MoveActor (launchDir);
 	}
 
-	void MoveActor (Vector3 launchDir){
+	void MoveActor (Vector2 launchDir){
 		if (GameState.gameEnded) {
 			return;
 		}
 
-		Vector3 impulse = CalculateImpulse (launchDir);
+		Vector2 impulse = CalculateImpulse (launchDir);
 
 		if (GameSetup.isHost) {
-			Vector3 drunkImpulse = CalculateWineImpulse (impulse, WineBuzzLevel.PlayerBuzz) ;
+			Vector2 drunkImpulse = CalculateWineImpulse (impulse, WineBuzzLevel.PlayerBuzz) ;
 
 			Utilities.FaceCorrectDirection (actor, drunkImpulse, ref facingHomeBase, true);
 
@@ -61,8 +61,8 @@ public class Moving {
 	// movt calculations
 	//-------------------------------------------
 
-	Vector3 CalculateLaunchDirection (Vector3 movtEndPoint){
-		Vector3 launchDir =  movtStartPosition - Input.mousePosition ;
+	Vector2 CalculateLaunchDirection (Vector2 movtEndPoint){
+		Vector2 launchDir =  movtStartPosition - movtEndPoint ;
 
 		if (launchDir.magnitude > MOVT_CAP) {
 			launchDir = launchDir/ launchDir.magnitude * MOVT_CAP;
@@ -71,11 +71,11 @@ public class Moving {
 		return launchDir;
 	}
 
-	Vector3 CalculateImpulse (Vector3 launchDir){
+	Vector2 CalculateImpulse (Vector2 launchDir){
 		return launchDir * MOVT_SPEED; 
 	}
 
-	Vector3 CalculateWineImpulse (Vector3 impulse, float wineLevel){
+	Vector2 CalculateWineImpulse (Vector2 impulse, float wineLevel){
 		return impulse * wineLevel;
 	}
 }

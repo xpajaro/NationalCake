@@ -10,19 +10,18 @@ public class Utilities : MonoBehaviour{
 
 
 	static float OVERLAP_RADIUS = 1.2f;
-	public static GameObject GetOverLappingItem (Vector3 pos, int layerMask){
+	public static GameObject GetOverLappingItem (Vector2 pos, int layerMask){
 		GameObject collisionObject = null;
 
 		Collider2D collider = Physics2D.OverlapCircle (pos, OVERLAP_RADIUS, layerMask);
 		if (collider != null) {
 			collisionObject = collider.gameObject;
-			Debug.Log ("icon collision "+ collisionObject.name);
 		}
 
 		return collisionObject;
 	}
 
-	public static void FaceCorrectDirection (GameObject actor, Vector3 impulse, ref bool facingHomeBase, bool leftIsHome){
+	public static void FaceCorrectDirection (GameObject actor, Vector2 impulse, ref bool facingHomeBase, bool leftIsHome){
 
 		if (leftIsHome) {
 			TurnByImpulse (actor, impulse.x, ref facingHomeBase);
@@ -43,14 +42,14 @@ public class Utilities : MonoBehaviour{
 	}
 
 	public static void TurnAround (GameObject actor){
-		Vector3 theScale = actor.transform.localScale;
+		Vector2 theScale = actor.transform.localScale;
 		theScale.x *= -1;
 		actor.transform.localScale = theScale;
 	}
 
 
-	public static Vector3 GetRandomStagePosition() {
-		Vector3 pos = GetRandomCoordinates ();
+	public static Vector2 GetRandomStagePosition() {
+		Vector2 pos = GetRandomCoordinates ();
 
 		while (!StageManager.isOnStage (pos)) {
 			pos = GetRandomCoordinates ();
@@ -59,20 +58,20 @@ public class Utilities : MonoBehaviour{
 		return pos;
 	} 
 
-	static Vector3 GetRandomCoordinates () {
+	static Vector2 GetRandomCoordinates () {
 
 		System.Random r = new System.Random();
 
 		float randomX = (float)( r.NextDouble() * 9f) - 4.5f;
 		float randomY = (float)( r.NextDouble() * 5.5f) - 2.25f;
 
-		return new Vector3 (randomX, randomY, 0f);
+		return new Vector2 (randomX, randomY);
 	}
 
 
-	public static float Interpolate (GameObject actor, Vector3 start, Vector3 destination, float  pctDone){
+	public static float Interpolate (GameObject actor, Vector2 start, Vector2 destination, float  pctDone){
 		if (pctDone <= 1.0) {
-			actor.transform.position = Vector3.Lerp (start, destination, pctDone);
+			actor.transform.position = Vector2.Lerp (start, destination, pctDone);
 		}
 		return pctDone;
 	}
@@ -84,7 +83,7 @@ public class Utilities : MonoBehaviour{
 	}
 
 
-	public static Vector3 FlipSide (Vector3 input){
+	public static Vector2 FlipSide (Vector2 input){
 		input.x *= -1;
 		return input;
 	}
@@ -98,22 +97,21 @@ public class Utilities : MonoBehaviour{
 		return value;
 	}
 
-	public static string Vector3ToString (Vector3 v){
+	public static string Vector2ToString (Vector2 v){
 		//Debug.Log ("vector3 to string");
 		StringBuilder sb = new StringBuilder();
-		sb.Append(v.x).Append(" ").Append(v.y).Append(" ").Append(v.z) ;
+		sb.Append(v.x).Append(" ").Append(v.y) ;
 
 		//Debug.Log ("vector3 to string done");
 		return sb.ToString();
 	}
 
-	public static void StringToVector3 (string v, ref Vector3 vectorHolder){
+	public static void StringToVector2 (string v, ref Vector2 vectorHolder){
 		//Debug.Log ("string to vector3");
 		string[] values = v.Split(' ');
 
 		vectorHolder.x = float.Parse(values[0]); 
 		vectorHolder.y = float.Parse(values[1]);
-		vectorHolder.z = float.Parse(values[2]);
 
 		//Debug.Log ("string to vector3 done");
 	}

@@ -7,7 +7,7 @@ public class ActivateItem {
 
 	public MonoBehaviour controller;
 
-	int INVALID_ICON = -1;
+	public static int INVALID_ICON = -1;
 
 	public static float JUJU_COOLDOWN = 8;
 
@@ -21,7 +21,7 @@ public class ActivateItem {
 		cakeEffigyRenderer = cakeEffigy.GetComponent <SpriteRenderer> ();
 	}
 
-	public int Activate (GameObject icon, Vector3 position){
+	public int Activate (GameObject icon, Vector2 position){
 		int iconType = INVALID_ICON;
 
 		if (icon.name.StartsWith (Constants.ICON_JUJU_NAME)) {
@@ -31,7 +31,9 @@ public class ActivateItem {
 			iconType = SpillProcessor (position);
 		}
 
-		Cleanup (icon);
+		if (iconType != INVALID_ICON) {
+			Cleanup (icon);
+		}
 
 		return iconType;
 	}
@@ -46,7 +48,7 @@ public class ActivateItem {
 		int iconType = INVALID_ICON;
 
 		if (StageManager.cakeOnStage) {
-			Communicator.Instance.ShareItemUse (Constants.ITEM_JUJU, Vector3.zero);
+			Communicator.Instance.ShareItemUse (Constants.ITEM_JUJU, Vector2.zero);
 			ActivateJuju ();
 
 			iconType = Constants.ITEM_JUJU;
@@ -55,7 +57,7 @@ public class ActivateItem {
 		return iconType;
 	}
 
-	int SpillProcessor (Vector3 position){
+	int SpillProcessor (Vector2 position){
 		int iconType = INVALID_ICON;
 
 		if (StageManager.isOnStage (position)) {
@@ -83,10 +85,9 @@ public class ActivateItem {
 		Presenter.Attach (cake, cakeRenderer);
 	}
 
-	public void ActivateSpill (Vector3 position){
-		GameObject spill = (GameObject) GameControls.Instantiate ( 
-			Resources.Load( "items/" + Constants.ITEM_NAME_SPILL ));
-		spill.transform.position = position;
+	public void ActivateSpill (Vector2 position){
+		StageManager.Instantiate ( 
+			Resources.Load( "items/" + Constants.ITEM_NAME_SPILL ), position, Quaternion.identity);
 	}
 
 	//-------------------------------------------

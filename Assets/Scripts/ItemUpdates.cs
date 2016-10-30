@@ -14,7 +14,7 @@ public class ItemUpdates : MonoBehaviour {
 
 	public void ShowDroppedItem (Dictionary<string, object> itemDropped){
 		int itemID = (int) itemDropped [Deserialization.ITEM_KEY];
-		Vector3 pos = (Vector3) itemDropped [Deserialization.POSITION_KEY];
+		Vector2 pos = (Vector2) itemDropped [Deserialization.POSITION_KEY];
 
 		GameObject newItem = (GameObject) Instantiate ( Resources.Load( ItemManager.GetPickupNameByID(itemID) ));
 		newItem.transform.position = pos;
@@ -29,7 +29,7 @@ public class ItemUpdates : MonoBehaviour {
 			Invoke ("DeactivateJuju", ActivateItem.JUJU_COOLDOWN);
 
 		} else if (itemID == Constants.ITEM_SPILL){
-			Vector3 pos = (Vector3) itemUsed [Deserialization.POSITION_KEY];
+			Vector2 pos = (Vector2) itemUsed [Deserialization.POSITION_KEY];
 			itemActivator.ActivateSpill (pos);
 		}
 	}

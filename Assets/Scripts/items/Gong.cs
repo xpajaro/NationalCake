@@ -43,7 +43,7 @@ public class Gong : MonoBehaviour {
 
 	//handle moving after swap
 	void SwapSides (){
-		Vector3 tempPosition = pGoal.transform.position;
+		Vector2 tempPosition = pGoal.transform.position;
 		pGoal.transform.position = eGoal.transform.position;
 		eGoal.transform.position = tempPosition;
 		swapped = !swapped;

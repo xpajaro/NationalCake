@@ -3,9 +3,9 @@ using System.Collections;
 
 public class StageManager : MonoBehaviour 
 {
-	public static Vector3 PLAYER_START_POSITION;
-	public static Vector3 ENEMY_START_POSITION;
-	public static Vector3 CAKE_START_POSITION;
+	public static Vector2 PLAYER_START_POSITION;
+	public static Vector2 ENEMY_START_POSITION;
+	public static Vector2 CAKE_START_POSITION;
 
 	public float MOVT_DAMPING = 0.5f;
 	public float VELOCITY_CAP = 10.0f;
@@ -109,7 +109,7 @@ public class StageManager : MonoBehaviour
 		if (onStage) {
 			dampMovement (rb, MOVT_DAMPING);
 		} else {
-			rb.velocity = Vector3.zero;
+			rb.velocity = Vector2.zero;
 		}
 	}
 

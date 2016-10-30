@@ -38,7 +38,7 @@ public class Serialization
 		return helloMessage.ToArray ();
 	}
 
-	public static byte [] SerializeMovement (Vector3 impulse){
+	public static byte [] SerializeMovement (Vector2 impulse){
 		//Debug.Log ("Serialize movement");
 
 		movementMessage.Clear ();
@@ -53,7 +53,7 @@ public class Serialization
 		return movementMessage.ToArray ();
 	}
 
-	public static byte [] SerializeItemDrop (int itemID, Vector3 pos){
+	public static byte [] SerializeItemDrop (int itemID, Vector2 pos){
 		//Debug.Log ("Serialize item drop");
 
 		itemDropMessage.Clear ();
@@ -69,7 +69,7 @@ public class Serialization
 		return itemDropMessage.ToArray ();
 	}
 
-	public static byte [] SerializeItemUse (int itemID, Vector3 pos){
+	public static byte [] SerializeItemUse (int itemID, Vector2 pos){
 		//Debug.Log ("Serialize item use");
 
 		itemUseMessage.Clear ();

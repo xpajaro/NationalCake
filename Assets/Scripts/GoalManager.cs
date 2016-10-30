@@ -4,9 +4,9 @@ using System.Collections;
 public class GoalManager : MonoBehaviour {
 
 	public GameObject pGoal, eGoal;
-	Vector3 pStart, eStart, pDestination, eDestination;
+	Vector2 pStart, eStart, pDestination, eDestination;
 
-	public Vector3 DISTANCE_TO_MOVE = new Vector3 (1,0,0);
+	public Vector2 DISTANCE_TO_MOVE = new Vector2 (1,0);
 
 	public int TIMES_TO_MOVE = 4;
 	public int WHEN_TO_MOVE = 60; //1800f at 30f/s is one minute
@@ -65,12 +65,12 @@ public class GoalManager : MonoBehaviour {
 		MoveGoal (eGoal, eStart, eDestination, pctDone);
 	}
 
-	void MoveGoal (GameObject goal, Vector3 start, Vector3 destination, float pctDone){
+	void MoveGoal (GameObject goal, Vector2 start, Vector2 destination, float pctDone){
 		Utilities.Interpolate (goal, start, destination, pctDone);
 	}
 
 	void SwitchSides (){
-		Vector3 temp = pGoal.transform.position;
+		Vector2 temp = pGoal.transform.position;
 		pGoal.transform.position = eGoal.transform.position;
 		eGoal.transform.position = temp;
 	}

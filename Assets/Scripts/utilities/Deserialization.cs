@@ -6,8 +6,8 @@ public class Deserialization {
 	public static string ITEM_KEY = "item";
 	public static string POSITION_KEY = "pos";
 
-	public static Vector3 GetImpulse (byte[] dataFields){
-		Vector3 impulse = new Vector3 ();
+	public static Vector2 GetImpulse (byte[] dataFields){
+		Vector2 impulse = new Vector2 ();
 		//Debug.Log ("Get Impulse ");
 		impulse.x = System.BitConverter.ToSingle(dataFields, 2);
 		impulse.y = System.BitConverter.ToSingle(dataFields, 6);
@@ -23,7 +23,7 @@ public class Deserialization {
 		int item = System.BitConverter.ToInt32(dataFields, 2);
 		itemDrop.Add (ITEM_KEY, item);
 
-		Vector3 pos = new Vector3 ();
+		Vector2 pos = new Vector2 ();
 		pos.x = System.BitConverter.ToSingle(dataFields, 6);
 		pos.y = System.BitConverter.ToSingle(dataFields, 10);
 		itemDrop.Add (POSITION_KEY, pos);
@@ -39,7 +39,7 @@ public class Deserialization {
 		int item = System.BitConverter.ToInt32(dataFields, 2);
 		itemUsed.Add (ITEM_KEY, item);
 
-		Vector3 pos = new Vector3 ();
+		Vector2 pos = new Vector2 ();
 		pos.x = System.BitConverter.ToSingle(dataFields, 6);
 		pos.y = System.BitConverter.ToSingle(dataFields, 10);
 		itemUsed.Add (POSITION_KEY, pos);
@@ -60,29 +60,29 @@ public class Deserialization {
 	public static ActorState GetActorState (byte[] dataFields){
 		ActorState state = new ActorState ();
 		//Debug.Log ("get state");
-		Vector3 val = new Vector3 ();
+		Vector2 val = new Vector2 ();
 
 		state.stateNumber = System.BitConverter.ToInt32(dataFields, 2);
 
 		val.x = System.BitConverter.ToSingle(dataFields, 6);
 		val.y = System.BitConverter.ToSingle(dataFields, 10);
-		state.playerPosition = new Vector3(val.x, val.y, 0); 
+		state.playerPosition = new Vector2(val.x, val.y); 
 
 		val.x = System.BitConverter.ToSingle(dataFields, 14);
 		val.y = System.BitConverter.ToSingle(dataFields, 18);
-		state.playerVelocity = new Vector3(val.x, val.y, 0);
+		state.playerVelocity = new Vector2(val.x, val.y);
 
 		val.x = System.BitConverter.ToSingle(dataFields, 22);
 		val.y = System.BitConverter.ToSingle(dataFields, 26);
-		state.enemyPosition = new Vector3(val.x, val.y, 0); 
+		state.enemyPosition = new Vector2(val.x, val.y); 
 
 		val.x = System.BitConverter.ToSingle(dataFields, 30);
 		val.y = System.BitConverter.ToSingle(dataFields, 34);
-		state.enemyVelocity = new Vector3(val.x, val.y, 0);
+		state.enemyVelocity = new Vector2(val.x, val.y);
 
 		val.x = System.BitConverter.ToSingle(dataFields, 38);
 		val.y = System.BitConverter.ToSingle(dataFields, 42);
-		state.cakePosition = new Vector3(val.x, val.y, 0);
+		state.cakePosition = new Vector2(val.x, val.y);
 
 		state.playerFalling = System.BitConverter.ToBoolean(dataFields, 46);
 		state.enemyFalling = System.BitConverter.ToBoolean(dataFields, 47);

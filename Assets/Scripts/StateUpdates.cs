@@ -10,7 +10,7 @@ public class StateUpdates : MonoBehaviour {
 	float outOfScreen = -10f;
 
 	//for moving the actors (cake, player, enemy) w interpolation
-	Vector3 pCurrPos, pNextPos, eCurrPos, eNextPos, cCurrPos, cNextPos;
+	Vector2 pCurrPos, pNextPos, eCurrPos, eNextPos, cCurrPos, cNextPos;
 
 	//for keeping falling status
 	bool pFalling, eFalling, cFalling; //receiving networked game updates
@@ -65,7 +65,7 @@ public class StateUpdates : MonoBehaviour {
 	//-------------------------------------------
 	// Handle opponent input (host only)
 	//-------------------------------------------
-	public void MoveEnemy (Vector3 impulse){
+	public void MoveEnemy (Vector2 impulse){
 		if (GameState.gameEnded) {
 			return;
 		}
@@ -115,7 +115,7 @@ public class StateUpdates : MonoBehaviour {
 
 	bool enemyFacingHomeBase_Client = false, playerFacingHomeBase_Client = false;
 	void FaceCorrectDirection (){
-		if (!pNextPos.Equals( Vector3.zero) ) {
+		if (!pNextPos.Equals( Vector2.zero) ) {
 			if (pCurrPos.x > pNextPos.x && playerFacingHomeBase_Client) { //going left
 				Utilities.TurnAround (player);
 				playerFacingHomeBase_Client = false;
@@ -126,7 +126,7 @@ public class StateUpdates : MonoBehaviour {
 			}
 		}
 
-		if (!eNextPos.Equals (Vector3.zero)) {
+		if (!eNextPos.Equals (Vector2.zero)) {
 			if (eCurrPos.x > eNextPos.x && !enemyFacingHomeBase_Client) { //going left
 				Utilities.TurnAround (enemy);
 				enemyFacingHomeBase_Client = true;
@@ -176,7 +176,7 @@ public class StateUpdates : MonoBehaviour {
 		InterpolateUnlessReviving (cake, cCurrPos, cNextPos);
 	}
 
-	void InterpolateUnlessReviving (GameObject actor, Vector3 currPos, Vector3 nextPos ){
+	void InterpolateUnlessReviving (GameObject actor, Vector2 currPos, Vector2 nextPos ){
 		if (currPos.x > outOfScreen ) {
 			Utilities.Interpolate (actor, currPos, nextPos, GetMovementProgresss ());
 		} else {
@@ -189,9 +189,8 @@ public class StateUpdates : MonoBehaviour {
 		return (Time.time - lastUpdateTime) / TIME_GAP;
 	}
 
-	Vector3 positionHolder;
 	ActorState SwitchPlayers (ActorState oldState){
-		positionHolder = oldState.playerPosition;
+		Vector2 positionHolder = oldState.playerPosition;
 		oldState.playerPosition = oldState.enemyPosition ;
 		oldState.enemyPosition = positionHolder ;
 

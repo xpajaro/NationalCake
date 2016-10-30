@@ -11,11 +11,11 @@ public class ActorState
 		get; set;
 	}
 
-	public Vector3 playerPosition{
+	public Vector2 playerPosition{
 		get; set;
 	}
 
-	public Vector3 playerVelocity{
+	public Vector2 playerVelocity{
 		get; set;
 	}
 
@@ -23,11 +23,11 @@ public class ActorState
 		get; set;
 	}
 
-	public Vector3 enemyPosition{
+	public Vector2 enemyPosition{
 		get; set;
 	}
 
-	public Vector3 enemyVelocity{
+	public Vector2 enemyVelocity{
 		get; set;
 	}
 
@@ -35,7 +35,7 @@ public class ActorState
 		get; set;
 	}
 
-	public Vector3 cakePosition{
+	public Vector2 cakePosition{
 		get; set;
 	}
 
