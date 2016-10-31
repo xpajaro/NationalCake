@@ -11,7 +11,7 @@ public class Spill : MonoBehaviour {
 		Invoke ("ExpireItem", EXPIRATION_TIME);
 	}
 
-	void OnCollisionEnter2D (Collision2D col)
+	void OnTriggerEnter2D (Collider2D col)
 	{	if (GameSetup.isHost) {
 			Rigidbody2D actorBody = col.gameObject.GetComponent<Rigidbody2D> ();
 			actorBody.velocity *= SLIP_MAGNITUDE;

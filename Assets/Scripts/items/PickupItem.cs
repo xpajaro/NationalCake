@@ -16,7 +16,7 @@ public class PickupItem : MonoBehaviour {
 		Physics2D.IgnoreCollision (GetComponent<Collider2D>(), cake.GetComponent<Collider2D>());
 	}
 
-	void OnCollisionEnter2D (Collision2D col)
+	void OnTriggerEnter2D (Collider2D col)
 	{	
 		string actorName = col.gameObject.name;
 
