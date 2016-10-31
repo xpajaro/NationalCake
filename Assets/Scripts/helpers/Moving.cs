@@ -4,7 +4,7 @@ using UnityEngine;
 public class Moving {
 
 	//for player
-	float MOVT_SPEED = 4; //liked 5
+	float MOVT_SPEED = 3; //liked 5
 	float MOVT_CAP = 200;
 	float MOVT_CAP_EFFECTIVE_RATIO = 50;
 
