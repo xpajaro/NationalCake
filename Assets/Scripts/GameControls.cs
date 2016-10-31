@@ -8,6 +8,7 @@ public class GameControls : MonoBehaviour {
 	public GameObject cake, cakeEffigy, spillPrefab ;
 	GameObject iconTouched;
 
+	public static ItemManager itemManager;
 
 	Rigidbody2D playerBody;
 
@@ -59,10 +60,10 @@ public class GameControls : MonoBehaviour {
 			GameObject holderTouched = GetHolderTouched (touch);
 
 			if (holderTouched != null) {
-				iconTouched = ItemManager.GetIconByHolder (holderTouched); 
+				iconTouched = itemManager.GetIconByHolder (holderTouched); 
 
 				if (iconTouched != null) {
-					ItemManager.HighlightHolder (holderTouched);
+					itemManager.HighlightHolder (holderTouched);
 				} 
 			}
 			else {
@@ -100,12 +101,12 @@ public class GameControls : MonoBehaviour {
 	}
 
 	void CleanupHolder (int itemType){
-		GameObject holder = ItemManager.GetItemHolder (iconTouched).holder;
+		GameObject holder = itemManager.GetItemHolder (iconTouched).holder;
 
-		ItemManager.RemoveHolderHighlight (holder);
+		itemManager.RemoveHolderHighlight (holder);
 
 		if (itemType != ActivateItem.INVALID_ICON) {
-			ItemManager.RemoveHolderIcon (holder);
+			itemManager.RemoveHolderIcon (holder);
 		} 
 
 		iconTouched = null;
@@ -124,7 +125,7 @@ public class GameControls : MonoBehaviour {
 	}
 
 	GameObject GetIconTouched (GameObject holderTouched){
-		return ItemManager.GetIconByHolder (holderTouched);
+		return itemManager.GetIconByHolder (holderTouched);
 	}
 
 }

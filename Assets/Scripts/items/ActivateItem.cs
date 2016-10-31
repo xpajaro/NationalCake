@@ -29,6 +29,9 @@ public class ActivateItem {
 
 		} else if (icon.name.StartsWith (Constants.ICON_SPILL_NAME)) {
 			iconType = SpillProcessor (position);
+
+		} else if (icon.name.StartsWith (Constants.ICON_BARREL_NAME)) {
+			iconType = BarrelProcessor (position);
 		}
 
 		if (iconType != INVALID_ICON) {
@@ -69,6 +72,18 @@ public class ActivateItem {
 		return iconType;
 	}
 
+	int BarrelProcessor (Vector2 position){
+		int iconType = INVALID_ICON;
+
+		if (StageManager.isOnStage (position)) {
+			Communicator.Instance.ShareItemUse (Constants.ITEM_BARREL, position);
+			ActivateBarrel (position);
+
+			iconType = Constants.ITEM_BARREL;
+		}
+		return iconType;
+	}
+
 	//-------------------------------------------
 	// item activators
 	//-------------------------------------------
@@ -88,6 +103,11 @@ public class ActivateItem {
 	public void ActivateSpill (Vector2 position){
 		StageManager.Instantiate ( 
 			Resources.Load( "items/" + Constants.ITEM_NAME_SPILL ), position, Quaternion.identity);
+	}
+
+	public void ActivateBarrel (Vector2 position){
+		StageManager.Instantiate ( 
+			Resources.Load( "items/" + Constants.ITEM_NAME_BARREL ), position, Quaternion.identity);
 	}
 
 	//-------------------------------------------

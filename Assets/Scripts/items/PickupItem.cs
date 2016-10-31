@@ -6,6 +6,8 @@ public class PickupItem : MonoBehaviour {
 	GameObject cake;
 	public float LIFETIME = 7f;
 
+	public static ItemManager itemManager;
+
 	void Start(){
 		IgnoreCake ();
 		Invoke ("Disappear", LIFETIME);
@@ -29,7 +31,7 @@ public class PickupItem : MonoBehaviour {
 	}
 
 	void SaveItem (){
-		ItemManager.SaveItem (itemType);
+		itemManager.SaveItem (itemType);
 	}
 
 	void Disappear (){

@@ -14,7 +14,6 @@ public class Spill : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D col)
 	{	if (GameSetup.isHost) {
 			Rigidbody2D actorBody = col.gameObject.GetComponent<Rigidbody2D> ();
-			Debug.Log ("slip magnitude " + actorBody.velocity.ToString() + " normal " + actorBody.velocity.normalized.ToString());
 			actorBody.AddForce (actorBody.velocity.normalized * SLIP_MAGNITUDE, ForceMode2D.Impulse);
 		}
 	}

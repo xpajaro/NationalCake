@@ -7,6 +7,8 @@ public class ItemUpdates : MonoBehaviour {
 	public GameObject cake, cakeEffigy;
 	ActivateItem itemActivator;
 
+	public static ItemManager itemManager;
+
 	void Start (){
 		itemActivator = new ActivateItem (cake, cakeEffigy);
 		Communicator.Instance.itemUpdates = this;
@@ -16,7 +18,7 @@ public class ItemUpdates : MonoBehaviour {
 		int itemID = (int) itemDropped [Deserialization.ITEM_KEY];
 		Vector2 pos = (Vector2) itemDropped [Deserialization.POSITION_KEY];
 
-		GameObject newItem = (GameObject) Instantiate ( Resources.Load( ItemManager.GetPickupNameByID(itemID) ));
+		GameObject newItem = (GameObject) Instantiate ( itemManager.GetPickupPrefabByID(itemID) );
 		newItem.transform.position = pos;
 	}
 
@@ -31,6 +33,10 @@ public class ItemUpdates : MonoBehaviour {
 		} else if (itemID == Constants.ITEM_SPILL){
 			Vector2 pos = (Vector2) itemUsed [Deserialization.POSITION_KEY];
 			itemActivator.ActivateSpill (pos);
+
+		} else if (itemID == Constants.ITEM_BARREL){
+			Vector2 pos = (Vector2) itemUsed [Deserialization.POSITION_KEY];
+			itemActivator.ActivateBarrel (pos);
 		}
 	}
 

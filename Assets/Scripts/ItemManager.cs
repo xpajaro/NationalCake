@@ -2,6 +2,10 @@
 using System.Collections;
 
 public class ItemManager : MonoBehaviour {
+
+	public GameObject barrelPickupPrefab, spillPickupPrefab, jujuPickupPrefab;
+	public GameObject barrelIconPrefab, spillIconPrefab, jujuIconPrefab;
+
 	public GameObject holder1, holder2;
 	static public IconHolderState holder1State, holder2State;
 
@@ -9,6 +13,10 @@ public class ItemManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		ItemUpdates.itemManager = this;
+		PickupItem.itemManager = this;
+		GameControls.itemManager = this;
+
 		holder1State = new IconHolderState (holder1);
 		holder2State = new IconHolderState (holder2);
 
@@ -18,7 +26,7 @@ public class ItemManager : MonoBehaviour {
 	}
 
 
-	public static void SaveItem (int itemType){
+	public void SaveItem (int itemType){
 		if (holder1State.icon == null) {
 			holder1State.icon = SpawnNewItem (itemType, holder1State.holder.transform.position);
 			
@@ -27,23 +35,23 @@ public class ItemManager : MonoBehaviour {
 		}
 	}
 
-	static GameObject SpawnNewItem (int itemType, Vector2 position){
-		GameObject itemIcon = (GameObject) Instantiate ( Resources.Load( GetIconNameByID(itemType) ));
+	GameObject SpawnNewItem (int itemType, Vector2 position){
+		GameObject itemIcon = (GameObject) Instantiate ( GetIconPrefabByID(itemType) );
 		itemIcon.transform.position = position;
 
 		return itemIcon;
 	}
 
-	public static void HighlightHolder (GameObject holder){
+	public void HighlightHolder (GameObject holder){
 		ChangeHolderColor (holder, 0.8f);
 	}
 
-	public static void RemoveHolderHighlight (GameObject holder){
+	public void RemoveHolderHighlight (GameObject holder){
 		ChangeHolderColor (holder, 1.25f);
 	}
 
 
-	public static void ChangeHolderColor (GameObject holder, float factor){
+	void ChangeHolderColor (GameObject holder, float factor){
 		SpriteRenderer _renderer = holder.GetComponent<SpriteRenderer>();
 
 		Color color = _renderer.color;
@@ -53,7 +61,7 @@ public class ItemManager : MonoBehaviour {
 		_renderer.color = color;
 	}
 
-	public static IconHolderState GetItemHolder (GameObject icon){
+	public IconHolderState GetItemHolder (GameObject icon){
 		IconHolderState holderState = null;
 
 		if (icon == holder1State.icon) {
@@ -66,7 +74,7 @@ public class ItemManager : MonoBehaviour {
 		return holderState;
 	}
 
-	public static GameObject GetIconByHolder (GameObject holder){
+	public GameObject GetIconByHolder (GameObject holder){
 		GameObject icon = null;
 
 		if (holder1State.holder == holder ) {
@@ -79,7 +87,7 @@ public class ItemManager : MonoBehaviour {
 		return icon;
 	}
 
-	public static void RemoveHolderIcon (GameObject holder){
+	public void RemoveHolderIcon (GameObject holder){
 		if ( holder == holder1State.holder ) {
 			holder1State.icon = null;
 		} else if ( holder == holder2State.holder) {
@@ -89,11 +97,11 @@ public class ItemManager : MonoBehaviour {
 
 	public void DropItem (){
 		System.Random r = new System.Random();
-		int rInt = r.Next(1, Constants.ITEM_JUJU); //for ints
+		int rInt = r.Next(0, 3);
 
 		Vector2 newPos = GetRandomStagePosition ();
 
-		GameObject newItem = (GameObject) Instantiate ( Resources.Load( GetPickupNameByID(rInt) ));
+		GameObject newItem = (GameObject) Instantiate ( GetPickupPrefabByID(rInt) );
 		newItem.transform.position = newPos;
 
 		Communicator.Instance.ShareItemDrop (rInt, newPos);
@@ -108,44 +116,32 @@ public class ItemManager : MonoBehaviour {
 		return newPos;
 	}
 
-	public static string GetPickupNameByID (int ID){
-		string pickupName = "itemPickups/" ;
+	public GameObject GetPickupPrefabByID (int ID){
+		GameObject pickupPrefab = null ;
 
 		if (ID == 0) {
-			pickupName += "barrelPickup";
+			pickupPrefab = barrelPickupPrefab;
 		} else if (ID == 1) {
-			pickupName += "spillPickup";
+			pickupPrefab = spillPickupPrefab;
 		} else if (ID == 2) {
-			pickupName += "jujuPickup";
+			pickupPrefab = jujuPickupPrefab;
 		} 
 
-		return pickupName;
+		return pickupPrefab;
 	}
 
-	static string GetIconNameByID (int ID){
-		string controllerName = "itemIcons/";
+	GameObject GetIconPrefabByID (int ID){
+		GameObject iconPrefab = null ;
 
 		if (ID == 0) {
-			controllerName += "barrelIcon";
+			iconPrefab = barrelIconPrefab;
 		} else if (ID == 1) {
-			controllerName += "spillIcon";
+			iconPrefab = spillIconPrefab;
 		} else if (ID == 2) {
-			controllerName += "jujuIcon";
+			iconPrefab = jujuIconPrefab;
 		} 
 
-		return controllerName;
-	}
-
-	public static string GetItemNameByID (int ID){
-		string controllerName = "items/";
-
-		if (ID == 0) {
-			controllerName += "barrel1";
-		} else if (ID == 1) {
-			controllerName += "spill";
-		}
-
-		return controllerName;
+		return iconPrefab;
 	}
 
 
