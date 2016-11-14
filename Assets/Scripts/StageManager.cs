@@ -10,6 +10,8 @@ public class StageManager : MonoBehaviour
 	public float MOVT_DAMPING = 0.5f;
 	public float VELOCITY_CAP = 10.0f;
 
+	Vector2 LEG_HEIGHT = new Vector2(0, 0.36f);
+
 	//for elements to do friction on
 	public GameObject cake, player, enemy;
 	Rigidbody2D playerBody, enemyBody, cakeBody;
@@ -52,7 +54,7 @@ public class StageManager : MonoBehaviour
 		SortAppearance (enemy, eRenderer);
 
 		if (GameSetup.isHost) {
-			checkIfActorsOnStage ();
+			CheckIfActorsOnStage ();
 			StartAllFriction ();
 		}
 	}		
@@ -114,10 +116,14 @@ public class StageManager : MonoBehaviour
 		}
 	}
 
-	void checkIfActorsOnStage (){
-		playerOnStage = isOnStage (playerBody.position);
-		enemyOnStage = isOnStage (enemyBody.position);
-		cakeOnStage = isOnStage (cakeBody.position);
+	void CheckIfActorsOnStage (){
+		playerOnStage = isOnStage ( GetFeetPosition(playerBody) );
+		enemyOnStage = isOnStage ( GetFeetPosition(enemyBody) );
+		cakeOnStage = isOnStage ( GetFeetPosition(cakeBody) );
+	}
+
+	Vector2 GetFeetPosition (Rigidbody2D rb){
+		return rb.position - LEG_HEIGHT;
 	}
 
 	public static bool isOnStage (Vector2 actorPosition){
