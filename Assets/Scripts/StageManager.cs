@@ -27,7 +27,8 @@ public class StageManager : MonoBehaviour
 		LoadRigidBodies ();
 		converter = new WorldConverter (this.gameObject);
 
-			stageTexture = GetComponent<SpriteRenderer> ().sprite.texture;
+		stageTexture = GetComponent<SpriteRenderer> ().sprite.texture;
+
 		if (!GameSetup.isHost) {
 			SwitchSides ();
 			RemoveClientPhysics ();

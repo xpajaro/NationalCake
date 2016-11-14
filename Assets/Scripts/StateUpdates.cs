@@ -113,30 +113,6 @@ public class StateUpdates : MonoBehaviour {
 
 	}
 
-	bool enemyFacingHomeBase_Client = false, playerFacingHomeBase_Client = false;
-	void FaceCorrectDirection (){
-		if (!pNextPos.Equals( Vector2.zero) ) {
-			if (pCurrPos.x > pNextPos.x && playerFacingHomeBase_Client) { //going left
-				Utilities.TurnAround (player);
-				playerFacingHomeBase_Client = false;
-
-			} else if (pCurrPos.x < pNextPos.x && !playerFacingHomeBase_Client) {
-				Utilities.TurnAround (player);
-				playerFacingHomeBase_Client = true;
-			}
-		}
-
-		if (!eNextPos.Equals (Vector2.zero)) {
-			if (eCurrPos.x > eNextPos.x && !enemyFacingHomeBase_Client) { //going left
-				Utilities.TurnAround (enemy);
-				enemyFacingHomeBase_Client = true;
-
-			} else if (eCurrPos.x < eNextPos.x && enemyFacingHomeBase_Client) {
-				Utilities.TurnAround (enemy);
-				enemyFacingHomeBase_Client = false;
-			}
-		}
-	}
 
 
 	void UpdatePositions (ActorState state){
@@ -147,6 +123,31 @@ public class StateUpdates : MonoBehaviour {
 		pNextPos = state.playerPosition ;
 		eNextPos = state.enemyPosition ;
 		cNextPos = state.cakePosition ;
+	}
+
+
+	bool enemyFacingHomeBase_Client = false, playerFacingHomeBase_Client = false;
+	void FaceCorrectDirection (){
+		
+		if (pCurrPos.x > pNextPos.x && playerFacingHomeBase_Client) { //going left
+			Utilities.TurnAround (player);
+			playerFacingHomeBase_Client = false;
+
+		} else if (pCurrPos.x < pNextPos.x && !playerFacingHomeBase_Client) {
+			Utilities.TurnAround (player);
+			playerFacingHomeBase_Client = true;
+		}
+
+
+		if (eCurrPos.x > eNextPos.x && !enemyFacingHomeBase_Client) { //going left
+			Utilities.TurnAround (enemy);
+			enemyFacingHomeBase_Client = true;
+
+		} else if (eCurrPos.x < eNextPos.x && enemyFacingHomeBase_Client) {
+			Utilities.TurnAround (enemy);
+			enemyFacingHomeBase_Client = false;
+		}
+
 	}
 
 
