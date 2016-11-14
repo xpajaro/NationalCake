@@ -5,7 +5,10 @@ using System.Text;
 
 public class GameControls : MonoBehaviour {
 
-	public GameObject cake, cakeEffigy, spillPrefab ;
+	public GameObject cake, cakeEffigy, spillPrefab, holder1, holder2 ;
+
+	float HOLDER_DISTANCE = 1.06f;
+
 	GameObject iconTouched;
 
 	public static ItemManager itemManager;
@@ -116,13 +119,27 @@ public class GameControls : MonoBehaviour {
 		itemActivator.DeactivateJuju ();
 	}
 
+//	GameObject GetHolderTouched (Touch touch){
+//		int layerMask = 1 << Constants.ITEM_ICONS_LAYER;
+//		GameObject holderTouched = Utilities.GetOverLappingItem (
+//			Camera.main.ScreenToWorldPoint(touch.position), layerMask);
+//
+//		return holderTouched ;
+//	}
+
 	GameObject GetHolderTouched (Touch touch){
-		int layerMask = 1 << Constants.ITEM_ICONS_LAYER;
-		GameObject holderTouched = Utilities.GetOverLappingItem (
-			Camera.main.ScreenToWorldPoint(touch.position), layerMask);
+		Vector2 touchPosition = Camera.main.ScreenToWorldPoint (touch.position);
+		GameObject holderTouched = null;
+
+		if (Vector2.Distance (holder1.transform.position, touchPosition) < HOLDER_DISTANCE) {
+			holderTouched = holder1;
+		} else if (Vector2.Distance (holder2.transform.position, touchPosition) < HOLDER_DISTANCE) {
+			holderTouched = holder2;
+		}
 
 		return holderTouched ;
 	}
+
 
 	GameObject GetIconTouched (GameObject holderTouched){
 		return itemManager.GetIconByHolder (holderTouched);
