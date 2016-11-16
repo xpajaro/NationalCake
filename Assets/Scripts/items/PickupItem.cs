@@ -9,7 +9,7 @@ public class PickupItem : MonoBehaviour {
 	public static ItemManager itemManager;
 
 	void Start(){
-		IgnoreCake ();
+		//IgnoreCake ();
 		Invoke ("Disappear", LIFETIME);
 	}
 
