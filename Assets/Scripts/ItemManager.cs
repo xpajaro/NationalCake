@@ -7,6 +7,7 @@ public class ItemManager : MonoBehaviour {
 	public GameObject barrelIconPrefab, spillIconPrefab, jujuIconPrefab;
 
 	public GameObject holder1, holder2;
+	public Sprite activeHolderSprite, holderSprite;
 	static public IconHolderState holder1State, holder2State;
 
 	float DROP_ITEM_COOLDOWN = 10f; //change to 40
@@ -43,22 +44,17 @@ public class ItemManager : MonoBehaviour {
 	}
 
 	public void HighlightHolder (GameObject holder){
-		ChangeHolderColor (holder, 0.8f);
+		ChangeHolderSprite (holder, activeHolderSprite);
 	}
 
 	public void RemoveHolderHighlight (GameObject holder){
-		ChangeHolderColor (holder, 1.25f);
+		ChangeHolderSprite (holder, holderSprite);
 	}
 
 
-	void ChangeHolderColor (GameObject holder, float factor){
+	void ChangeHolderSprite (GameObject holder, Sprite holderStateSprite){
 		SpriteRenderer _renderer = holder.GetComponent<SpriteRenderer>();
-
-		Color color = _renderer.color;
-		color.g = color.g * factor;
-		color.b = color.b * factor;
-
-		_renderer.color = color;
+		_renderer.sprite = holderStateSprite;
 	}
 
 	public IconHolderState GetItemHolder (GameObject icon){

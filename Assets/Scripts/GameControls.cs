@@ -7,7 +7,7 @@ public class GameControls : MonoBehaviour {
 
 	public GameObject cake, cakeEffigy, spillPrefab, holder1, holder2 ;
 
-	float HOLDER_DISTANCE = 1.06f;
+	float HOLDER_DISTANCE = 1.1f;
 
 	GameObject iconTouched;
 
@@ -118,14 +118,6 @@ public class GameControls : MonoBehaviour {
 	void DeactivateJuju (){
 		itemActivator.DeactivateJuju ();
 	}
-
-//	GameObject GetHolderTouched (Touch touch){
-//		int layerMask = 1 << Constants.ITEM_ICONS_LAYER;
-//		GameObject holderTouched = Utilities.GetOverLappingItem (
-//			Camera.main.ScreenToWorldPoint(touch.position), layerMask);
-//
-//		return holderTouched ;
-//	}
 
 	GameObject GetHolderTouched (Touch touch){
 		Vector2 touchPosition = Camera.main.ScreenToWorldPoint (touch.position);
