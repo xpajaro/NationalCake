@@ -50,8 +50,7 @@ public class StageManager : MonoBehaviour
 	}
 
 	void FixedUpdate () {
-		SortAppearance (player, pRenderer);
-		SortAppearance (enemy, eRenderer);
+		SortAppearances ();
 
 		if (GameSetup.isHost) {
 			CheckIfActorsOnStage ();
@@ -59,12 +58,29 @@ public class StageManager : MonoBehaviour
 		}
 	}		
 
+	void SortAppearances (){
+		SortCakeAppearance (player, pRenderer);
+		SortCakeAppearance (enemy, eRenderer);
 
-	void SortAppearance (GameObject actor, SpriteRenderer _renderer){
+		SortEnemyAppearance ();
+	}
+
+	void SortCakeAppearance (GameObject actor, SpriteRenderer _renderer){
 		if (actor.transform.position.y > cake.transform.position.y) {
 			_renderer.sortingOrder = Constants.SORTING_ORDER_BACK;
 		} else {
 			_renderer.sortingOrder = Constants.SORTING_ORDER_FRONT;
+		}
+	}
+
+	void SortEnemyAppearance (){
+		//if characters are both in front or back of cake, sort appearance
+		if (eRenderer.sortingOrder == pRenderer.sortingOrder){
+			if (enemy.transform.position.y > player.transform.position.y) {
+				eRenderer.sortingOrder = pRenderer.sortingOrder - 1;
+			} else {
+				eRenderer.sortingOrder = pRenderer.sortingOrder + 1;
+			}
 		}
 	}
 
