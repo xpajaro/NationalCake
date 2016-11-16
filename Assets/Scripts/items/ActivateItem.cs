@@ -50,7 +50,7 @@ public class ActivateItem {
 	int CakeProcessor (){
 		int iconType = INVALID_ICON;
 
-		if (StageManager.cakeOnStage) {
+		if (StageManager.isOnStage (cake.transform.position)) {
 			Communicator.Instance.ShareItemUse (Constants.ITEM_JUJU, Vector2.zero);
 			ActivateJuju ();
 
