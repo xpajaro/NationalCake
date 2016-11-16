@@ -17,12 +17,14 @@ public class WorldConverter
 	{
 		renderer = world.GetComponent<SpriteRenderer>();
 		texture = renderer.sprite.texture ;
-		dimensions = getDimensions (renderer.transform.position);
+
+		//always calculate padding before dimensions
 		padding = getPadding (renderer.bounds.extents);
+		dimensions = getDimensions (renderer.transform.position);
 	}
 
 	public Vector2 getPositionInWorld (Vector2 rawPosition){
-		Vector2 scaledPosition = getScaledPosition (rawPosition, texture);
+		Vector2 scaledPosition = getScaledPosition (rawPosition);
 		return  scaledPosition;
 	}
 
@@ -35,20 +37,19 @@ public class WorldConverter
 
 
 	Vector2 getDimensions (Vector2 stagePosition){
-		Vector2 tempDimensions = new Vector2 ();
+		Vector2 stageDimensions = new Vector2 ();
 		Vector2 stagePositionInPixels = Camera.main.WorldToScreenPoint (stagePosition);
 
 		//stage dimensions in screenPoint
-		tempDimensions.x = (stagePositionInPixels.x - padding.x) *2;
-		tempDimensions.y = (stagePositionInPixels.y - padding.y) *2;
+		stageDimensions.x = (stagePositionInPixels.x - padding.x) *2;
+		stageDimensions.y = (stagePositionInPixels.y - padding.y) *2;
 
-		return tempDimensions;
+		return stageDimensions;
 	}
 
 
-	Vector2 positionInScale = new Vector2 ();
-	Vector2 getScaledPosition(Vector2 position, Texture2D stageTexture){
-
+	Vector2 getScaledPosition (Vector2 position){
+		Vector2 positionInScale = new Vector2 ();
 		position = Camera.main.WorldToScreenPoint (position);
 
 		//convert from position on screen to position on stage
@@ -57,8 +58,8 @@ public class WorldConverter
 		position.y = position.y - padding.y;
 
 		//pixels on unity have diff resolutions than sprite pixels
-		positionInScale.x = (int) (position.x/dimensions.x * stageTexture.width);
-		positionInScale.y = (int) (position.y/dimensions.y * stageTexture.height);
+		positionInScale.x = (int) (position.x/dimensions.x * texture.width);
+		positionInScale.y = (int) (position.y/dimensions.y * texture.height);
 
 		return positionInScale;
 	}

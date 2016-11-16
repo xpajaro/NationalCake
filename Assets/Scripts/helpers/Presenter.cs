@@ -11,7 +11,7 @@ public class Presenter {
 
 	public static void Detach (GameObject actor, SpriteRenderer renderer){
 		StopCollisions (actor);
-		RemoveFromRig (renderer);
+		RemoveFromRig (actor.transform.position, renderer);
 	}
 
 
@@ -20,8 +20,14 @@ public class Presenter {
 	}
 
 
-	static void RemoveFromRig (SpriteRenderer renderer){
-		renderer.sortingLayerName = Constants.SORTING_LAYER_WATER_TOP;
+	//put behind rig if dropped from top
+	//else put in front of rig
+	static void RemoveFromRig (Vector2 position, SpriteRenderer renderer){
+		if (position.y > 0) {
+			renderer.sortingLayerName = Constants.SORTING_LAYER_WATER_TOP;
+		} else {
+			renderer.sortingLayerName = Constants.SORTING_LAYER_RIG;
+		}
 	}
 
 

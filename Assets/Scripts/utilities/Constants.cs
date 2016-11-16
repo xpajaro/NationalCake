@@ -13,6 +13,7 @@ public class Constants {
 	public static int ITEM_ICONS_LAYER = 14 ;
 	public static string SORTING_LAYER_WATER_TOP = "water-top" ;
 	public static string SORTING_LAYER_RIG_TOP = "rig-top" ;
+	public static string SORTING_LAYER_RIG = "rig" ;
 	public static int SORTING_ORDER_FRONT = 7 ;
 	public static int SORTING_ORDER_BACK = 3 ;
 

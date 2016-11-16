@@ -10,7 +10,7 @@ public class StageManager : MonoBehaviour
 	public float MOVT_DAMPING = 0.5f;
 	public float VELOCITY_CAP = 10.0f;
 
-	float LEG_HEIGHT = 0.36f;
+	float LEG_HEIGHT = 0.4f;
 
 	//for elements to do friction on
 	public GameObject cake, player, enemy;
@@ -146,7 +146,7 @@ public class StageManager : MonoBehaviour
 	Vector2 GetFeetPosition (GameObject actor){
 		Vector2 feetPosition = new Vector2 ();
 		feetPosition.x = actor.transform.position.x;
-		feetPosition.y = actor.transform.position.y; //- LEG_HEIGHT;
+		feetPosition.y = actor.transform.position.y- LEG_HEIGHT;
 
 		return feetPosition;
 	}
