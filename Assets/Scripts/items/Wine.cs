@@ -5,7 +5,7 @@ using System;
 public class Wine : MonoBehaviour {
 
 	float RESPAWN_TIME = 10f; 
-	float BUZZ = 2.5f; //3.5 was good
+	float BUZZ = 3f; //3.5 was good
 	float BUZZ_MAX = 20f;
 
 	SpriteRenderer spriteRenderer;
@@ -14,7 +14,7 @@ public class Wine : MonoBehaviour {
 
 	void Start(){
 		spriteRenderer = this.gameObject.GetComponent<SpriteRenderer> ();
-		IgnoreCake ();
+		//IgnoreCake ();
 	}
 
 	void IgnoreCake (){
@@ -24,11 +24,12 @@ public class Wine : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D col)
 	{	
 		string actorName = col.gameObject.name;
+
+		//hide
+		Presenter.Detach (this.gameObject, spriteRenderer);
+
 		if (actorName.Equals("player") || actorName.Equals("enemy") ) {
-
-			//hide
-			Presenter.Detach (this.gameObject, spriteRenderer);
-
+			
 			// show again after countdwown
 			Invoke("ShowAgain", RESPAWN_TIME);
 

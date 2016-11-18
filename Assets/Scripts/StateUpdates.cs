@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using GooglePlayGames;
 using System.Collections;
 
 public class StateUpdates : MonoBehaviour {

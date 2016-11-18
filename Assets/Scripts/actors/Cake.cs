@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using GooglePlayGames;
 using System.Collections;
 
 public class Cake : MonoBehaviour {
@@ -32,7 +33,13 @@ public class Cake : MonoBehaviour {
 	}
 
 	void LockOnGoal (GameObject goal){
-		transform.position = goal.transform.position;
+		float GOAL_RADIUS = 0.36f;
+		Vector2 newPos = new Vector2 ();
+
+		newPos.x = goal.transform.position.x;
+		newPos.y = goal.transform.position.y + GOAL_RADIUS;
+
+		transform.position = newPos;
 	}
 
 	void StopMoving (){
