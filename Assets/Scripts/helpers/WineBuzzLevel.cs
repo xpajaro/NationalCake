@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WineBuzzLevel : MonoBehaviour
 {
-	public static float DEFAULT_LEVEL = 3f;
+	public static float DEFAULT_LEVEL = 2f;
 	public static float PlayerBuzz , EnemyBuzz ;
 	public float SOBER_RATE = 0.8f;
 
@@ -23,10 +23,10 @@ public class WineBuzzLevel : MonoBehaviour
 	}
 
 	void SoberUp(ref float level){
-		if (level > 1) {
+		if (level > DEFAULT_LEVEL) {
 			level = level * SOBER_RATE;
 		} else {
-			level = 1;
+			level = DEFAULT_LEVEL;
 		}
 			
 	}
