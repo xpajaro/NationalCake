@@ -9,8 +9,8 @@ public class StateUpdates : MonoBehaviour {
 	SpriteRenderer playerRenderer, enemyRenderer, cakeRenderer;
 	Animator pAnimator, eAnimator;
 
-	string PLAYER_MOVT_PARAMETER = "playerMovedByNetwork";
-	string ENEMY_MOVT_PARAMETER = "enemyMovedByNetwork";
+	string PLAYER_MOVT_PARAMETER = "playerDistanceToMove";
+	string ENEMY_MOVT_PARAMETER = "enemyDistanceToMove";
 
 	float outOfScreen = -10f;
 
@@ -204,13 +204,11 @@ public class StateUpdates : MonoBehaviour {
 	}
 
 	void AnimateActor (GameObject actor, float movtDistance){
-		bool actorMoving = movtDistance > 0 ? true: false;
-
 		if (actor.name.Equals (Constants.PLAYER_NAME)) {
-			pAnimator.SetBool (PLAYER_MOVT_PARAMETER, actorMoving);
+			pAnimator.SetFloat (PLAYER_MOVT_PARAMETER, movtDistance);
 
 		} else if (actor.name.Equals (Constants.ENEMY_NAME)) {
-			eAnimator.SetBool (ENEMY_MOVT_PARAMETER, actorMoving);
+			eAnimator.SetFloat (ENEMY_MOVT_PARAMETER, movtDistance);
 		}
 	}
 
