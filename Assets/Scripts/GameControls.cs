@@ -5,7 +5,7 @@ using System.Text;
 
 public class GameControls : MonoBehaviour {
 
-	public GameObject cake, cakeEffigy, spillPrefab, holder1, holder2 ;
+	public GameObject cake, enemy, cakeEffigy, spillPrefab, holder1, holder2 ;
 
 	float HOLDER_DISTANCE = 1.1f;
 
@@ -13,21 +13,37 @@ public class GameControls : MonoBehaviour {
 
 	public static ItemManager itemManager;
 
-	Rigidbody2D playerBody;
+	Rigidbody2D playerBody, enemyBody;
 
 	Moving movePlayer;
 	ActivateItem itemActivator;
 
+	Animator animator, enemyAnimator;
+	string PLAYER_VELOCITY_PARAMETER = "playerVelocity";
+	string ENEMY_VELOCITY_PARAMETER = "enemyVelocity";
+
 	bool moving;
 
 	void Start () {
+		//components
+		playerBody = GetComponent<Rigidbody2D> ();
+		enemyBody = enemy.GetComponent<Rigidbody2D> ();
+		animator = GetComponent<Animator> ();
+		enemyAnimator = enemy.GetComponent<Animator> ();
+
+		//classes
 		itemActivator = new ActivateItem (cake, cakeEffigy);
 		movePlayer = new Moving (gameObject);
-
 	}
 
 	void FixedUpdate (){
 		HandleTouch ();
+		UpdateAnimationParemeters ();
+	}
+
+	void UpdateAnimationParemeters (){
+		animator.SetFloat (PLAYER_VELOCITY_PARAMETER, playerBody.velocity.magnitude);
+		enemyAnimator.SetFloat (ENEMY_VELOCITY_PARAMETER, enemyBody.velocity.magnitude);
 	}
 
 	//-------------------------------------------

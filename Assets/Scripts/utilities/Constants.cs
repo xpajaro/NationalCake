@@ -30,4 +30,7 @@ public class Constants {
 	public static string ICON_BARREL_NAME = "barrelIcon";
 	public static string ICON_SPILL_NAME = "spillIcon";
 	public static string ICON_JUJU_NAME = "jujuIcon";
+
+	public static string PLAYER_NAME = "player";
+	public static string ENEMY_NAME = "enemy";
 }

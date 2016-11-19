@@ -7,6 +7,10 @@ public class StateUpdates : MonoBehaviour {
 	public GameObject player, enemy, cake;
 	Rigidbody2D playerBody, cakeBody, enemyBody;
 	SpriteRenderer playerRenderer, enemyRenderer, cakeRenderer;
+	Animator pAnimator, eAnimator;
+
+	string PLAYER_MOVT_PARAMETER = "playerMovedByNetwork";
+	string ENEMY_MOVT_PARAMETER = "enemyMovedByNetwork";
 
 	float outOfScreen = -10f;
 
@@ -30,6 +34,7 @@ public class StateUpdates : MonoBehaviour {
 
 		if (!GameSetup.isHost) {
 			LoadRenderers ();
+			LoadAnimators ();
 		} else {
 			LoadRigidBodies ();
 		}
@@ -45,6 +50,11 @@ public class StateUpdates : MonoBehaviour {
 		playerRenderer = player.GetComponent<SpriteRenderer> ();
 		enemyRenderer = enemy.GetComponent<SpriteRenderer> ();
 		cakeRenderer = cake.GetComponent<SpriteRenderer> ();
+	}
+
+	void LoadAnimators (){
+		pAnimator = player.GetComponent<Animator> ();
+		eAnimator = enemy.GetComponent<Animator> ();
 	}
 
 	void FixedUpdate () {
@@ -180,14 +190,31 @@ public class StateUpdates : MonoBehaviour {
 
 	void InterpolateUnlessReviving (GameObject actor, Vector2 currPos, Vector2 nextPos ){
 		if (currPos.x > outOfScreen ) {
-			Utilities.Interpolate (actor, currPos, nextPos, GetMovementProgresss ());
+
+			if (!currPos.Equals (nextPos)) {
+				float movementProgress = GetMovementProgress ();
+				Utilities.Interpolate (actor, currPos, nextPos, movementProgress);
+			}
+
+			AnimateActor (actor, Vector2.Distance (currPos, nextPos));
+
 		} else {
-			Debug.Log ("revive "+ currPos.ToString());
 			actor.transform.position = nextPos;
 		}
 	}
 
-	float GetMovementProgresss (){
+	void AnimateActor (GameObject actor, float movtDistance){
+		bool actorMoving = movtDistance > 0 ? true: false;
+
+		if (actor.name.Equals (Constants.PLAYER_NAME)) {
+			pAnimator.SetBool (PLAYER_MOVT_PARAMETER, actorMoving);
+
+		} else if (actor.name.Equals (Constants.ENEMY_NAME)) {
+			eAnimator.SetBool (ENEMY_MOVT_PARAMETER, actorMoving);
+		}
+	}
+
+	float GetMovementProgress (){
 		return (Time.time - lastUpdateTime) / TIME_GAP;
 	}
 

@@ -3,6 +3,7 @@ using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.Multiplayer;
 using UnityEngine.SocialPlatforms;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class NetworkListener : RealTimeMultiplayerListener {
@@ -40,14 +41,14 @@ public class NetworkListener : RealTimeMultiplayerListener {
 
 	public void OnLeftRoom ()
 	{
-		//Debug.Log ("on left room");
-		//throw new System.NotImplementedException ();
+		Debug.Log ("conner - onLeftRoom");
+		HandleGameTransition (true);
 	}
 
 	public void OnParticipantLeft (Participant participant)
 	{
-		//Debug.Log ("on participant left");
-		//throw new System.NotImplementedException ();
+		Debug.Log ("conner - OnParticipantLeft");
+		HandleGameTransition (false);
 	}
 
 	public void OnPeersConnected (string[] participantIds)
@@ -58,9 +59,28 @@ public class NetworkListener : RealTimeMultiplayerListener {
 
 	public void OnPeersDisconnected (string[] participantIds)
 	{
-		//Debug.Log ("on peers disconnected");
-		// user left wins
+		Debug.Log ("conner - OnPeersDisconnected");
+		HandleGameTransition (false);
 	}
 
+	void HandleGameTransition (bool thisUserDisconnected){
+		Scene scene = SceneManager.GetActiveScene();
+
+		if (!thisUserDisconnected) {
+			PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
+		}
+
+		if (scene.name.Equals (Constants.GAME_SCENE) && !GameState.gameEnded) {
+			FinishGame (!thisUserDisconnected);
+		}
+
+	}
+
+	void FinishGame (bool gameWon){
+		GameState.gameEnded = true;
+		GameState.gameWon = gameWon;
+
+		GameSetup.NextScene ();
+	}
 
 }

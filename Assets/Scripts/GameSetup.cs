@@ -49,6 +49,10 @@ public class GameSetup : MonoBehaviour {
 
 	public static void LeaveGame(){
 		PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
+		NextScene ();
+	}
+
+	public static void NextScene(){
 		SceneManager.LoadScene (ENG_GAME_SCENE);
 	}
 
