@@ -14,8 +14,8 @@ public class NetworkListener : RealTimeMultiplayerListener {
 		// show the default waiting room.
 		//Debug.Log ("on room setup progresss");
 		if (!showingWaitingRoom) {
-			showingWaitingRoom = true;
 			PlayGamesPlatform.Instance.RealTime.ShowWaitingRoomUI();
+			showingWaitingRoom = true;
 		}
 	}
 

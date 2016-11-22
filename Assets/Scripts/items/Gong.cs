@@ -17,7 +17,7 @@ public class Gong : MonoBehaviour {
 		greenColor = spriteRenderer.color.g;
 	}
 
-	float COOL_DOWN = 25f, DURATION = 10f;
+	float COOL_DOWN = 10f ;
 
 	void OnCollisionEnter2D (Collision2D col)
 	{	
@@ -26,10 +26,10 @@ public class Gong : MonoBehaviour {
 			if (actorName.Equals("player") || actorName.Equals( "enemy")) {
 
 				SwapSides ();
-				Darken ();
-				Presenter.StopCollisions (this.gameObject);
+				swapped = true;
 
-				Invoke ("SwapSides", DURATION);
+				Darken ();
+
 				Invoke ("Revive", COOL_DOWN);
 			}
 		}
@@ -37,16 +37,18 @@ public class Gong : MonoBehaviour {
 	}
 
 	void Revive (){
-		Presenter.StartCollisions (this.gameObject);
+		SwapSides ();
 		Brighten ();
 	}
 
 	//handle moving after swap
 	void SwapSides (){
-		Vector2 tempPosition = pGoal.transform.position;
-		pGoal.transform.position = eGoal.transform.position;
-		eGoal.transform.position = tempPosition;
-		swapped = !swapped;
+		if (!GameState.gameEnded) {
+			Vector2 tempPosition = pGoal.transform.position;
+			pGoal.transform.position = eGoal.transform.position;
+			eGoal.transform.position = tempPosition;
+			swapped = false;
+		}
 	}
 
 	void Darken (){
