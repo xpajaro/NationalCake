@@ -74,7 +74,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 
-  [super application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
   NSLog(@"Got Token for APNS: %@", deviceToken);
 
 
@@ -85,12 +84,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   // service should be used.  This value needs to match the cooresponding
   // certificate registered in the play app console, under linked apps > ios in
   // the section for push notifications.
-  gpg::RegisterDeviceToken(deviceToken, GPGPushNotificationEnvironmentProduction);
+  gpg::RegisterDeviceToken(deviceToken, GPGPushNotificationEnvironmentSandbox);
 }
 
 - (void)application:(UIApplication *)application
 didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-  //[super application:application didFailToRegisterForRemoteNotificationsWithError:error];
+  [super application:application didFailToRegisterForRemoteNotificationsWithError:error];
   NSLog(@"Error registering for remote notifications! %@", error);
 }
 
