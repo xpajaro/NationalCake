@@ -45,7 +45,7 @@ public class Moving {
 
 		Vector2 impulse = CalculateImpulse (launchDir);
 
-		if (GameSetup.isHost) {
+		if (GameSetup.isHost) { //add network delay 
 			Vector2 drunkImpulse = CalculateWineImpulse (impulse, WineBuzzLevel.PlayerBuzz) ;
 
 			Utilities.FaceCorrectDirection (actor, drunkImpulse, ref facingHomeBase, true);

@@ -110,7 +110,7 @@ public class Communicator  {
 	}
 
 
-	public void RouteMessage (char msgType, byte[] dataFields ){
+	public void RouteMessage (char msgType, byte[] dataFields ){//use switch
 		//Debug.Log ("route message");
 		if (MESSAGE_TYPE_MOVEMENT.Equals (msgType) ) {
 			Vector2 impulse = Deserialization.GetImpulse (dataFields);

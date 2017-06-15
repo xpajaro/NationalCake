@@ -379,6 +379,11 @@ namespace GooglePlayGames
             Authenticate(callback, false);
         }
 
+		public void Authenticate(ILocalUser unused, Action<bool, string> callback)
+		{
+			//mClient.Authenticate(callback, false);
+		}
+
         /// <summary>
         /// Determines whether the user is authenticated.
         /// </summary>

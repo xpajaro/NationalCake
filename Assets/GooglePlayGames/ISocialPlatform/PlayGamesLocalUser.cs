@@ -58,6 +58,14 @@ namespace GooglePlayGames
             mPlatform.Authenticate(callback, silent);
         }
 
+
+		public void Authenticate(Action<bool, string> callback)
+		{
+			//mPlatform.Authenticate(callback);
+		}
+
+
+
         /// <summary>
         /// Loads all friends of the authenticated user.
         /// </summary>
