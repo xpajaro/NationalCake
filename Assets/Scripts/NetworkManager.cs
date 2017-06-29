@@ -29,6 +29,7 @@ public class NetworkManager  {
 		if (! Social.localUser.authenticated) {
 			Social.localUser.Authenticate((bool success) => {
 				if (success) {
+					UIHandler.GotoMenuScene();
 					//Debug.Log ("We're signed in! Welcome " + Social.localUser.userName);
 				} else {
 					//Debug.Log ("Oh... we're not signed in.");

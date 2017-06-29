@@ -3,8 +3,8 @@ using System.Collections;
 
 public class ItemManager : MonoBehaviour {
 
-	public GameObject barrelPickupPrefab, spillPickupPrefab, jujuPickupPrefab;
-	public GameObject barrelIconPrefab, spillIconPrefab, jujuIconPrefab;
+	public GameObject barrelPickupPrefab, spillPickupPrefab, jujuPickupPrefab, bombPickupPrefab;
+	public GameObject barrelIconPrefab, spillIconPrefab, jujuIconPrefab, bombIconPrefab;
 
 	public GameObject holder1, holder2;
 	public Sprite activeHolderSprite, holderSprite;
@@ -44,11 +44,11 @@ public class ItemManager : MonoBehaviour {
 	}
 
 	public void HighlightHolder (GameObject holder){
-		ChangeHolderSprite (holder, activeHolderSprite);
+		//ChangeHolderSprite (holder, activeHolderSprite);
 	}
 
 	public void RemoveHolderHighlight (GameObject holder){
-		ChangeHolderSprite (holder, holderSprite);
+		//ChangeHolderSprite (holder, holderSprite);
 	}
 
 
@@ -121,6 +121,8 @@ public class ItemManager : MonoBehaviour {
 			pickupPrefab = spillPickupPrefab;
 		} else if (ID == 2) {
 			pickupPrefab = jujuPickupPrefab;
+		} else if (ID == 3) {
+			pickupPrefab = bombPickupPrefab;
 		} 
 
 		return pickupPrefab;
@@ -135,6 +137,8 @@ public class ItemManager : MonoBehaviour {
 			iconPrefab = spillIconPrefab;
 		} else if (ID == 2) {
 			iconPrefab = jujuIconPrefab;
+		} else if (ID == 3) {
+			iconPrefab = bombIconPrefab;
 		} 
 
 		return iconPrefab;

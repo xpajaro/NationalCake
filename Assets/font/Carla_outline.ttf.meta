@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 9fcd3a6e3c523494195dc4b47557c07d
+timeCreated: 1498399282
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Carla_outline
+  fontNames:
+  - Carla_outline
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

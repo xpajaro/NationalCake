@@ -10,14 +10,18 @@ using System;
 public class GameSetup : MonoBehaviour {
 
 	public static bool isHost;
-	static int GAME_SCENE = 1;
-	static int ENG_GAME_SCENE = 2;
+	static int GAME_SCENE = 2;
+	static int ENG_GAME_SCENE = 3;
 
 	void Start (){
+	}
+
+
+	public static void setupGame(){
 		SetupGooglePlay ();
 		SignIn ();
 	}
-		
+
 	static void SetupGooglePlay (){
 		//Debug.Log ("setup google play");
 		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ().Build ();
