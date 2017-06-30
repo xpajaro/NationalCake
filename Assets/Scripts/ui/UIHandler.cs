@@ -8,7 +8,9 @@ public class UIHandler : MonoBehaviour {
 	int INVITE_SCENE = 0;
 	static int MENU_SCENE = 1;
 	int MAIN_SCENE = 2;
-	int TUTORIAL_SCENE = 3;
+	int TUTORIAL_SCENE_1 = 4;
+	int TUTORIAL_SCENE_2 = 5;
+	int TUTORIAL_SCENE_3 = 6;
 
 
 	public void SetupGame(){
@@ -35,13 +37,26 @@ public class UIHandler : MonoBehaviour {
 		SceneManager.LoadScene (MENU_SCENE);
 	}
 
+	public void GoToMenu (){
+		UIHandler.GotoMenuScene ();
+	}
+
 	public void GotoMainScene (){
 		SceneManager.LoadScene (MAIN_SCENE);
 	}
 
-	public void GotoTutorialScene (){
-		SceneManager.LoadScene (TUTORIAL_SCENE);
+	public void GotoTutorialScene1 (){
+		SceneManager.LoadScene (TUTORIAL_SCENE_1);
 	}
+
+	public void GotoTutorialScene2 (){
+		SceneManager.LoadScene (TUTORIAL_SCENE_2);
+	}
+
+	public void GotoTutorialScene3 (){
+		SceneManager.LoadScene (TUTORIAL_SCENE_3);
+	}
+
 
 
 }

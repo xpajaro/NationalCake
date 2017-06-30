@@ -6,16 +6,18 @@ public class StartGame : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		Invoke ("EnterGame", 3.0f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (Input.touchCount > 0) {
 			//consider animation to give user feedback
-
-			GameSetup.setupGame ();
+			this.EnterGame();
 		}
-		
+	}
+
+	void EnterGame(){
+		GameSetup.setupGame ();
 	}
 }

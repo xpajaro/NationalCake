@@ -11,10 +11,20 @@ public class Gong : MonoBehaviour {
 	float blueColor, greenColor;
 
 
-	void Start(){
+	Animator animator;
+	string GONG_VIBRATION_PARAMETER = "vibrating";
+
+	// Use this for initialization
+	void Start () {
+		animator = GetComponent<Animator> ();
+
 		spriteRenderer = GetComponent<SpriteRenderer> ();
 		blueColor = spriteRenderer.color.b;
 		greenColor = spriteRenderer.color.g;
+	}
+
+	void Update(){
+		Debug.Log("animation status " + animator.GetBool(GONG_VIBRATION_PARAMETER).ToString());
 	}
 
 	float COOL_DOWN = 10f ;
@@ -52,6 +62,8 @@ public class Gong : MonoBehaviour {
 	}
 
 	void Darken (){
+		animator.SetBool (GONG_VIBRATION_PARAMETER, true);
+
 		Color c = spriteRenderer.color;
 		c.b = 0;
 		c.g = 0;
@@ -59,6 +71,8 @@ public class Gong : MonoBehaviour {
 	}
 
 	void Brighten (){
+		animator.SetBool (GONG_VIBRATION_PARAMETER, false);
+
 		Color c = spriteRenderer.color;
 		c.b = blueColor;
 		c.g = greenColor;
