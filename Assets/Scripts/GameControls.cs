@@ -7,7 +7,7 @@ public class GameControls : MonoBehaviour {
 
 	public GameObject cake, enemy, cakeEffigy, spillPrefab, holder1, holder2 ;
 
-	float HOLDER_DISTANCE = 1.1f;
+	float HOLDER_DISTANCE = 1.5f;
 
 	GameObject iconTouched;
 

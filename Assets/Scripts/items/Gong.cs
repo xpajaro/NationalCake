@@ -10,6 +10,8 @@ public class Gong : MonoBehaviour {
 	SpriteRenderer spriteRenderer;
 	float blueColor, greenColor;
 
+	float COOL_DOWN = 10f ;
+
 
 	Animator animator;
 	string GONG_VIBRATION_PARAMETER = "vibrating";
@@ -23,11 +25,6 @@ public class Gong : MonoBehaviour {
 		greenColor = spriteRenderer.color.g;
 	}
 
-	void Update(){
-		Debug.Log("animation status " + animator.GetBool(GONG_VIBRATION_PARAMETER).ToString());
-	}
-
-	float COOL_DOWN = 10f ;
 
 	void OnCollisionEnter2D (Collision2D col)
 	{	

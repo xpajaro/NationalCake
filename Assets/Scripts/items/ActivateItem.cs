@@ -51,7 +51,7 @@ public class ActivateItem {
 		int iconType = INVALID_ICON;
 
 		if (StageManager.isOnStage (cake.transform.position)) {
-			Communicator.Instance.ShareItemUse (Constants.ITEM_JUJU, Vector2.zero);
+			Communicator.Instance.ShareItemUse (Constants.ITEM_BOMB, Vector2.zero);
 			ActivateJuju ();
 
 			iconType = Constants.ITEM_JUJU;
@@ -108,6 +108,19 @@ public class ActivateItem {
 	public void ActivateBarrel (Vector2 position){
 		StageManager.Instantiate ( 
 			Resources.Load( "items/" + Constants.ITEM_NAME_BARREL ), position, Quaternion.identity);
+	}
+
+	public void ActivateBomb (Vector2 position){
+
+		Debug.Log ("xxxx - activate bomb " + Bomb.activeBombs.Count);
+		foreach(GameObject bomb in Bomb.activeBombs) {
+			Vector2 bombPosition = bomb.transform.position;
+			Debug.Log ("xxxx " +  bombPosition.ToString() + " " +  position.ToString());
+
+			if (bombPosition.Equals (position)) {
+				Bomb.TriggerExplosion (bomb);
+			}
+		}
 	}
 
 	//-------------------------------------------

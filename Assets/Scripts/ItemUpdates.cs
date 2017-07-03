@@ -20,11 +20,18 @@ public class ItemUpdates : MonoBehaviour {
 
 		GameObject newItem = (GameObject) Instantiate ( itemManager.GetPickupPrefabByID(itemID) );
 		newItem.transform.position = pos;
+
+		if (itemID == Constants.ITEM_BOMB) {
+			Bomb.activeBombs.Add (newItem);
+			Debug.Log ("xxxx - dropped bomb " + Bomb.activeBombs.Count);
+		}
 	}
 
 	public void UseItem (Dictionary<string, object> itemUsed){
 
+
 		int itemID = (int) itemUsed [Deserialization.ITEM_KEY];
+		Debug.Log ("xxxx - update " + itemID.ToString());
 
 		if (itemID == Constants.ITEM_JUJU) {
 			itemActivator.ActivateJuju ();
@@ -37,6 +44,10 @@ public class ItemUpdates : MonoBehaviour {
 		} else if (itemID == Constants.ITEM_BARREL){
 			Vector2 pos = (Vector2) itemUsed [Deserialization.POSITION_KEY];
 			itemActivator.ActivateBarrel (pos);
+
+		} else if (itemID == Constants.ITEM_BOMB){
+			Vector2 pos = (Vector2) itemUsed [Deserialization.POSITION_KEY];
+			itemActivator.ActivateBomb (pos);
 		}
 	}
 

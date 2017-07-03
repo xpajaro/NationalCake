@@ -6,7 +6,7 @@ public class StartGame : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Invoke ("EnterGame", 3.0f);
+		Invoke ("EnterGame", 1.0f);
 	}
 	
 	// Update is called once per frame

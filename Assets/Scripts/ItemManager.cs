@@ -93,7 +93,7 @@ public class ItemManager : MonoBehaviour {
 
 	public void DropItem (){
 		System.Random r = new System.Random();
-		int rInt = r.Next(0, 3);
+		int rInt = r.Next(0, 4);
 
 		Vector2 newPos = GetRandomStagePosition ();
 
