@@ -82,7 +82,7 @@ public class GameControls : MonoBehaviour {
 				iconTouched = itemManager.GetIconByHolder (holderTouched); 
 
 				if (iconTouched != null) {
-					itemManager.HighlightHolder (holderTouched);
+					ChangeIconHighlight (iconTouched, 0.5f);
 				} 
 			}
 			else {
@@ -122,7 +122,8 @@ public class GameControls : MonoBehaviour {
 	void CleanupHolder (int itemType){
 		GameObject holder = itemManager.GetItemHolder (iconTouched).holder;
 
-		itemManager.RemoveHolderHighlight (holder);
+		//itemManager.RemoveHolderHighlight (holder);
+		ChangeIconHighlight (iconTouched, 2f);
 
 		if (itemType != ActivateItem.INVALID_ICON) {
 			itemManager.RemoveHolderIcon (holder);
@@ -151,6 +152,11 @@ public class GameControls : MonoBehaviour {
 
 	GameObject GetIconTouched (GameObject holderTouched){
 		return itemManager.GetIconByHolder (holderTouched);
+	}
+
+	void ChangeIconHighlight(GameObject icon, float value){
+		Color iconColor = iconTouched.GetComponent<SpriteRenderer> ().color;
+		iconTouched.GetComponent<SpriteRenderer> ().color = iconColor * value;
 	}
 
 }

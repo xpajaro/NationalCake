@@ -7,6 +7,10 @@ public class Cake : MonoBehaviour {
 	string PLAYER_GOAL = "pGoal";
 	string ENEMY_GOAL = "eGoal";
 
+	void Update(){
+		Utilities.UpdateSortingLayer (gameObject);
+	}
+
 	void OnCollisionEnter2D (Collision2D col)
 	{
 		if (GameSetup.isHost) {

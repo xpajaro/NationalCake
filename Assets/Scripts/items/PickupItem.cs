@@ -8,12 +8,11 @@ public class PickupItem : MonoBehaviour {
 
 	int EXPLOSION_POWER = -300;
 
-	Animator animator;
-
 	public static ItemManager itemManager;
 
 	void Start(){
-		animator = GetComponent<Animator>();
+		Utilities.UpdateSortingLayer (gameObject);
+
 		Invoke ("Disappear", LIFETIME);
 	}
 
@@ -22,15 +21,15 @@ public class PickupItem : MonoBehaviour {
 	{	
 		string actorName = col.gameObject.name;
 
-		Debug.Log ("xxxx - triggered " + actorName);
+		if ( (actorName.Equals ("player") || actorName.Equals ("enemy"))
+			 && itemType == Constants.ITEM_BOMB) {
+				DetonateBomb (col.gameObject);
 
-		if (actorName.Equals ("player") || actorName.Equals ("enemy")) {
-			if (itemType == 3) { //bomb
-				Debug.Log ("xxxx - triggered bomb found ");
-				DetonateBomb( col.gameObject);
-			}
-		} else if (actorName.Equals( "player")) {
+		} else if (actorName.Equals ("player")) {
 			SaveItem ();
+			Destroy (gameObject);
+
+		} else {
 			Destroy (gameObject);
 		}
 	}
@@ -52,7 +51,6 @@ public class PickupItem : MonoBehaviour {
 	}
 
 	void Disappear (){
-		Debug.Log ("xxxx - disappear in pickup code");
 		Bomb.Deactivate (gameObject);
 		Destroy (gameObject);
 	}

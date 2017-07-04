@@ -111,11 +111,8 @@ public class ActivateItem {
 	}
 
 	public void ActivateBomb (Vector2 position){
-
-		Debug.Log ("xxxx - activate bomb " + Bomb.activeBombs.Count);
 		foreach(GameObject bomb in Bomb.activeBombs) {
 			Vector2 bombPosition = bomb.transform.position;
-			Debug.Log ("xxxx " +  bombPosition.ToString() + " " +  position.ToString());
 
 			if (bombPosition.Equals (position)) {
 				Bomb.TriggerExplosion (bomb);

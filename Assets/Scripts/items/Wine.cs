@@ -13,12 +13,9 @@ public class Wine : MonoBehaviour {
 	public GameObject cake;
 
 	void Start(){
-		spriteRenderer = this.gameObject.GetComponent<SpriteRenderer> ();
-		//IgnoreCake ();
-	}
+		Utilities.UpdateSortingLayer (gameObject);
 
-	void IgnoreCake (){
-		Physics2D.IgnoreCollision (GetComponent<Collider2D>(), cake.GetComponent<Collider2D>());
+		spriteRenderer = this.gameObject.GetComponent<SpriteRenderer> ();
 	}
 
 	void OnTriggerEnter2D (Collider2D col)
@@ -27,17 +24,13 @@ public class Wine : MonoBehaviour {
 
 		//hide
 		Presenter.Detach (this.gameObject, spriteRenderer);
+		Invoke("ShowAgain", RESPAWN_TIME);
 
 		if (actorName.Equals("player") || actorName.Equals("enemy") ) {
-			
-			// show again after countdwown
-			Invoke("ShowAgain", RESPAWN_TIME);
-
 			//add to speed
 			if (GameSetup.isHost) {
 				GoFaster (actorName);
 			}
-
 		}
 
 	}

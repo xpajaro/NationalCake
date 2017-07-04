@@ -9,6 +9,8 @@ public class Barrel : MonoBehaviour {
 	SpriteRenderer spriteRenderer;
 
 	void Start (){
+		Utilities.UpdateSortingLayer (gameObject);
+
 		spriteRenderer = GetComponent<SpriteRenderer> ();
 	}
 

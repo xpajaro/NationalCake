@@ -8,6 +8,10 @@ using System.IO;
 
 public class Utilities : MonoBehaviour{
 
+	public static void UpdateSortingLayer (GameObject item){
+		int layer = Mathf.RoundToInt(item.transform.position.y * 100f) * -1;
+		item.GetComponent<SpriteRenderer> ().sortingOrder = layer;
+	}
 
 	static float OVERLAP_RADIUS = 1.2f;
 	public static GameObject GetOverLappingItem (Vector2 pos, int layerMask){

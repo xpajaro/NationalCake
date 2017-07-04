@@ -11,6 +11,8 @@ public class Spill : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Utilities.UpdateSortingLayer (gameObject);
+
 		animator = GetComponent<Animator> ();
 		animator.Play (OIL_SPILL_ANIMATION_NAME);
 
