@@ -17,9 +17,11 @@ public class Communicator  {
 	public static char MESSAGE_TYPE_ITEM_USE = 'U';
 	public static char MESSAGE_TYPE_ACTOR_STATE = 'A';
 	public static char MESSAGE_TYPE_GAME_STATE = 'G';
+	public static char MESSAGE_TYPE_GONG_STATE = 'g';
 
 	public StateUpdates stateUpdates;
 	public ItemUpdates itemUpdates;
+	public Gong gong;
 
 	bool gameStarted;
 
@@ -42,7 +44,7 @@ public class Communicator  {
 		//Debug.Log ("say hello");
 
 		for (int i = 0; i < 3; i++) { // make sure it gets there
-			NetworkManager.Instance.SendFastMessage (Serialization.SerializeHello ());
+			NetworkManager.Instance.SendMessage (Serialization.SerializeHello (), true);
 		}
 		//Debug.Log ("say hello done");
 	}
@@ -81,6 +83,11 @@ public class Communicator  {
 			cakeBody, cFalling ) );
 		//Debug.Log ("share state done");
 	}
+
+	public void ShareGongSwap (){
+		NetworkManager.Instance.SendMessage ( Serialization.SerializeGongSwap (), true );
+	}
+
 
 	//-------------------------------------------
 	// Receiving
@@ -131,6 +138,9 @@ public class Communicator  {
 		} else if (MESSAGE_TYPE_GAME_STATE.Equals (msgType) ){
 			Deserialization.UpdateGameState (dataFields);
 			stateUpdates.EndGame ();
+
+		} else if (MESSAGE_TYPE_GONG_STATE.Equals (msgType) ){
+			gong.HandleSwap ();
 		}
 		//Debug.Log ("route message done");
 	}

@@ -18,6 +18,7 @@ public class Gong : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Communicator.Instance.gong = this;
 		animator = GetComponent<Animator> ();
 
 		spriteRenderer = GetComponent<SpriteRenderer> ();
@@ -28,24 +29,22 @@ public class Gong : MonoBehaviour {
 
 	void OnCollisionEnter2D (Collision2D col)
 	{	
-		if (!swapped) {
+		if (GameSetup.isHost && !swapped) {
 			string actorName = col.gameObject.name;
-			if (actorName.Equals("player") || actorName.Equals( "enemy")) {
 
-				SwapSides ();
+			if (actorName.Equals ("player") || actorName.Equals ("enemy")) {
+				Communicator.Instance.ShareGongSwap ();
+
+				HandleSwap ();
 				swapped = true;
-
-				Darken ();
-
-				Invoke ("Revive", COOL_DOWN);
 			}
 		}
-
 	}
 
-	void Revive (){
+	public void HandleSwap() {
 		SwapSides ();
-		Brighten ();
+		Darken ();
+		Invoke ("Revive", COOL_DOWN);
 	}
 
 	//handle moving after swap
@@ -75,4 +74,11 @@ public class Gong : MonoBehaviour {
 		c.g = greenColor;
 		spriteRenderer.color = c;
 	}
+
+
+	void Revive (){
+		SwapSides ();
+		Brighten ();
+	}
+
 }

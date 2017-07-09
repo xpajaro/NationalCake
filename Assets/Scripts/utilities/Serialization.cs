@@ -14,6 +14,7 @@ public class Serialization
 	static int ITEM_USE_MESSAGE_LENGTH = 14;
 	static int ACTOR_STATE_MESSAGE_LENGTH = 49;
 	static int GAME_STATE_MESSAGE_LENGTH = 4;
+	static int GONG_SWAP_MESSAGE_LENGTH = 2;
 
 	//order of message sent (ignore if expired)
 	static int stateMessageNo = 0 ;
@@ -24,6 +25,7 @@ public class Serialization
 	static List<byte> itemUseMessage  = new List<byte> (ITEM_USE_MESSAGE_LENGTH);
 	static List<byte> actorStateMessage  = new List<byte> (ACTOR_STATE_MESSAGE_LENGTH);
 	static List<byte> gameStateMessage  = new List<byte> (GAME_STATE_MESSAGE_LENGTH);
+	static List<byte> gongSwapMessage  = new List<byte> (GONG_SWAP_MESSAGE_LENGTH);
 
 	//-------------------------------------------
 	// Serialize
@@ -100,6 +102,18 @@ public class Serialization
 
 		//Debug.Log ("Serialize movement done");
 		return gameStateMessage.ToArray ();
+	}
+
+	public static byte [] SerializeGongSwap (){
+		//Debug.Log ("Serialize gong swap");
+
+		gongSwapMessage.Clear ();
+		//meta
+		gongSwapMessage.Add (PROTOCOL_VERSION);
+		gongSwapMessage.Add ((byte)Communicator.MESSAGE_TYPE_GONG_STATE);
+
+		//Debug.Log ("Serialize gong swap done");
+		return gongSwapMessage.ToArray ();
 	}
 
 
