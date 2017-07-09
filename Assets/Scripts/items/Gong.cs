@@ -36,7 +36,6 @@ public class Gong : MonoBehaviour {
 				Communicator.Instance.ShareGongSwap ();
 
 				HandleSwap ();
-				swapped = true;
 			}
 		}
 	}
@@ -45,6 +44,7 @@ public class Gong : MonoBehaviour {
 		SwapSides ();
 		Darken ();
 		Invoke ("Revive", COOL_DOWN);
+		swapped = true;
 	}
 
 	//handle moving after swap
@@ -53,7 +53,6 @@ public class Gong : MonoBehaviour {
 			Vector2 tempPosition = pGoal.transform.position;
 			pGoal.transform.position = eGoal.transform.position;
 			eGoal.transform.position = tempPosition;
-			swapped = false;
 		}
 	}
 
@@ -79,6 +78,7 @@ public class Gong : MonoBehaviour {
 	void Revive (){
 		SwapSides ();
 		Brighten ();
+		swapped = false;
 	}
 
 }
