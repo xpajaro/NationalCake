@@ -93,7 +93,14 @@ public class ActivateItem {
 		Vector2 startPos = point + barrelHalfRect;
 		Vector2 endPos = point - barrelHalfRect;
 
-		return (Physics2D.OverlapArea (startPos, endPos) != null);
+		bool collision = (Physics2D.OverlapArea (startPos, endPos) != null);
+
+		if (!collision && !GameSetup.isHost) { //cake has no collider on client
+			float distToCake = Vector2.Distance (point, cake.transform.position);
+			collision = (distToCake < .5f);
+		}
+
+		return collision;
 	}
 
 	//-------------------------------------------
@@ -128,7 +135,7 @@ public class ActivateItem {
 	}
 
 	public void ActivateBomb (Vector2 position){
-		foreach(GameObject bomb in Bomb.activeBombs) {
+		foreach(GameObject bomb in Bomb.instance.activeBombs) {
 			Vector2 bombPosition = bomb.transform.position;
 
 			if (bombPosition.Equals (position)) {

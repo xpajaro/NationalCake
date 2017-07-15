@@ -4,7 +4,9 @@ using System.Collections;
 public class SoundManager : MonoBehaviour 
 {
 	public AudioSource efxSource;                 
-	public static SoundManager instance = null;     
+	public static SoundManager instance = null;  
+
+	public AudioClip invalidAction;
 
 
 	void Awake ()
@@ -28,4 +30,9 @@ public class SoundManager : MonoBehaviour
 	{
 		efxSource.PlayOneShot (clip, level);
 	}
+
+	public void PlayWarning(){
+		PlaySingle (invalidAction, 0.5f);
+	}
+
 }

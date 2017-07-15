@@ -86,7 +86,7 @@ public class GameControls : MonoBehaviour {
 				if (iconTouched != null) {
 					ChangeIconHighlight (iconTouched, 0.5f);
 
-					if (iconTouched.name.Equals (Constants.ICON_JUJU_NAME)) { // do ghost
+					if (iconTouched.name.StartsWith (Constants.ICON_JUJU_NAME)) { // do ghost
 						HandleItemActivation (touch.position);
 					} 
 				} 
@@ -132,7 +132,10 @@ public class GameControls : MonoBehaviour {
 
 		if (itemType != ActivateItem.INVALID_ICON) {
 			itemManager.RemoveHolderIcon (holder);
-		} 
+
+		} else {
+			SoundManager.instance.PlayWarning ();
+		}
 
 		iconTouched = null;
 	}

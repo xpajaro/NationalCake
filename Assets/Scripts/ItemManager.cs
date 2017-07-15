@@ -111,9 +111,9 @@ public class ItemManager : MonoBehaviour {
 
 	Vector2 GetRandomStagePosition(){
 		Vector2 newPos = Utilities.GetRandomStagePosition ();
-
+		
 		while (!StageManager.isOnStage (newPos)
-			&& Physics2D.OverlapCircle(newPos, 1f) == null){
+			&& Physics2D.OverlapCircle(newPos, .7f) == null){
 			newPos = Utilities.GetRandomStagePosition ();
 		}
 		return newPos;

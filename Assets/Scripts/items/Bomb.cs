@@ -7,7 +7,7 @@ public class Bomb: MonoBehaviour
 	static string EXPLOSION_PARAMETER = "touchedByUser";
 
 	//keep track of items for client updates
-	public static List<GameObject> activeBombs = new List<GameObject>();    
+	public List<GameObject> activeBombs;   
 	public AudioClip explosionSound, playerSlipping;
 
 	public static Bomb instance = null;    
@@ -16,6 +16,8 @@ public class Bomb: MonoBehaviour
 	{
 		if (instance == null) {
 			instance = this;
+			this.activeBombs =  new List<GameObject>();
+
 		} else if (instance != this) {
 			Destroy (gameObject);
 		}
@@ -31,7 +33,7 @@ public class Bomb: MonoBehaviour
 	}
 
 	public static void Deactivate (GameObject bomb){
-		activeBombs.Remove (bomb);
+		Bomb.instance.activeBombs.Remove (bomb);
 	}
 }
 
