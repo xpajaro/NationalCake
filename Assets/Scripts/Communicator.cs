@@ -18,6 +18,8 @@ public class Communicator  {
 	public static char MESSAGE_TYPE_ACTOR_STATE = 'A';
 	public static char MESSAGE_TYPE_GAME_STATE = 'G';
 	public static char MESSAGE_TYPE_GONG_STATE = 'g';
+	public static char MESSAGE_TYPE_BARREL_HIT = 'B';
+	public static char MESSAGE_TYPE_SLIP = 'S';
 
 	public StateUpdates stateUpdates;
 	public ItemUpdates itemUpdates;
@@ -88,6 +90,14 @@ public class Communicator  {
 		NetworkManager.Instance.SendMessage ( Serialization.SerializeGongSwap (), true );
 	}
 
+	public void ShareBarrelhit(Vector2 pos, int hitCount){
+		NetworkManager.Instance.SendMessage ( Serialization.SerializeBarrelHit (pos, hitCount), true );
+	}
+
+	public void ShareSlip(){
+		NetworkManager.Instance.SendMessage ( Serialization.SerializeSlip (), true );
+	}
+
 
 	//-------------------------------------------
 	// Receiving
@@ -141,6 +151,13 @@ public class Communicator  {
 
 		} else if (MESSAGE_TYPE_GONG_STATE.Equals (msgType) ){
 			gong.HandleSwap ();
+
+		} else if (MESSAGE_TYPE_BARREL_HIT.Equals (msgType) ){
+			Dictionary<string, object> barrelHit = Deserialization.GetBarrelHit (dataFields);
+			Barrel.updateClientBarrel (barrelHit);
+
+		} else if (MESSAGE_TYPE_SLIP.Equals (msgType) ){
+			Spill.PlaySounds ();
 		}
 		//Debug.Log ("route message done");
 	}

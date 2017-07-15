@@ -25,12 +25,13 @@ public class StateUpdates : MonoBehaviour {
 	float lastUpdateTime;
 
 	Moving moveEnemy;
+	public AudioClip enemyRunningSound, playerFallingSound;
 
 
 	void Start (){
 		Communicator.Instance.stateUpdates = this;
 
-		moveEnemy = new Moving (enemy);
+		moveEnemy = new Moving (enemy, enemyRunningSound);
 
 		if (!GameSetup.isHost) {
 			LoadRenderers ();
@@ -172,6 +173,10 @@ public class StateUpdates : MonoBehaviour {
 		if (isFalling && !localFallingRef) {
 			localFallingRef = true;
 			Presenter.Detach (actor, renderer);
+
+			if (actor.name.Equals("player")){
+				SoundManager.instance.PlaySingle (playerFallingSound);
+			}
 		} else if (!isFalling && localFallingRef){
 			localFallingRef = false;
 			Presenter.Attach (actor, renderer);

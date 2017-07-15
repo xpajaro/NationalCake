@@ -11,6 +11,7 @@ public class Wine : MonoBehaviour {
 	SpriteRenderer spriteRenderer;
 
 	public GameObject cake;
+	public AudioClip gasUpSound;
 
 	void Start(){
 		Utilities.UpdateSortingLayer (gameObject);
@@ -22,11 +23,17 @@ public class Wine : MonoBehaviour {
 	{	
 		string actorName = col.gameObject.name;
 
-		//hide
-		Presenter.Detach (this.gameObject, spriteRenderer);
-		Invoke("ShowAgain", RESPAWN_TIME);
-
 		if (actorName.Equals("player") || actorName.Equals("enemy") ) {
+
+			//hide
+			Presenter.Detach (this.gameObject, spriteRenderer);
+			Invoke("ShowAgain", RESPAWN_TIME);
+
+
+			if (actorName.Equals ("player")) {
+				SoundManager.instance.PlaySingle (gasUpSound);
+			}
+
 			//add to speed
 			if (GameSetup.isHost) {
 				GoFaster (actorName);

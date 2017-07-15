@@ -15,6 +15,8 @@ public class Serialization
 	static int ACTOR_STATE_MESSAGE_LENGTH = 49;
 	static int GAME_STATE_MESSAGE_LENGTH = 4;
 	static int GONG_SWAP_MESSAGE_LENGTH = 2;
+	static int BARREL_HIT_MESSAGE_LENGTH = 14;
+	static int SLIP_MESSAGE_LENGTH = 2;
 
 	//order of message sent (ignore if expired)
 	static int stateMessageNo = 0 ;
@@ -26,6 +28,8 @@ public class Serialization
 	static List<byte> actorStateMessage  = new List<byte> (ACTOR_STATE_MESSAGE_LENGTH);
 	static List<byte> gameStateMessage  = new List<byte> (GAME_STATE_MESSAGE_LENGTH);
 	static List<byte> gongSwapMessage  = new List<byte> (GONG_SWAP_MESSAGE_LENGTH);
+	static List<byte> barrelHitMessage  = new List<byte> (BARREL_HIT_MESSAGE_LENGTH);
+	static List<byte> slipMessage  = new List<byte> (SLIP_MESSAGE_LENGTH);
 
 	//-------------------------------------------
 	// Serialize
@@ -115,6 +119,35 @@ public class Serialization
 		//Debug.Log ("Serialize gong swap done");
 		return gongSwapMessage.ToArray ();
 	}
+
+	public static byte [] SerializeBarrelHit (Vector2 pos, int hitCount){
+		//Debug.Log ("Serialize barrel hit");
+
+		barrelHitMessage.Clear ();
+		//meta
+		barrelHitMessage.Add (PROTOCOL_VERSION);
+		barrelHitMessage.Add ((byte)Communicator.MESSAGE_TYPE_BARREL_HIT);
+		//data
+		barrelHitMessage.AddRange (System.BitConverter.GetBytes (pos.x));  
+		barrelHitMessage.AddRange (System.BitConverter.GetBytes (pos.y)); 
+		barrelHitMessage.AddRange (System.BitConverter.GetBytes (hitCount));  
+
+		//Debug.Log ("Serialize barrel hit done");
+		return barrelHitMessage.ToArray ();
+	}
+
+	public static byte [] SerializeSlip (){
+		//Debug.Log ("Serialize slip");
+
+		slipMessage.Clear ();
+		//meta
+		slipMessage.Add (PROTOCOL_VERSION);
+		slipMessage.Add ((byte)Communicator.MESSAGE_TYPE_SLIP);
+
+		//Debug.Log ("Serialize slip done");
+		return slipMessage.ToArray ();
+	}
+
 
 
 	public static byte [] SerializeActorState (Rigidbody2D playerBody, bool pFalling,

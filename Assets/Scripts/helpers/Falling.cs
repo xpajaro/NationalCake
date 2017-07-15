@@ -10,6 +10,7 @@ public class Falling : MonoBehaviour {
 	public static bool pFalling, eFalling, cFalling ;
 
 	FallingAnimator pAnimator, eAnimator, cAnimator ;
+	public AudioClip playerFallingSound;
 
 	void Start(){
 
@@ -31,6 +32,8 @@ public class Falling : MonoBehaviour {
 		if (!StageManager.playerOnStage && !pFalling) {
 			pFalling = true;
 			WineBuzzLevel.PlayerBuzz = WineBuzzLevel.DEFAULT_LEVEL;
+
+			SoundManager.instance.PlaySingle (playerFallingSound);
 		}
 		if (!StageManager.enemyOnStage && !pFalling) {
 			eFalling = true; 

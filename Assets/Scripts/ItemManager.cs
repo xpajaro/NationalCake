@@ -12,8 +12,12 @@ public class ItemManager : MonoBehaviour {
 
 	float DROP_ITEM_COOLDOWN = 10f; //change to 40
 
+	public AudioClip itemDropSound;
+
 	// Use this for initialization
 	void Start () {
+		Keeper.itemDropSound = itemDropSound;
+
 		ItemUpdates.itemManager = this;
 		PickupItem.itemManager = this;
 		GameControls.itemManager = this;
@@ -101,12 +105,15 @@ public class ItemManager : MonoBehaviour {
 		newItem.transform.position = newPos;
 
 		Communicator.Instance.ShareItemDrop (rInt, newPos);
+
+		SoundManager.instance.PlaySingle (itemDropSound);
 	}
 
 	Vector2 GetRandomStagePosition(){
 		Vector2 newPos = Utilities.GetRandomStagePosition ();
 
-		while (!StageManager.isOnStage (newPos)){
+		while (!StageManager.isOnStage (newPos)
+			&& Physics2D.OverlapCircle(newPos, 1f) == null){
 			newPos = Utilities.GetRandomStagePosition ();
 		}
 		return newPos;

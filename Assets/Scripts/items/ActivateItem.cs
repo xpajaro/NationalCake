@@ -11,6 +11,8 @@ public class ActivateItem {
 
 	public static float JUJU_COOLDOWN = 8;
 
+	Vector2 barrelHalfRect = new Vector2 (.46f, .9f);
+
 
 	public ActivateItem (GameObject _cake, GameObject _cakeEffigy)
 	{
@@ -51,7 +53,7 @@ public class ActivateItem {
 		int iconType = INVALID_ICON;
 
 		if (StageManager.isOnStage (cake.transform.position)) {
-			Communicator.Instance.ShareItemUse (Constants.ITEM_BOMB, Vector2.zero);
+			Communicator.Instance.ShareItemUse (Constants.ITEM_JUJU, Vector2.zero);
 			ActivateJuju ();
 
 			iconType = Constants.ITEM_JUJU;
@@ -64,6 +66,7 @@ public class ActivateItem {
 		int iconType = INVALID_ICON;
 
 		if (StageManager.isOnStage (position)) {
+
 			Communicator.Instance.ShareItemUse (Constants.ITEM_SPILL, position);
 			ActivateSpill (position);
 
@@ -75,13 +78,22 @@ public class ActivateItem {
 	int BarrelProcessor (Vector2 position){
 		int iconType = INVALID_ICON;
 
-		if (StageManager.isOnStage (position)) {
+		if (StageManager.isOnStage (position) &&
+			!areaOccupied (position) ) {
+
 			Communicator.Instance.ShareItemUse (Constants.ITEM_BARREL, position);
 			ActivateBarrel (position);
 
 			iconType = Constants.ITEM_BARREL;
 		}
 		return iconType;
+	}
+
+	bool areaOccupied(Vector2 point){
+		Vector2 startPos = point + barrelHalfRect;
+		Vector2 endPos = point - barrelHalfRect;
+
+		return (Physics2D.OverlapArea (startPos, endPos) != null);
 	}
 
 	//-------------------------------------------
@@ -103,11 +115,16 @@ public class ActivateItem {
 	public void ActivateSpill (Vector2 position){
 		StageManager.Instantiate ( 
 			Resources.Load( "items/" + Constants.ITEM_NAME_SPILL ), position, Quaternion.identity);
+		
+		SoundManager.instance.PlaySingle (Keeper.itemDropSound);
 	}
 
 	public void ActivateBarrel (Vector2 position){
-		StageManager.Instantiate ( 
+		GameObject newBarrel = (GameObject) StageManager.Instantiate ( 
 			Resources.Load( "items/" + Constants.ITEM_NAME_BARREL ), position, Quaternion.identity);
+		Barrel.activeBarrels.Add (newBarrel);
+
+		SoundManager.instance.PlaySingle (Keeper.itemDropSound);
 	}
 
 	public void ActivateBomb (Vector2 position){

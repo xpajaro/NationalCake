@@ -14,9 +14,12 @@ public class Moving {
 	Vector2 movtStartPosition;
 	bool facingHomeBase = false; // default position
 
-	public Moving (GameObject _actor){
+	AudioClip actorRunningSound;
+
+	public Moving (GameObject _actor, AudioClip _actorRunningSound){
 		actor = _actor;
 		actorBody = actor.GetComponent<Rigidbody2D> ();
+		actorRunningSound = _actorRunningSound;
 	}
 
 
@@ -25,11 +28,15 @@ public class Moving {
 	}
 
 	public void NetworkImpulseReceived (Vector2 impulse, float buzz){
-		Vector2 drunkImpulse =  CalculateWineImpulse (impulse, buzz) ;
+		SoundManager.instance.PlaySingle (actorRunningSound, 1f);
 
-		Utilities.FaceCorrectDirection (actor, drunkImpulse, ref facingHomeBase, false);
+		if (GameSetup.isHost) {
+			Vector2 drunkImpulse = CalculateWineImpulse (impulse, buzz);
 
-		actorBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
+			Utilities.FaceCorrectDirection (actor, drunkImpulse, ref facingHomeBase, false);
+
+			actorBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
+		}
 	}
 
 	public void MovementInputEnded(Vector2 endPos){
@@ -52,9 +59,11 @@ public class Moving {
 
 			actorBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
 
-		} else {
-			Communicator.Instance.ShareMovement (impulse);
-		}
+		} 
+
+		SoundManager.instance.PlaySingle (actorRunningSound, 1f);
+		Communicator.Instance.ShareMovement (impulse);
+
 	}
 
 	//-------------------------------------------

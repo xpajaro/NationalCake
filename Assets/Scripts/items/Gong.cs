@@ -16,6 +16,8 @@ public class Gong : MonoBehaviour {
 	Animator animator;
 	string GONG_VIBRATION_PARAMETER = "vibrating";
 
+	public AudioClip gongSound;
+
 	// Use this for initialization
 	void Start () {
 		Communicator.Instance.gong = this;
@@ -41,6 +43,7 @@ public class Gong : MonoBehaviour {
 	}
 
 	public void HandleSwap() {
+		SoundManager.instance.PlaySingle (gongSound);
 		SwapSides ();
 		Darken ();
 		Invoke ("Revive", COOL_DOWN);

@@ -1,35 +1,67 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Barrel : MonoBehaviour {
 	
 	public Sprite CRACKED_BARREL , BROKEN_BARREL ;
+	public AudioClip barrelHit, barrelBroken;
+
+	//keep track of items for client updates
+	public static List<GameObject> activeBarrels = new List<GameObject>();    
+
 	int noOfHits = 0;
 
-	SpriteRenderer spriteRenderer;
-
 	void Start (){
+		StoreRefs ();
 		Utilities.UpdateSortingLayer (gameObject);
+	}
 
-		spriteRenderer = GetComponent<SpriteRenderer> ();
+	void StoreRefs(){
+		Keeper.CRACKED_BARREL = CRACKED_BARREL;
+		Keeper.BROKEN_BARREL = BROKEN_BARREL;
+		Keeper.barrelBroken = barrelBroken;
+		Keeper.barrelHit = barrelHit;
 	}
 
 	void OnCollisionEnter2D (Collision2D col){	
-		CrushBarrel ();
-		noOfHits++;
+		if (GameSetup.isHost) {
+			Communicator.Instance.ShareBarrelhit(transform.position, noOfHits);
+
+			Barrel.CrushBarrel (noOfHits, gameObject);
+			noOfHits++;
+		}
 	}
 
-	void CrushBarrel (){
-		
-		switch (noOfHits) {
+	public static void updateClientBarrel (Dictionary<string, object>  barrelHit){
+		int hitCount = (int) barrelHit [Deserialization.HITCOUNT_KEY];
+		Vector2 pos = (Vector2) barrelHit [Deserialization.POSITION_KEY];
+
+		foreach(GameObject barrel in Barrel.activeBarrels) {
+			Vector2 barrelPosition = barrel.transform.position;
+
+			if (barrelPosition.Equals (pos)) {
+				Barrel.CrushBarrel (hitCount, barrel);
+			}
+		}
+	}
+
+
+	public static void CrushBarrel (int hitCount, GameObject barrel){
+
+		SpriteRenderer renderer = barrel.GetComponent<SpriteRenderer> ();
+
+		switch (hitCount) {
 			case 0:
-				spriteRenderer.sprite = CRACKED_BARREL;
+				renderer.sprite = Keeper.CRACKED_BARREL;
+				SoundManager.instance.PlaySingle (Keeper.barrelHit);
 				break;
 			case 1:
-				spriteRenderer.sprite = BROKEN_BARREL;
+				renderer.sprite = Keeper.BROKEN_BARREL;
+				SoundManager.instance.PlaySingle (Keeper.barrelHit);
 				break;
 			case 2:
-				ExpireItem ();
+				ExpireItem (barrel);
+				SoundManager.instance.PlaySingle (Keeper.barrelBroken);
 				break;
 			default:
 				break;
@@ -37,7 +69,8 @@ public class Barrel : MonoBehaviour {
 
 	}
 
-	void ExpireItem (){
-		Destroy (this.gameObject);
+	static void ExpireItem (GameObject barrel){
+		Destroy (barrel);
+		Barrel.activeBarrels.Remove (barrel);
 	}
 }

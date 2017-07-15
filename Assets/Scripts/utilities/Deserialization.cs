@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Deserialization {
 	public static string ITEM_KEY = "item";
 	public static string POSITION_KEY = "pos";
+	public static string HITCOUNT_KEY = "hitCount";
 
 	public static Vector2 GetImpulse (byte[] dataFields){
 		Vector2 impulse = new Vector2 ();
@@ -56,6 +57,24 @@ public class Deserialization {
 
 		//Debug.Log ("Update Game state");
 	}
+
+
+	public static Dictionary<string, object> GetBarrelHit (byte[] dataFields){
+		//Debug.Log ("Get barrel hit ");
+		Dictionary<string, object> itemUsed = new Dictionary<string, object>();
+
+		Vector2 pos = new Vector2 ();
+		pos.x = System.BitConverter.ToSingle(dataFields, 2);
+		pos.y = System.BitConverter.ToSingle(dataFields, 6);
+		itemUsed.Add (POSITION_KEY, pos);
+
+		int item = System.BitConverter.ToInt32(dataFields, 10);
+		itemUsed.Add (HITCOUNT_KEY, item);
+
+		//Debug.Log ("Get item use done");
+		return itemUsed;
+	}
+
 
 	public static ActorState GetActorState (byte[] dataFields){
 		ActorState state = new ActorState ();

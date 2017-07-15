@@ -24,6 +24,8 @@ public class GameControls : MonoBehaviour {
 
 	bool moving;
 
+	public AudioClip playerRunningSound;
+
 	void Start () {
 		//components
 		playerBody = GetComponent<Rigidbody2D> ();
@@ -33,7 +35,7 @@ public class GameControls : MonoBehaviour {
 
 		//classes
 		itemActivator = new ActivateItem (cake, cakeEffigy);
-		movePlayer = new Moving (gameObject);
+		movePlayer = new Moving (gameObject, playerRunningSound);
 	}
 
 	void FixedUpdate (){
@@ -83,9 +85,12 @@ public class GameControls : MonoBehaviour {
 
 				if (iconTouched != null) {
 					ChangeIconHighlight (iconTouched, 0.5f);
+
+					if (iconTouched.name.Equals (Constants.ICON_JUJU_NAME)) { // do ghost
+						HandleItemActivation (touch.position);
+					} 
 				} 
-			}
-			else {
+			} else {
 				movePlayer.MovementInputStarted (touch.position);
 				moving = true;
 			}

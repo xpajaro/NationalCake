@@ -6,6 +6,7 @@ public class ItemUpdates : MonoBehaviour {
 
 	public GameObject cake, cakeEffigy;
 	ActivateItem itemActivator;
+	public AudioClip itemDropSound;
 
 	public static ItemManager itemManager;
 
@@ -24,6 +25,8 @@ public class ItemUpdates : MonoBehaviour {
 		if (itemID == Constants.ITEM_BOMB) {
 			Bomb.activeBombs.Add (newItem);
 		}
+
+		SoundManager.instance.PlaySingle (itemDropSound);
 	}
 
 	public void UseItem (Dictionary<string, object> itemUsed){
@@ -31,6 +34,7 @@ public class ItemUpdates : MonoBehaviour {
 
 		if (itemID == Constants.ITEM_JUJU) {
 			itemActivator.ActivateJuju ();
+			Invoke ("DeactivateJuju", ActivateItem.JUJU_COOLDOWN);
 
 		} else if (itemID == Constants.ITEM_SPILL){
 			Vector2 pos = (Vector2) itemUsed [Deserialization.POSITION_KEY];
