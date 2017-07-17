@@ -18,6 +18,8 @@ public class Serialization
 	static int BARREL_HIT_MESSAGE_LENGTH = 14;
 	static int SLIP_MESSAGE_LENGTH = 2;
 
+	static int GAMESTAMP_MESSAGE_LENGTH = 3;
+
 	//order of message sent (ignore if expired)
 	static int stateMessageNo = 0 ;
 
@@ -30,6 +32,7 @@ public class Serialization
 	static List<byte> gongSwapMessage  = new List<byte> (GONG_SWAP_MESSAGE_LENGTH);
 	static List<byte> barrelHitMessage  = new List<byte> (BARREL_HIT_MESSAGE_LENGTH);
 	static List<byte> slipMessage  = new List<byte> (SLIP_MESSAGE_LENGTH);
+	static List<byte> gamestampMessage  = new List<byte> (GAMESTAMP_MESSAGE_LENGTH);
 
 	//-------------------------------------------
 	// Serialize
@@ -184,6 +187,15 @@ public class Serialization
 		return actorStateMessage.ToArray ();
 	}
 
+	public static byte[] SerializeGamestamp (char msgType, char tag){
+		//Debug.Log ("Serialize hello done");
+		gamestampMessage.Clear ();
+		gamestampMessage.Add (PROTOCOL_VERSION);
+		gamestampMessage.Add ((byte) msgType);
+		gamestampMessage.Add ((byte) tag);
+
+		return gamestampMessage.ToArray ();
+	}
 
 }
 

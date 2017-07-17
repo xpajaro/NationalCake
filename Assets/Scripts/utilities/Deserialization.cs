@@ -116,10 +116,17 @@ public class Deserialization {
 		return state;
 	}
 
+	public static char GetGamestamp(byte[] data){
+		//Debug.Log ("get gamestamp done");
+		return (char) data[3];;
+	}
+
+
 	public static char GetMessageType(byte[] data){
 		//Debug.Log ("get message type done");
 		return (char) data[1];;
 	}
+
 
 
 

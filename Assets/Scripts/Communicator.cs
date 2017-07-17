@@ -6,11 +6,6 @@ using System.Collections.Generic;
 //massages data to and from the network interfaces
 public class Communicator  {
 
-	public static string MESSAGE_TYPE = "MESSAGE_TYPE" ;
-	public static string IMPULSE = "CONTENT" ;
-	public static string ACTOR_STATE = "ACTOR_STATE" ;
-
-	public enum MessageTypes {HELLO, MOVEMENT, ITEM, STATE};
 	public static char MESSAGE_TYPE_HELLO = 'H';
 	public static char MESSAGE_TYPE_MOVEMENT = 'M';
 	public static char MESSAGE_TYPE_ITEM_DROP = 'D';
@@ -20,6 +15,10 @@ public class Communicator  {
 	public static char MESSAGE_TYPE_GONG_STATE = 'g';
 	public static char MESSAGE_TYPE_BARREL_HIT = 'B';
 	public static char MESSAGE_TYPE_SLIP = 'S';
+
+
+	public static char MESSAGE_TYPE_SERVER_TIMESTAMP = '1';
+	public static char MESSAGE_TYPE_CLIENT_TIMESTAMP = '2';
 
 	public StateUpdates stateUpdates;
 	public ItemUpdates itemUpdates;
@@ -96,6 +95,18 @@ public class Communicator  {
 
 	public void ShareSlip(){
 		NetworkManager.Instance.SendMessage ( Serialization.SerializeSlip (), true );
+	}
+
+	public void ShareServerGamestamp(char tag){
+		NetworkManager.Instance.SendMessage ( 
+			Serialization.SerializeGamestamp ( Communicator.MESSAGE_TYPE_SERVER_TIMESTAMP, tag), 
+			true );
+	}
+
+	public void ShareClientGamestamp(char tag){
+		NetworkManager.Instance.SendMessage ( 
+			Serialization.SerializeGamestamp ( Communicator.MESSAGE_TYPE_CLIENT_TIMESTAMP, tag), 
+			true );
 	}
 
 

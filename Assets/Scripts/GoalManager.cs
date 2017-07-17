@@ -3,16 +3,19 @@ using System.Collections;
 
 public class GoalManager : MonoBehaviour {
 
-	public GameObject pGoal, eGoal;
+	public GameObject pGoal, eGoal, greenSmoke, redSmoke;
 	Vector2 pStart, eStart, pDestination, eDestination;
 
 	public Vector2 DISTANCE_TO_MOVE = new Vector2 (1,0);
+	public AudioClip goalMovementSound;
 
 	public int TIMES_TO_MOVE = 4;
-	public int WHEN_TO_MOVE = 60; //1800f at 30f/s is one minute
-	public int ANIMATION_DURATION = 90;
+	public int WHEN_TO_MOVE = 2400; //1800f at 30f/s is one minute
+	public int ANIMATION_DURATION = 60;
+	int SMOKE_DURATION = 5;
 
 	int timesMoved = 0, animationCounter = 0;
+	GameObject greenSmokeRef, redSmokeRef;
 
 
 	void Start () {
@@ -32,6 +35,9 @@ public class GoalManager : MonoBehaviour {
 
 				if (pctDone == 0) {
 					Prepare ();
+					AddSmokeParticles ();
+					SoundManager.instance.PlaySingle (goalMovementSound);
+					Invoke ("RemoveSmokeParticles", SMOKE_DURATION);
 				} 
 
 				MoveGoals (pctDone);
@@ -58,6 +64,7 @@ public class GoalManager : MonoBehaviour {
 			pDestination = pStart + (DISTANCE_TO_MOVE * -1);
 			eDestination = eStart + DISTANCE_TO_MOVE ;
 		}
+
 	}
 
 	void MoveGoals (float pctDone){
@@ -73,5 +80,27 @@ public class GoalManager : MonoBehaviour {
 		Vector2 temp = pGoal.transform.position;
 		pGoal.transform.position = eGoal.transform.position;
 		eGoal.transform.position = temp;
+	}
+
+	void AddSmokeParticles(){
+		Debug.Log("add particles");
+
+		greenSmokeRef = Instantiate (greenSmoke, pGoal.transform.position, greenSmoke.transform.rotation);
+		greenSmokeRef.transform.parent = pGoal.transform;
+
+		redSmokeRef = Instantiate (redSmoke, eGoal.transform.position, redSmoke.transform.rotation);
+		redSmokeRef.transform.parent = eGoal.transform;
+
+		if (!GameSetup.isHost) {
+			greenSmokeRef.transform.Rotate(Vector3.up * -180);
+			redSmokeRef.transform.Rotate(Vector3.up * 180);
+		}
+	}
+
+	void RemoveSmokeParticles(){
+		Debug.Log("remove particles");
+
+		Destroy (greenSmokeRef);
+		Destroy (redSmokeRef);
 	}
 }
