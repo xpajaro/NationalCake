@@ -44,7 +44,7 @@ public class Communicator  {
 	public void SayHello (){
 		//Debug.Log ("say hello");
 
-		for (int i = 0; i < 3; i++) { // make sure it gets there
+		for (int i = 0; i < 5; i++) { // make sure it gets there
 			NetworkManager.Instance.SendMessage (Serialization.SerializeHello (), true);
 		}
 		//Debug.Log ("say hello done");
@@ -99,14 +99,14 @@ public class Communicator  {
 
 	public void ShareServerGamestamp(char tag){
 		NetworkManager.Instance.SendMessage ( 
-			Serialization.SerializeGamestamp ( Communicator.MESSAGE_TYPE_SERVER_TIMESTAMP, tag), 
-			true );
+			Serialization.SerializeGamestamp ( Communicator.MESSAGE_TYPE_SERVER_TIMESTAMP, tag),
+			true);
 	}
 
 	public void ShareClientGamestamp(char tag){
 		NetworkManager.Instance.SendMessage ( 
-			Serialization.SerializeGamestamp ( Communicator.MESSAGE_TYPE_CLIENT_TIMESTAMP, tag), 
-			true );
+			Serialization.SerializeGamestamp ( Communicator.MESSAGE_TYPE_CLIENT_TIMESTAMP, tag),
+			true);
 	}
 
 
@@ -126,6 +126,9 @@ public class Communicator  {
 			if (!gameStarted ){
 				gameStarted = true;
 				GameSetup.ChooseHost (senderID);
+
+				NetworkManager.Instance.PingForLag ();
+
 				GameSetup.StartGame ();
 			}
 		} else { 
@@ -140,7 +143,15 @@ public class Communicator  {
 
 	public void RouteMessage (char msgType, byte[] dataFields ){//use switch
 		//Debug.Log ("route message");
-		if (MESSAGE_TYPE_MOVEMENT.Equals (msgType) ) {
+		if (MESSAGE_TYPE_SERVER_TIMESTAMP.Equals (msgType) ) {
+			char tag = Deserialization.GetGamestamp (dataFields);
+			Communicator.Instance.ShareClientGamestamp (tag);
+
+		} else if (MESSAGE_TYPE_CLIENT_TIMESTAMP.Equals (msgType) ) {
+			char tag = Deserialization.GetGamestamp (dataFields);
+			NetworkManager.Instance.CalculateLag (tag);
+
+		} else if (MESSAGE_TYPE_MOVEMENT.Equals (msgType) ) {
 			Vector2 impulse = Deserialization.GetImpulse (dataFields);
 			stateUpdates.MoveEnemy (impulse);
 

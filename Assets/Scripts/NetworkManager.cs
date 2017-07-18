@@ -23,6 +23,12 @@ public class NetworkManager  {
 
 	NetworkListener networkListener = new NetworkListener();
 
+	const int LAG_PROBE_COUNT = 5;
+	LagMessage[] lagMessages = new LagMessage[LAG_PROBE_COUNT] ;
+
+	public int networkLag = 0;
+	int lagMessagesReceived = 0;
+
 	public void SignIn (){
 		//Debug.Log ("sign in");
 
@@ -69,6 +75,32 @@ public class NetworkManager  {
 		//Debug.Log ("send message");
 		PlayGamesPlatform.Instance.RealTime.SendMessageToAll (reliable, msgBytes);
 		//Debug.Log ("send message done");
+	}
+
+	//send tags, wait for roundtrip and diff timesent/received
+	// use a class to map tag, timesent and diff?
+	public void PingForLag(){
+		if (GameSetup.isHost) {
+			for (int i = 0; i < LAG_PROBE_COUNT; i++) {
+				char tag = (char)i;
+
+				lagMessages [i] = new LagMessage (DateTime.Now, 0);
+
+				Communicator.Instance.ShareServerGamestamp (tag);
+			}
+		}
+
+	}
+
+	public void CalculateLag(char tag) {
+		int msgIndex = Convert.ToInt32(tag);
+
+		LagMessage msg = lagMessages [msgIndex];
+		msg.roundtripDuration = DateTime.Now.Subtract (msg.timeSent).Milliseconds;
+
+		lagMessagesReceived++;
+		networkLag = (networkLag + msg.roundtripDuration) / lagMessagesReceived;
+		Debug.Log (String.Format("calculating lag {0} , msg: {1}", networkLag, lagMessagesReceived));
 	}
 
 	//-------------------------------------------

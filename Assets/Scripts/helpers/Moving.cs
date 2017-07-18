@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Moving {
@@ -46,23 +47,20 @@ public class Moving {
 	}
 
 	void MoveActor (Vector2 launchDir){
-		if (GameState.gameEnded) {
-			return;
+		if (!GameState.gameEnded) {
+			Vector2 impulse = CalculateImpulse (launchDir);
+
+			if (GameSetup.isHost) {
+				Vector2 drunkImpulse = CalculateWineImpulse (impulse, WineBuzzLevel.PlayerBuzz);
+
+				Utilities.FaceCorrectDirection (actor, drunkImpulse, ref facingHomeBase, true);
+
+				actorBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
+			} 
+
+			SoundManager.instance.PlaySingle (actorRunningSound, 1f);
+			Communicator.Instance.ShareMovement (impulse);
 		}
-
-		Vector2 impulse = CalculateImpulse (launchDir);
-
-		if (GameSetup.isHost) { //add network delay 
-			Vector2 drunkImpulse = CalculateWineImpulse (impulse, WineBuzzLevel.PlayerBuzz) ;
-
-			Utilities.FaceCorrectDirection (actor, drunkImpulse, ref facingHomeBase, true);
-
-			actorBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
-
-		} 
-
-		SoundManager.instance.PlaySingle (actorRunningSound, 1f);
-		Communicator.Instance.ShareMovement (impulse);
 
 	}
 

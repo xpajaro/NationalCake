@@ -56,7 +56,10 @@ public class PickupItem : MonoBehaviour {
 	}
 
 	void Disappear (){
-		Bomb.Deactivate (gameObject);
+		if (gameObject.name.StartsWith(Constants.ITEM_NAME_BOMB)){
+			Bomb.Deactivate (gameObject);
+		}
+
 		Destroy (gameObject);
 	}
 

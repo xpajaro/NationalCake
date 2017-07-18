@@ -99,9 +99,19 @@ public class GameControls : MonoBehaviour {
 
 	void TouchEnded (Touch touch) {
 		if (moving) {
+			if (GameSetup.isHost) {
+				StartCoroutine (WaitForClient ());
+			}
 			movePlayer.MovementInputEnded (touch.position);
 			moving = false;
 		}
+	}
+
+	IEnumerator WaitForClient(){
+		float lag = NetworkManager.Instance.networkLag / 1000f;
+		Debug.Log (string.Format ("xo waiting for lag {0}", lag));
+		yield return new WaitForSeconds (lag);
+		Debug.Log ("waiting done");
 	}
 
 	void TouchCanceled () {

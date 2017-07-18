@@ -118,7 +118,7 @@ public class Deserialization {
 
 	public static char GetGamestamp(byte[] data){
 		//Debug.Log ("get gamestamp done");
-		return (char) data[3];;
+		return (char) data[2];;
 	}
 
 
