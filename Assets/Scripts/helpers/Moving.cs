@@ -58,7 +58,7 @@ public class Moving {
 				actorBody.AddForce (drunkImpulse, ForceMode2D.Impulse);
 			} 
 
-			SoundManager.instance.PlaySingle (actorRunningSound, 1f);
+			SoundManager.instance.PlaySingle (actorRunningSound, 1.5f);
 			Communicator.Instance.ShareMovement (impulse);
 		}
 

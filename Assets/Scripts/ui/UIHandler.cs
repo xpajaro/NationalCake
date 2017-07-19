@@ -29,15 +29,16 @@ public class UIHandler : MonoBehaviour {
 		//Debug.Log ("check inbox done");
 	}
 
-	public void GotoInviteScene (){
-		SceneManager.LoadScene (INVITE_SCENE);
-	}
+//	public void GotoInviteScene (){
+//		SceneManager.LoadScene (INVITE_SCENE);
+//	}
 
 	public static void GotoMenuScene (){
 		SceneManager.LoadScene (MENU_SCENE);
 	}
 
 	public void GoToMenu (){
+		SoundManager.instance.PlayClick ();
 		UIHandler.GotoMenuScene ();
 	}
 
@@ -46,14 +47,17 @@ public class UIHandler : MonoBehaviour {
 	}
 
 	public void GotoTutorialScene1 (){
+		SoundManager.instance.PlayClick ();
 		SceneManager.LoadScene (TUTORIAL_SCENE_1);
 	}
 
 	public void GotoTutorialScene2 (){
+		SoundManager.instance.PlayClick ();
 		SceneManager.LoadScene (TUTORIAL_SCENE_2);
 	}
 
 	public void GotoTutorialScene3 (){
+		SoundManager.instance.PlayClick ();
 		SceneManager.LoadScene (TUTORIAL_SCENE_3);
 	}
 

@@ -7,6 +7,10 @@ public class GameControls : MonoBehaviour {
 
 	public GameObject cake, enemy, cakeEffigy, spillPrefab, holder1, holder2 ;
 
+	public GameObject soundButton, musicButton;
+	public Sprite soundOnSprite, soundOffSprite, musicOnSprite, musicOffSprite;
+	bool soundOn = true, musicOn = true;
+
 	float HOLDER_DISTANCE = 1.5f;
 
 	GameObject iconTouched;
@@ -74,11 +78,22 @@ public class GameControls : MonoBehaviour {
 
 
 	void TouchStarted (Touch touch){
+
+		Vector2 touchPosition = Camera.main.ScreenToWorldPoint (touch.position);
+
 		if (iconTouched != null ) { //touched before, activate item
-			HandleItemActivation (touch.position);
+			HandleItemActivation (touchPosition);
+
+		} else if ( TouchingGameObject(soundButton, touchPosition)) {
+			soundOn = changeButton (soundButton, soundOn, soundOnSprite, soundOffSprite);
+			SoundManager.instance.ToggleAllSound (soundOn);
+
+		} else if  ( TouchingGameObject(musicButton, touchPosition))  {
+			musicOn = changeButton (musicButton, musicOn, musicOnSprite, musicOffSprite);
+			SoundManager.instance.ToggleMusic (musicOn);
 
 		} else {
-			GameObject holderTouched = GetHolderTouched (touch);
+			GameObject holderTouched = GetHolderTouched (touchPosition);
 
 			if (holderTouched != null) {
 				iconTouched = itemManager.GetIconByHolder (holderTouched); 
@@ -154,19 +169,31 @@ public class GameControls : MonoBehaviour {
 		itemActivator.DeactivateJuju ();
 	}
 
-	GameObject GetHolderTouched (Touch touch){
-		Vector2 touchPosition = Camera.main.ScreenToWorldPoint (touch.position);
+	GameObject GetHolderTouched (Vector2 touchPosition){
 		GameObject holderTouched = null;
 
-		if (Vector2.Distance (holder1.transform.position, touchPosition) < HOLDER_DISTANCE) {
+		if ( TouchingGameObject(holder1, touchPosition))  {
 			holderTouched = holder1;
-		} else if (Vector2.Distance (holder2.transform.position, touchPosition) < HOLDER_DISTANCE) {
+
+		} else if  ( TouchingGameObject(holder2, touchPosition)) {
 			holderTouched = holder2;
 		}
 
 		return holderTouched ;
 	}
 
+
+	bool changeButton (GameObject button, bool audioOn, Sprite onSprite, Sprite offSprite){
+		SpriteRenderer btnRenderer = button.GetComponent<SpriteRenderer> ();
+		btnRenderer.sprite = audioOn ? onSprite : offSprite; //show on button if we're shutting off
+
+		return !audioOn;
+	}
+
+
+	bool TouchingGameObject(GameObject item, Vector2 touchPosition){
+		return (Vector2.Distance (item.transform.position, touchPosition) < HOLDER_DISTANCE);
+	}
 
 	GameObject GetIconTouched (GameObject holderTouched){
 		return itemManager.GetIconByHolder (holderTouched);

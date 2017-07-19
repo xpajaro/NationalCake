@@ -47,6 +47,7 @@ public class GameSetup : MonoBehaviour {
 	public static void StartGame (){
 		//Debug.Log ("start game");
 		SceneManager.LoadScene(GAME_SCENE);
+		SoundManager.instance.ToggleMusic (true);
 		//Debug.Log ("start game done");
 	}
 

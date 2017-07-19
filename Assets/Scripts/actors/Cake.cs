@@ -24,9 +24,9 @@ public class Cake : MonoBehaviour {
 					GameState.gameWon = false;
 				}
 
-				GameState.gameEnded = true;
 				Communicator.Instance.ShareGameState ();
 
+				GameState.gameEnded = true;
 				StopMoving ();
 				LockOnGoal (col.gameObject);
 
