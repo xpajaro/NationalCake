@@ -35,5 +35,6 @@ public class Constants {
 
 	public static string PLAYER_NAME = "player";
 	public static string ENEMY_NAME = "enemy";
+	public static string CAKE_NAME = "cake";
 
 }

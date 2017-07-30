@@ -8,6 +8,10 @@ public class Cake : MonoBehaviour {
 	string ENEMY_GOAL = "eGoal";
 
 
+	void Start (){
+		
+	}
+
 	void OnCollisionEnter2D (Collision2D col)
 	{
 		if (GameSetup.isHost) {

@@ -8,7 +8,7 @@ public class EnemyRenderer : NetworkBehaviour {
 	public Sprite enemySprite;
 	public RuntimeAnimatorController enemyController;
 
-	string ENEMY_VELOCITY_PARAMETER = "enemyVelocity";
+	const string ENEMY_VELOCITY_PARAMETER = "enemyVelocity";
 
 	Animator animator;
 	Rigidbody2D enemyBody;
@@ -33,4 +33,5 @@ public class EnemyRenderer : NetworkBehaviour {
 			animator.SetFloat (ENEMY_VELOCITY_PARAMETER, enemyBody.velocity.magnitude);
 		}
 	}
+
 }

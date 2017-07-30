@@ -7,16 +7,18 @@ using UnityEngine.Networking.NetworkSystem;
 public class PlayerController : NetworkBehaviour {
 
 	//for player
-	float MOVT_SPEED = 3; //liked 5
-	float MOVT_CAP = 200;
-	float MOVT_CAP_EFFECTIVE_RATIO = 50;
-	string PLAYER_VELOCITY_PARAMETER = "playerVelocity";
+	const float MOVT_SPEED = 3; //liked 5
+	const float MOVT_CAP = 200;
+	const float MOVT_CAP_EFFECTIVE_RATIO = 50;
+	const string PLAYER_VELOCITY_PARAMETER = "playerVelocity";
 
 	Vector2 movtStartPosition;
 	Rigidbody2D playerBody;
 	Animator animator;
 	public AudioClip actorRunningSound;
+	public GameObject marker;
 
+	public bool isSwimming; //set in swimming class
 	float currentXPosition;
 	int currentDirection = 1; //1 is right, -1 is left
 
@@ -26,26 +28,32 @@ public class PlayerController : NetworkBehaviour {
 	public override void OnStartLocalPlayer (){
 		if (isLocalPlayer) {
 			LocalInstance = this;
-		}
+			PlaceMarker ();
+		} 
 	}
 
 	void Start () {
+		SetTags ();
 		playerBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator> ();
 
-		currentXPosition = transform.position.x;
-		if (currentXPosition > 0) { //player on right should face inwards
-			TurnPlayerAround ();
-			currentDirection = -1;
-		}
+		SetupAfterSpawn ();
 	}
 
 	void Update() {
 		if (isLocalPlayer) {
 			animator.SetFloat (PLAYER_VELOCITY_PARAMETER, playerBody.velocity.magnitude);
 		}
+	}
 
-		FaceCorrectDirection ();
+	void FixedUpdate() {
+		FaceFrontOnMove ();
+	}
+
+
+	public void SetupAfterSpawn (){
+		currentXPosition = transform.position.x; 
+		FaceFrontOnSpawn ();
 	}
 
 	public void StartMovement (Vector2 startPos){
@@ -70,17 +78,45 @@ public class PlayerController : NetworkBehaviour {
 	}
 
 	//-------------------------------------------
-	// utilities
+	// setup
 	//-------------------------------------------
 
-	void FaceCorrectDirection () {
+	void SetTags(){
+		if (isLocalPlayer) {
+			tag = Constants.PLAYER_NAME;
+		} else {
+			tag = Constants.ENEMY_NAME;
+		}
+	}
+
+	public void FaceFrontOnSpawn(){
+		if (transform.position.x > 0) { //player on right should face inwards
+			int direction = -1;
+
+			TurnPlayerAround (direction);
+			currentDirection = direction;
+		}
+	}
+
+	public void PlaceMarker(){
+		Vector3 markerPosition = transform.position + new Vector3 (0,1,0);
+		GameObject _marker = Instantiate (marker, markerPosition, Quaternion.identity) as GameObject;
+		_marker.transform.parent = transform;
+	}
+
+
+	//-------------------------------------------
+	// movement
+	//-------------------------------------------
+
+	void FaceFrontOnMove () {
 		float newXPosition = transform.position.x;
 
-		if (newXPosition != currentXPosition) {
+		if (!newXPosition.Equals(currentXPosition)) {
 			int newDirection = (newXPosition > currentXPosition) ? 1 : -1;
 
 			if (newDirection != currentDirection) {
-				TurnPlayerAround ();
+				TurnPlayerAround (newDirection);
 				currentDirection = newDirection;
 			}
 
@@ -88,10 +124,15 @@ public class PlayerController : NetworkBehaviour {
 		}
 	}
 
-	void TurnPlayerAround (){
-		transform.localScale = Vector3.Scale(transform.localScale, new Vector3(-1, 1, 1));
+
+	void TurnPlayerAround (int direction){
+		transform.localScale = new Vector3(direction, 1, 1) ;
+		Debug.Log (string.Format("TPA {0}", transform.localScale.x));
 	}
 
+	//-------------------------------------------
+	// utilities
+	//-------------------------------------------
 
 	Vector2 CalculateLaunchDirection (Vector2 movtEndPoint){
 		Vector2 launchDir =  movtStartPosition - movtEndPoint ;

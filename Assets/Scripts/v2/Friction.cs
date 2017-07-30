@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Friction : MonoBehaviour {
 
-	float LEG_HEIGHT = 0.4f;
-	float MOVT_DAMPING = 0.5f;
+	const float LEG_HEIGHT = 0.4f;
+	const float MOVT_DAMPING = 0.5f;
 
 	Rigidbody2D rigidBody;
 
@@ -15,14 +15,14 @@ public class Friction : MonoBehaviour {
 	}
 
 
-	void Update () {
+	void FixedUpdate () {
 		Vector2 standingPosition = GetFeetPosition (gameObject);
 		bool onStage = Stage.Instance.IsOnStage (standingPosition);
 
 		if (onStage) {
 			dampMovement (rigidBody, MOVT_DAMPING);
 		} else {
-			rigidBody.velocity = Vector2.zero;
+			// rigidBody.velocity = Vector2.zero;
 		}
 	}
 
