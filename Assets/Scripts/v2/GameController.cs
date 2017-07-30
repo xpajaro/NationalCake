@@ -8,7 +8,7 @@ public class GameController : NetworkBehaviour {
 	bool isMoving;
 
 	void Start(){
-	
+		
 	}
 
 	void Update (){

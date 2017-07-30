@@ -27,7 +27,6 @@ public class PlayerController : NetworkBehaviour {
 		if (isLocalPlayer) {
 			LocalInstance = this;
 		}
-
 	}
 
 	void Start () {
@@ -42,7 +41,9 @@ public class PlayerController : NetworkBehaviour {
 	}
 
 	void Update() {
-		animator.SetFloat (PLAYER_VELOCITY_PARAMETER, playerBody.velocity.magnitude);
+		if (isLocalPlayer) {
+			animator.SetFloat (PLAYER_VELOCITY_PARAMETER, playerBody.velocity.magnitude);
+		}
 
 		FaceCorrectDirection ();
 	}
@@ -66,7 +67,6 @@ public class PlayerController : NetworkBehaviour {
 
 			//SoundManager.instance.PlaySingle (actorRunningSound, 1.5f);
 		}
-
 	}
 
 	//-------------------------------------------
