@@ -52,6 +52,7 @@ public class PlayerController : NetworkBehaviour {
 
 
 	public void SetupAfterSpawn (){
+		Debug.Log ("spawn in ");
 		currentXPosition = transform.position.x; 
 		FaceFrontOnSpawn ();
 	}
@@ -61,10 +62,12 @@ public class PlayerController : NetworkBehaviour {
 	}
 
 	public void CompleteMovement (Vector2 endPos){
-		Vector2 launchDir = CalculateLaunchDirection (endPos);
-		launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
+		if (!isSwimming) {
+			Vector2 launchDir = CalculateLaunchDirection (endPos);
+			launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
 
-		Move (launchDir);
+			Move (launchDir);
+		}
 	}
 
 
@@ -90,12 +93,11 @@ public class PlayerController : NetworkBehaviour {
 	}
 
 	public void FaceFrontOnSpawn(){
-		if (transform.position.x > 0) { //player on right should face inwards
-			int direction = -1;
+		int direction = (transform.position.x > 0) ? -1 : 1;
 
-			TurnPlayerAround (direction);
-			currentDirection = direction;
-		}
+		TurnPlayerAround (direction);
+		currentDirection = direction;
+		Debug.Log ("FFS done");
 	}
 
 	public void PlaceMarker(){

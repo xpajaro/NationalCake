@@ -69,6 +69,7 @@ public class Swimming : NetworkBehaviour {
 			//done here because client doesn't do the dropping and swimming
 			if (transform.position.Equals(startPosition) &&
 				isReadyToDropAndSwim){
+				Debug.Log ("SWIM done");
 				Presenter.Attach (gameObject, spriteRenderer);
 
 				isReadyToDropAndSwim = false;
