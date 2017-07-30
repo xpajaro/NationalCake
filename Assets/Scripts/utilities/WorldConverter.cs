@@ -13,22 +13,22 @@ public class WorldConverter
 	SpriteRenderer renderer;
 	Texture2D texture ;
 
-	public WorldConverter (GameObject world)
+	public WorldConverter (SpriteRenderer worldRenderer)
 	{
-		renderer = world.GetComponent<SpriteRenderer>();
+		renderer = worldRenderer;
 		texture = renderer.sprite.texture ;
 
 		//always calculate padding before dimensions
-		padding = getPadding (renderer.bounds.extents);
-		dimensions = getDimensions (renderer.transform.position);
+		padding = GetPadding (renderer.bounds.extents);
+		dimensions = GetDimensions (renderer.transform.position);
 	}
 
-	public Vector2 getPositionInWorld (Vector2 rawPosition){
-		Vector2 scaledPosition = getScaledPosition (rawPosition);
+	public Vector2 GetPositionInWorld (Vector2 rawPosition){
+		Vector2 scaledPosition = GetScaledPosition (rawPosition);
 		return  scaledPosition;
 	}
 
-	Vector2 getPadding (Vector2 stageBounds){
+	Vector2 GetPadding (Vector2 stageBounds){
 
 		//(renderer.bounds.extents * -1.0f); //to get stage padding measurement
 		//this is distance from left of screen and bottom of screen
@@ -36,7 +36,7 @@ public class WorldConverter
 	}
 
 
-	Vector2 getDimensions (Vector2 stagePosition){
+	Vector2 GetDimensions (Vector2 stagePosition){
 		Vector2 stageDimensions = new Vector2 ();
 		Vector2 stagePositionInPixels = Camera.main.WorldToScreenPoint (stagePosition);
 
@@ -48,7 +48,7 @@ public class WorldConverter
 	}
 
 
-	Vector2 getScaledPosition (Vector2 position){
+	Vector2 GetScaledPosition (Vector2 position){
 		Vector2 positionInScale = new Vector2 ();
 		position = Camera.main.WorldToScreenPoint (position);
 

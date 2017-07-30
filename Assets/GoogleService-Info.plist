@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>1038615921051-mdtg4qtfrua155mfg1llvrn4tt75jc98.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1038615921051-mdtg4qtfrua155mfg1llvrn4tt75jc98</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD3i4y3q_MPXieq4gpC8CS85th4KCfmam8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1038615921051</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.xpajaro.nationalcake</string>
+	<key>PROJECT_ID</key>
+	<string>national-cake</string>
+	<key>STORAGE_BUCKET</key>
+	<string>national-cake.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1038615921051:ios:3ef4f0b9c4427768</string>
+	<key>DATABASE_URL</key>
+	<string>https://national-cake.firebaseio.com</string>
+</dict>
+</plist>

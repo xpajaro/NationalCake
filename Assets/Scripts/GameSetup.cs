@@ -1,8 +1,8 @@
 ﻿using UnityEngine;    
 using UnityEngine.SceneManagement;
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
-using GooglePlayGames.BasicApi.Multiplayer;
+//using GooglePlayGames;
+//using GooglePlayGames.BasicApi;
+//using GooglePlayGames.BasicApi.Multiplayer;
 using UnityEngine.SocialPlatforms;
 using System.Collections;
 using System;
@@ -24,11 +24,11 @@ public class GameSetup : MonoBehaviour {
 
 	static void SetupGooglePlay (){
 		//Debug.Log ("setup google play");
-		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ().Build ();
-
-		PlayGamesPlatform.InitializeInstance (config);
-		//PlayGamesPlatform.DebugLogEnabled = true;
-		PlayGamesPlatform.Activate (); // Activate the Google Play Games platform
+//		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ().Build ();
+//
+//		PlayGamesPlatform.InitializeInstance (config);
+//		//PlayGamesPlatform.DebugLogEnabled = true;
+//		PlayGamesPlatform.Activate (); // Activate the Google Play Games platform
 		//Debug.Log ("setup google play done");
 	}
 
@@ -38,9 +38,9 @@ public class GameSetup : MonoBehaviour {
 
 	public static void ChooseHost (string otherPlayerID){
 		//Debug.Log ("choose host");
-		if (String.Compare (PlayGamesPlatform.Instance.RealTime.GetSelf().ParticipantId, otherPlayerID) < 0) {
-			isHost = true;
-		} 
+//		if (String.Compare (PlayGamesPlatform.Instance.RealTime.GetSelf().ParticipantId, otherPlayerID) < 0) {
+//			isHost = true;
+//		} 
 		//Debug.Log ("choose host done");
 	}
 
@@ -53,7 +53,7 @@ public class GameSetup : MonoBehaviour {
 
 
 	public static void LeaveGame(){
-		PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
+		//PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
 		NextScene ();
 	}
 

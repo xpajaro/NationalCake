@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1038615921051",
+    "firebase_url": "https://national-cake.firebaseio.com",
+    "project_id": "national-cake",
+    "storage_bucket": "national-cake.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038615921051:android:3ef4f0b9c4427768",
+        "android_client_info": {
+          "package_name": "com.xpajaro.nationalcake"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038615921051-2phf53jt5rlpqolmnob4bo8gm82o6ims.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_gatqtbhUOjO56PMjfdbRTbX_9-BknUo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

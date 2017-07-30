@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
-using GooglePlayGames.BasicApi.Multiplayer;
 using UnityEngine.SocialPlatforms;
 using System.Collections;
 
@@ -14,6 +11,6 @@ public class TxtWelcome : MonoBehaviour {
 	}
 
 	string getUsername(){
-		return Social.localUser.userName;
+		return ""; //Social.localUser.userName;
 	}
 }

@@ -27,7 +27,7 @@ public class StageManager : MonoBehaviour
 		LoadRenderers ();
 		StoreEveryStartPosition ();
 		LoadRigidBodies ();
-		converter = new WorldConverter (this.gameObject);
+		converter = new WorldConverter ( gameObject.GetComponent<SpriteRenderer>() );
 
 		stageTexture = GetComponent<SpriteRenderer> ().sprite.texture;
 
@@ -126,7 +126,7 @@ public class StageManager : MonoBehaviour
 
 	public static bool isOnStage (Vector2 actorPosition){
 		bool onStage = true;
-		actorPosition = converter.getPositionInWorld (actorPosition);
+		actorPosition = converter.GetPositionInWorld (actorPosition);
 		//Debug.Log (actorPosition);
 
 		if (Utilities.GetAlphaAtPosition (actorPosition, stageTexture) == 0){

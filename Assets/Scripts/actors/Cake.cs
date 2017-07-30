@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using GooglePlayGames;
+//using GooglePlayGames;
 using System.Collections;
 
 public class Cake : MonoBehaviour {
 	string PLAYER_GOAL = "pGoal";
 	string ENEMY_GOAL = "eGoal";
 
-	void Update(){
-		Utilities.UpdateSortingLayer (gameObject);
-	}
 
 	void OnCollisionEnter2D (Collision2D col)
 	{

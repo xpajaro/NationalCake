@@ -9,7 +9,7 @@ public class Clouds : MonoBehaviour {
 		SpriteRenderer renderer = GetComponent<SpriteRenderer> ();
 
 		Color color = renderer.color;
-		color.a = 0.5f;
+		color.a = 0.7f;
 
 		renderer.color = color;
 	}

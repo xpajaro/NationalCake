@@ -1,7 +1,7 @@
 ﻿using UnityEngine;    
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
-using GooglePlayGames.BasicApi.Multiplayer;
+//using GooglePlayGames;
+//using GooglePlayGames.BasicApi;
+//using GooglePlayGames.BasicApi.Multiplayer;
 using UnityEngine.SocialPlatforms;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ public class NetworkManager  {
 	}
 
 	public void SignOut() {
-		PlayGamesPlatform.Instance.SignOut ();
+		//PlayGamesPlatform.Instance.SignOut ();
 	}
 
 	public void InvitePlayer (){
@@ -55,14 +55,14 @@ public class NetworkManager  {
 		const int MinOpponents = 1 , MaxOpponents= 1;
 		const int GameVariant = 0;
 
-		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (MinOpponents, MaxOpponents,
-			GameVariant, networkListener);
+//		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (MinOpponents, MaxOpponents,
+//			GameVariant, networkListener);
 		//Debug.Log ("invite player done");
 	}
 
 	public void CheckInbox (){
 		//Debug.Log ("check inbox");
-		PlayGamesPlatform.Instance.RealTime.AcceptFromInbox (networkListener);
+//		PlayGamesPlatform.Instance.RealTime.AcceptFromInbox (networkListener);
 		//Debug.Log ("check inbox done");
 	}
 
@@ -73,7 +73,7 @@ public class NetworkManager  {
 
 	public void SendMessage (byte[] msgBytes, bool reliable){
 		//Debug.Log ("send message");
-		PlayGamesPlatform.Instance.RealTime.SendMessageToAll (reliable, msgBytes);
+//		PlayGamesPlatform.Instance.RealTime.SendMessageToAll (reliable, msgBytes);
 		//Debug.Log ("send message done");
 	}
 

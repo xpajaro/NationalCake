@@ -1,12 +1,12 @@
 ﻿using UnityEngine;    
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
-using GooglePlayGames.BasicApi.Multiplayer;
+//using GooglePlayGames;
+//using GooglePlayGames.BasicApi;
+//using GooglePlayGames.BasicApi.Multiplayer;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class NetworkListener : RealTimeMultiplayerListener {
+public class NetworkListener  {
 	bool showingWaitingRoom = false;
 
 
@@ -14,7 +14,7 @@ public class NetworkListener : RealTimeMultiplayerListener {
 		// show the default waiting room.
 		//Debug.Log ("on room setup progresss");
 		if (!showingWaitingRoom) {
-			PlayGamesPlatform.Instance.RealTime.ShowWaitingRoomUI();
+			//PlayGamesPlatform.Instance.RealTime.ShowWaitingRoomUI();
 			showingWaitingRoom = true;
 		}
 	}
@@ -45,7 +45,7 @@ public class NetworkListener : RealTimeMultiplayerListener {
 		HandleGameTransition (true);
 	}
 
-	public void OnParticipantLeft (Participant participant)
+	public void OnParticipantLeft (string participant)
 	{
 		Debug.Log ("conner - OnParticipantLeft");
 		HandleGameTransition (false);
@@ -67,7 +67,7 @@ public class NetworkListener : RealTimeMultiplayerListener {
 		Scene scene = SceneManager.GetActiveScene();
 
 		if (!thisUserDisconnected) {
-			PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
+			//PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
 		}
 
 		if (scene.name.Equals (Constants.GAME_SCENE) && !GameState.gameEnded) {

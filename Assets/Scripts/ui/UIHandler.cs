@@ -1,7 +1,7 @@
 ﻿using UnityEngine;    
 using UnityEngine.SceneManagement;
 using System.Collections;
-using GooglePlayGames;
+//using GooglePlayGames;
 using System;
 
 public class UIHandler : MonoBehaviour {
