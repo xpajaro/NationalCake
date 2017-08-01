@@ -7,14 +7,15 @@ using UnityEngine.Networking.NetworkSystem;
 public class PlayerController : NetworkBehaviour {
 
 	//for player
-	const float MOVT_SPEED = 3; //liked 5
+	const float MOVT_SPEED = 5; //use 3
 	const float MOVT_CAP = 200;
 	const float MOVT_CAP_EFFECTIVE_RATIO = 50;
 	const string PLAYER_VELOCITY_PARAMETER = "playerVelocity";
+	const string ENEMY_VELOCITY_PARAMETER = "enemyVelocity";
 
 	Vector2 movtStartPosition;
-	Rigidbody2D playerBody;
-	Animator animator;
+	protected Rigidbody2D playerBody;
+	protected Animator animator;
 	public AudioClip actorRunningSound;
 	public GameObject marker;
 
@@ -23,26 +24,43 @@ public class PlayerController : NetworkBehaviour {
 	int currentDirection = 1; //1 is right, -1 is left
 
 
-	public static PlayerController LocalInstance = null;    
-
-	public override void OnStartLocalPlayer (){
-		if (isLocalPlayer) {
-			LocalInstance = this;
-			PlaceMarker ();
-		} 
-	}
+	public static PlayerController PlayerInstance = null;    
+	public static PlayerController EnemyInstance = null;    
 
 	void Start () {
-		SetTags ();
+
+		SetupInstances ();
+		SetupMarkers ();
+
 		playerBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator> ();
 
 		SetupAfterSpawn ();
 	}
 
+	void SetupInstances (){
+		if (tag.Equals (Constants.PLAYER_NAME)) {
+			PlayerInstance = this;
+
+		} else {
+			EnemyInstance = this;
+		}
+	}
+
+
+	void SetupMarkers (){
+		if ( (isServer && tag.Equals (Constants.PLAYER_NAME)) ||
+			 (!isServer && tag.Equals (Constants.ENEMY_NAME)) ) {
+			PlaceMarker ();
+		}
+	}
+
 	void Update() {
-		if (isLocalPlayer) {
+		if (tag.Equals (Constants.PLAYER_NAME)) {
 			animator.SetFloat (PLAYER_VELOCITY_PARAMETER, playerBody.velocity.magnitude);
+		
+		} else {
+			animator.SetFloat (ENEMY_VELOCITY_PARAMETER, playerBody.velocity.magnitude);
 		}
 	}
 
@@ -52,26 +70,12 @@ public class PlayerController : NetworkBehaviour {
 
 
 	public void SetupAfterSpawn (){
-		Debug.Log ("spawn in ");
 		currentXPosition = transform.position.x; 
 		FaceFrontOnSpawn ();
 	}
 
-	public void StartMovement (Vector2 startPos){
-		movtStartPosition = startPos;
-	}
 
-	public void CompleteMovement (Vector2 endPos){
-		if (!isSwimming) {
-			Vector2 launchDir = CalculateLaunchDirection (endPos);
-			launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
-
-			Move (launchDir);
-		}
-	}
-
-
-	void Move (Vector2 launchDir){
+	public void Move (Vector2 launchDir){
 		if (!GameState.gameEnded) {
 			Vector2 impulse = CalculateImpulse (launchDir , WineBuzzLevel.PlayerBuzz);
 			playerBody.AddForce (impulse, ForceMode2D.Impulse);
@@ -84,20 +88,12 @@ public class PlayerController : NetworkBehaviour {
 	// setup
 	//-------------------------------------------
 
-	void SetTags(){
-		if (isLocalPlayer) {
-			tag = Constants.PLAYER_NAME;
-		} else {
-			tag = Constants.ENEMY_NAME;
-		}
-	}
 
 	public void FaceFrontOnSpawn(){
 		int direction = (transform.position.x > 0) ? -1 : 1;
 
 		TurnPlayerAround (direction);
 		currentDirection = direction;
-		Debug.Log ("FFS done");
 	}
 
 	public void PlaceMarker(){
@@ -129,22 +125,11 @@ public class PlayerController : NetworkBehaviour {
 
 	void TurnPlayerAround (int direction){
 		transform.localScale = new Vector3(direction, 1, 1) ;
-		Debug.Log (string.Format("TPA {0}", transform.localScale.x));
 	}
 
 	//-------------------------------------------
 	// utilities
 	//-------------------------------------------
-
-	Vector2 CalculateLaunchDirection (Vector2 movtEndPoint){
-		Vector2 launchDir =  movtStartPosition - movtEndPoint ;
-
-		if (launchDir.magnitude > MOVT_CAP) {
-			launchDir = launchDir/ launchDir.magnitude * MOVT_CAP;
-		}
-
-		return launchDir;
-	}
 
 	Vector2 CalculateImpulse (Vector2 launchDir, float wineLevel){
 		return launchDir * MOVT_SPEED * wineLevel; 

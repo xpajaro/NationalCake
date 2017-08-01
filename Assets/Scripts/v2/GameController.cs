@@ -5,15 +5,20 @@ using UnityEngine.Networking;
 
 public class GameController : NetworkBehaviour {
 
-	bool isMoving;
+	protected bool isMoving;
+	const float MOVT_SPEED = 5; //use 3
+	const float MOVT_CAP = 200;
+	const float MOVT_CAP_EFFECTIVE_RATIO = 50;
+
+
+	Vector2 movtStartPosition;
 
 	void Start(){
-		
 	}
 
 	void Update (){
-		//don't allow inputs until the localplayer is loaded
-		if (!isLocalPlayer || PlayerController.LocalInstance == null){
+		//don't allow inputs from enemy character
+		if (!isLocalPlayer || GetPlayerControllerInstance() == null){
 			return;
 		}
 
@@ -22,7 +27,7 @@ public class GameController : NetworkBehaviour {
 	}
 
 
-	void HandleTouch(){
+	protected void HandleTouch(){
 		if (Input.touchCount > 0) {
 			Touch touch = Input.GetTouch (0);
 
@@ -44,7 +49,7 @@ public class GameController : NetworkBehaviour {
 		}
 	} 
 
-	void HandleMouse(){
+	protected void HandleMouse(){
 		if (Input.GetMouseButtonDown(0)){
 			if (!isMoving) {
 				MovementStarted (Input.mousePosition);
@@ -65,17 +70,62 @@ public class GameController : NetworkBehaviour {
 
 	void MovementStarted (Vector2 pos){
 		isMoving = true;
-		PlayerController.LocalInstance.StartMovement (pos);
+		movtStartPosition = pos;
 	}
 
 	void MovementEnded (Vector2 pos){
 		if (isMoving) {
 			isMoving = false;
-			PlayerController.LocalInstance.CompleteMovement (pos);
+
+			if (!GetPlayerControllerInstance().isSwimming ) {
+				Vector2 launchDir = CalculateLaunchDirection (pos);
+				launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
+
+				CmdMove (launchDir, isServer);
+			}
 		}
+	}
+
+	[Command]
+	void CmdMove (Vector2 launchDir, bool movePlayer){
+
+		if (movePlayer) {
+			PlayerController.PlayerInstance.Move (launchDir);
+		} else {
+			PlayerController.EnemyInstance.Move (launchDir);
+		}
+
 	}
 
 	void MovementCanceled (){
 		isMoving = false;
 	}
+
+
+	//-------------------------------------------
+	// utilities
+	//-------------------------------------------
+
+	PlayerController GetPlayerControllerInstance (){
+		PlayerController instance;
+
+		if (isServer) {
+			instance = PlayerController.PlayerInstance;
+		} else {
+			instance = PlayerController.EnemyInstance; 
+		}
+
+		return instance;
+	}
+
+	Vector2 CalculateLaunchDirection (Vector2 movtEndPoint){
+		Vector2 launchDir =  movtStartPosition - movtEndPoint ;
+
+		if (launchDir.magnitude > MOVT_CAP) {
+			launchDir = launchDir/ launchDir.magnitude * MOVT_CAP;
+		}
+
+		return launchDir;
+	}
+
 }

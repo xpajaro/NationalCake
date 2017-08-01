@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-//using GooglePlayGames;
 using System.Collections;
 
-public class Cake : MonoBehaviour {
+public class Cake : NetworkBehaviour {
 	string PLAYER_GOAL = "pGoal";
 	string ENEMY_GOAL = "eGoal";
 
@@ -14,7 +14,7 @@ public class Cake : MonoBehaviour {
 
 	void OnCollisionEnter2D (Collision2D col)
 	{
-		if (GameSetup.isHost) {
+		if (isServer) {
 			string cause = col.gameObject.name;
 
 			if (cause.Equals (PLAYER_GOAL) || cause.Equals (ENEMY_GOAL)) {	
@@ -25,7 +25,7 @@ public class Cake : MonoBehaviour {
 					GameState.gameWon = false;
 				}
 
-				Communicator.Instance.ShareGameState ();
+				//Communicator.Instance.ShareGameState ();
 
 				GameState.gameEnded = true;
 				StopMoving ();

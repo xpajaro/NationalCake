@@ -9,7 +9,7 @@ public class Swimming : NetworkBehaviour {
 	const float DISTANCE_TO_SWIM = -20.0f;
 	const float SPEED = 7f;
 
-	bool playerFallTriggered;
+	bool fallTriggered;
 	bool isReadyToDropAndSwim;
 	bool isDropping;
 	bool isSwimming;
@@ -20,13 +20,21 @@ public class Swimming : NetworkBehaviour {
 	SpriteRenderer spriteRenderer;
 	Rigidbody2D rigidBody;
 
+
+	public AudioClip playerFallingSound;
+
+
+
 	// Use this for initialization
 	void Start () {
 		spriteRenderer = GetComponent<SpriteRenderer> ();
 		rigidBody = GetComponent<Rigidbody2D> ();
 
 		startPosition = transform.position;
-		playerController = GetComponent<PlayerController> ();
+
+		if (ThisIsAPlayer ()) {
+			playerController = GetComponent<PlayerController> ();
+		}
 		
 	}
 	
@@ -38,14 +46,20 @@ public class Swimming : NetworkBehaviour {
 
 	void TriggerFall(){
 		if (!Stage.Instance.IsOnStage (transform.position) && 
-			!playerFallTriggered) {
-			playerFallTriggered = true;
-			playerController.isSwimming = true;
+			!fallTriggered) {
+			fallTriggered = true;
+
+			if (ThisIsAPlayer ()) {
+				//winelevel reset
+				playerController.isSwimming = true;
+			}
+
+			//SoundManager.instance.PlaySingle (playerFallingSound);
 		}
 	}
 
 	void HandleFall () {
-		if (playerFallTriggered){
+		if (fallTriggered){
 			
 			if (!isReadyToDropAndSwim ) {
 				CalculateFinalPositions ();
@@ -59,24 +73,21 @@ public class Swimming : NetworkBehaviour {
 			
 			} else {
 				ReturnToSpawnPosition ();
-
-				if (name.StartsWith (Constants.PLAYER_NAME)){
-					//winelevel reset
-				}
 			}
 
 			//fall and drown animation all done
 			//done here because client doesn't do the dropping and swimming
 			if (transform.position.Equals(startPosition) &&
 				isReadyToDropAndSwim){
-				Debug.Log ("SWIM done");
 				Presenter.Attach (gameObject, spriteRenderer);
 
 				isReadyToDropAndSwim = false;
-				playerFallTriggered = false;
+				fallTriggered = false;
 
-				playerController.SetupAfterSpawn ();
-				playerController.isSwimming = false;
+				if (ThisIsAPlayer ()) {
+					playerController.SetupAfterSpawn ();
+					playerController.isSwimming = false;
+				}
 			}
 		}
 	}
@@ -139,5 +150,9 @@ public class Swimming : NetworkBehaviour {
 		}
 
 		return canAffect;
+	}
+
+	bool ThisIsAPlayer(){
+		return name.StartsWith (Constants.PLAYER_NAME) ;
 	}
 }
