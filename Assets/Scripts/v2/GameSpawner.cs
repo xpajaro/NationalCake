@@ -11,10 +11,15 @@ public class GameSpawner : NetworkBehaviour {
 	public GameObject playerPosition;
 	public GameObject enemyPosition;
 
+
+	public GameObject cakePrefab;
+	Vector3 cakePosition;
+
 	public override void OnStartServer()
 	{
 		SpawnPlayer ();
 		SpawnEnemy ();
+		SpawnCake ();
 	}
 
 	void SpawnPlayer(){
@@ -33,5 +38,13 @@ public class GameSpawner : NetworkBehaviour {
 		enemy.name = Constants.ENEMY_NAME;
 
 		NetworkServer.Spawn(enemy);
+	}
+
+	void SpawnCake()
+	{
+		cakePosition = new Vector3 (0, 0.3f, 0);
+
+		GameObject cake = (GameObject)Instantiate(cakePrefab, cakePosition, Quaternion.identity);
+		NetworkServer.Spawn(cake);
 	}
 }
