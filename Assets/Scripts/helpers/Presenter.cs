@@ -32,10 +32,10 @@ public class Presenter {
 
 
 	public static void StopCollisions (GameObject actor){
-		if (actor.tag.StartsWith (Constants.PLAYER_NAME)) {
+		if (actor.tag.Equals (Constants.PLAYER_NAME)) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_ACTOR;
 		
-		} else if (actor.tag.StartsWith (Constants.ENEMY_NAME)) {
+		} else if (actor.tag.Equals (Constants.ENEMY_NAME)) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_ENEMY;
 		
 		} else if (actor.name.StartsWith ("cake") || actor.name.StartsWith ("cakeEffigy")) {

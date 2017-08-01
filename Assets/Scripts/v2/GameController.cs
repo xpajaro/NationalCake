@@ -77,12 +77,11 @@ public class GameController : NetworkBehaviour {
 		if (isMoving) {
 			isMoving = false;
 
-			if (!GetPlayerControllerInstance().isSwimming ) {
-				Vector2 launchDir = CalculateLaunchDirection (pos);
-				launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
+			Vector2 launchDir = CalculateLaunchDirection (pos);
+			launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
 
-				CmdMove (launchDir, isServer);
-			}
+			CmdMove (launchDir, isServer);
+
 		}
 	}
 
@@ -91,6 +90,7 @@ public class GameController : NetworkBehaviour {
 
 		if (movePlayer) {
 			PlayerController.PlayerInstance.Move (launchDir);
+			
 		} else {
 			PlayerController.EnemyInstance.Move (launchDir);
 		}

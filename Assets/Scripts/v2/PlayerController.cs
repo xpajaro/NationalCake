@@ -76,7 +76,7 @@ public class PlayerController : NetworkBehaviour {
 
 
 	public void Move (Vector2 launchDir){
-		if (!GameState.gameEnded) {
+		if (!GameState.gameEnded && !isSwimming) {
 			Vector2 impulse = CalculateImpulse (launchDir , WineBuzzLevel.PlayerBuzz);
 			playerBody.AddForce (impulse, ForceMode2D.Impulse);
 

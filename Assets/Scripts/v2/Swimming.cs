@@ -27,6 +27,7 @@ public class Swimming : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
 		spriteRenderer = GetComponent<SpriteRenderer> ();
 		rigidBody = GetComponent<Rigidbody2D> ();
 
@@ -40,13 +41,15 @@ public class Swimming : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+//		if (!isServer) {
+//			return;
+//		}
 		TriggerFall ();
 		HandleFall ();
 	}
 
 	void TriggerFall(){
-		if (!Stage.Instance.IsOnStage (transform.position) && 
-			!fallTriggered) {
+		if (!fallTriggered && !Stage.Instance.IsOnStage (transform.position) ) {
 			fallTriggered = true;
 
 			if (ThisIsAPlayer ()) {
@@ -59,11 +62,13 @@ public class Swimming : NetworkBehaviour {
 	}
 
 	void HandleFall () {
+
 		if (fallTriggered){
-			
+
 			if (!isReadyToDropAndSwim ) {
 				CalculateFinalPositions ();
 				Presenter.Detach (gameObject, spriteRenderer);
+				rigidBody.velocity = Vector2.zero;
 
 			} else if (isDropping) {
 				DropToWater ();
@@ -101,12 +106,11 @@ public class Swimming : NetworkBehaviour {
 	}
 
 	void DropToWater () {
-		if (CanAffectTranform ()) {
-			rigidBody.velocity = Vector2.zero;
 
+		if (isServer) {
 			float translation = SPEED * Time.deltaTime;
 			gameObject.transform.position = Vector2.MoveTowards 
-			(transform.position, placeToDropAt, translation);
+				(transform.position, placeToDropAt, translation);
 		}
 
 		if (transform.position.Equals (placeToDropAt)) {
@@ -116,10 +120,11 @@ public class Swimming : NetworkBehaviour {
 	}
 
 	void SwimOff () {
-		if (CanAffectTranform ()) {
-			float translation = SPEED * Time.deltaTime;
+		float translation = SPEED * Time.deltaTime;
+
+		if (isServer) {
 			gameObject.transform.position = Vector2.MoveTowards 
-			(transform.position, placeToSwimTo, translation);
+				(transform.position, placeToSwimTo, translation);
 		}
 
 		if (transform.position.Equals (placeToSwimTo)) {
@@ -128,31 +133,15 @@ public class Swimming : NetworkBehaviour {
 	}
 
 	void ReturnToSpawnPosition (){
-
-		if (CanAffectTranform ()) {
-			transform.position = startPosition;
-		}
-
+		transform.position = startPosition;
 	}
 
 	//-------------------------------------------
 	// Utilities
 	//-------------------------------------------
 
-	bool CanAffectTranform () {
-		bool canAffect = false;
-
-		if (isLocalPlayer && name.StartsWith (Constants.PLAYER_NAME)) {
-			canAffect = true;
-
-		} else if (isServer && name.StartsWith (Constants.CAKE_NAME)){
-			canAffect = true;
-		}
-
-		return canAffect;
-	}
-
 	bool ThisIsAPlayer(){
-		return name.StartsWith (Constants.PLAYER_NAME) ;
+		return name.StartsWith (Constants.PLAYER_NAME) ||
+			name.StartsWith (Constants.ENEMY_NAME);
 	}
 }
