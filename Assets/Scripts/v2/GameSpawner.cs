@@ -11,9 +11,11 @@ public class GameSpawner : NetworkBehaviour {
 	public GameObject playerPosition;
 	public GameObject enemyPosition;
 
-
 	public GameObject cakePrefab;
 	Vector3 cakePosition;
+
+	public static GameObject serverPlayerRef, serverEnemyRef, serverCakeRef;
+
 
 	public override void OnStartServer()
 	{
@@ -27,6 +29,7 @@ public class GameSpawner : NetworkBehaviour {
 		GameObject player = (GameObject)Instantiate
 			(playerPrefab, playerPosition.transform.position, Quaternion.identity);
 		player.name = Constants.PLAYER_NAME;
+		serverPlayerRef = player;
 
 		NetworkServer.Spawn(player);
 	}
@@ -36,6 +39,7 @@ public class GameSpawner : NetworkBehaviour {
 		GameObject enemy = (GameObject)Instantiate
 			(enemyPrefab, enemyPosition.transform.position, Quaternion.identity);
 		enemy.name = Constants.ENEMY_NAME;
+		serverEnemyRef = enemy;
 
 		NetworkServer.Spawn(enemy);
 	}
@@ -45,6 +49,8 @@ public class GameSpawner : NetworkBehaviour {
 		cakePosition = new Vector3 (0, 0.3f, 0);
 
 		GameObject cake = (GameObject)Instantiate(cakePrefab, cakePosition, Quaternion.identity);
+		serverCakeRef = cake;
+
 		NetworkServer.Spawn(cake);
 	}
 }

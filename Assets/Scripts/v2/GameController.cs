@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class GameController : NetworkBehaviour {
 
 	protected bool isMoving;
-	const float MOVT_SPEED = 5; //use 3
+
 	const float MOVT_CAP = 200;
 	const float MOVT_CAP_EFFECTIVE_RATIO = 50;
 
