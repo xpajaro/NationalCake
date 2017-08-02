@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class Barrel : MonoBehaviour {
+public class Bloc : MonoBehaviour {
 	
 	public Sprite CRACKED_BARREL , BROKEN_BARREL ;
 	public AudioClip barrelHit, barrelBroken;
@@ -27,7 +27,7 @@ public class Barrel : MonoBehaviour {
 		if (GameSetup.isHost) {
 			Communicator.Instance.ShareBarrelhit(transform.position, noOfHits);
 
-			Barrel.CrushBarrel (noOfHits, gameObject);
+			Bloc.CrushBarrel (noOfHits, gameObject);
 			noOfHits++;
 		}
 	}
@@ -36,11 +36,11 @@ public class Barrel : MonoBehaviour {
 		int hitCount = (int) barrelHit [Deserialization.HITCOUNT_KEY];
 		Vector2 pos = (Vector2) barrelHit [Deserialization.POSITION_KEY];
 
-		foreach(GameObject barrel in Barrel.activeBarrels) {
+		foreach(GameObject barrel in Bloc.activeBarrels) {
 			Vector2 barrelPosition = barrel.transform.position;
 
 			if (barrelPosition.Equals (pos)) {
-				Barrel.CrushBarrel (hitCount, barrel);
+				Bloc.CrushBarrel (hitCount, barrel);
 			}
 		}
 	}
@@ -71,6 +71,6 @@ public class Barrel : MonoBehaviour {
 
 	static void ExpireItem (GameObject barrel){
 		Destroy (barrel);
-		Barrel.activeBarrels.Remove (barrel);
+		Bloc.activeBarrels.Remove (barrel);
 	}
 }

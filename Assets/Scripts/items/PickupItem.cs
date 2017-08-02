@@ -12,8 +12,6 @@ public class PickupItem : MonoBehaviour {
 	public AudioClip powerUpSound;
 
 	void Start(){
-		Utilities.UpdateSortingLayer (gameObject);
-
 		Invoke ("Disappear", LIFETIME);
 	}
 

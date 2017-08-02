@@ -27,15 +27,46 @@ public class Stage : MonoBehaviour {
 		stageTexture = GetComponent<SpriteRenderer> ().sprite.texture;
 	}
 
-	public bool IsOnStage (Vector2 gameObjectPosition){
+	public bool IsOnStage (Vector2 objPosition){
 		bool onStage = true;
-		gameObjectPosition = worldConverter.GetPositionInWorld (gameObjectPosition);
+		objPosition = worldConverter.GetPositionInWorld (objPosition);
 
-		if (Utilities.GetAlphaAtPosition (gameObjectPosition, stageTexture) == 0){
+		if (GetAlphaAtPosition (objPosition) == 0){
 			onStage = false;
 		} 
 
 		return onStage;
 	}
 
+	public Vector2 GetRandomStagePosition() {
+		Vector2 pos = GetRandomStageCoordinates ();
+
+		while (!IsOnStage (pos)) {
+			pos = GetRandomStageCoordinates ();
+		}
+
+		return pos;
+	} 
+
+
+	//-------------------------------------------
+	// utilites
+	//-------------------------------------------
+
+
+	Vector2 GetRandomStageCoordinates () {
+
+		System.Random r = new System.Random();
+
+		float randomX = (float)( r.NextDouble() * 9f) - 4.5f;
+		float randomY = (float)( r.NextDouble() * 5.5f) - 2.25f;
+
+		return new Vector2 (randomX, randomY);
+	}
+
+
+	float GetAlphaAtPosition (Vector2 position){
+		Color color = stageTexture.GetPixel ((int)position.x, (int)position.y);
+		return color.a;
+	}
 }

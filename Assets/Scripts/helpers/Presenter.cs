@@ -38,10 +38,11 @@ public class Presenter {
 		} else if (actor.tag.Equals (Constants.ENEMY_NAME)) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_ENEMY;
 		
-		} else if (actor.name.StartsWith ("cake") || actor.name.StartsWith ("cakeEffigy")) {
+		} else if (actor.name.StartsWith (Constants.CAKE_NAME) || 
+			actor.name.StartsWith (Constants.CAKE_COPY_NAME)) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_CAKE;
 		
-		} else if (actor.name.StartsWith ("wine")) {
+		} else if (actor.name.StartsWith (Constants.JERRY_CAN_NAME)) {
 			actor.layer = Constants.COLLISION_FREE_LAYER_OTHERS;
 		
 		}
@@ -50,7 +51,8 @@ public class Presenter {
 
 	public static void StartCollisions (GameObject actor){
 
-		if (actor.name.StartsWith ("cake") || actor.name.StartsWith ("cakeEffigy")) {
+		if (actor.name.StartsWith (Constants.CAKE_NAME) || 
+			actor.name.StartsWith (Constants.CAKE_COPY_NAME)) {
 			actor.layer = Constants.COLLISION_CAKE;
 		} else {
 			actor.layer = Constants.GAME_LAYER;

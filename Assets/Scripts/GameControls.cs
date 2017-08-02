@@ -101,7 +101,7 @@ public class GameControls : MonoBehaviour {
 				if (iconTouched != null) {
 					ChangeIconHighlight (iconTouched, 0.5f);
 
-					if (iconTouched.name.StartsWith (Constants.ICON_JUJU_NAME)) { // do ghost
+					if (iconTouched.name.StartsWith (Constants.ICON_GHOST_NAME)) { // do ghost
 						HandleItemActivation (touch.position);
 					} 
 				} 

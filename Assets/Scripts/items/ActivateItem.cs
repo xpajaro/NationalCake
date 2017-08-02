@@ -26,13 +26,13 @@ public class ActivateItem {
 	public int Activate (GameObject icon, Vector2 position){
 		int iconType = INVALID_ICON;
 
-		if (icon.name.StartsWith (Constants.ICON_JUJU_NAME)) {
+		if (icon.name.StartsWith (Constants.ICON_GHOST_NAME)) {
 			iconType = CakeProcessor ();
 
 		} else if (icon.name.StartsWith (Constants.ICON_SPILL_NAME)) {
 			iconType = SpillProcessor (position);
 
-		} else if (icon.name.StartsWith (Constants.ICON_BARREL_NAME)) {
+		} else if (icon.name.StartsWith (Constants.ICON_BLOC_NAME)) {
 			iconType = BarrelProcessor (position);
 		}
 
@@ -128,8 +128,8 @@ public class ActivateItem {
 
 	public void ActivateBarrel (Vector2 position){
 		GameObject newBarrel = (GameObject) StageManager.Instantiate ( 
-			Resources.Load( "items/" + Constants.ITEM_NAME_BARREL ), position, Quaternion.identity);
-		Barrel.activeBarrels.Add (newBarrel);
+			Resources.Load( "items/" + Constants.ITEM_NAME_BLOC ), position, Quaternion.identity);
+		Bloc.activeBarrels.Add (newBarrel);
 
 		SoundManager.instance.PlaySingle (Keeper.itemDropSound);
 	}

@@ -176,7 +176,7 @@ public class Communicator  {
 
 		} else if (MESSAGE_TYPE_BARREL_HIT.Equals (msgType) ){
 			Dictionary<string, object> barrelHit = Deserialization.GetBarrelHit (dataFields);
-			Barrel.updateClientBarrel (barrelHit);
+			Bloc.updateClientBarrel (barrelHit);
 
 		} else if (MESSAGE_TYPE_SLIP.Equals (msgType) ){
 			Spill.PlaySounds ();
