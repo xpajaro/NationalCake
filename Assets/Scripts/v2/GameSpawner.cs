@@ -89,7 +89,7 @@ public class GameSpawner : NetworkBehaviour {
 
 	public void DropItem (){
 		System.Random r = new System.Random();
-		int itemIndex = r.Next(0, 4);
+		int itemIndex = 3; //r.Next(0, 4);
 
 		Vector2 newPos = GetRandomStagePosition ();
 

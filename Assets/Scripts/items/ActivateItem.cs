@@ -135,13 +135,13 @@ public class ActivateItem {
 	}
 
 	public void ActivateBomb (Vector2 position){
-		foreach(GameObject bomb in Bomb.instance.activeBombs) {
-			Vector2 bombPosition = bomb.transform.position;
-
-			if (bombPosition.Equals (position)) {
-				Bomb.TriggerExplosion (bomb);
-			}
-		}
+//		foreach(GameObject bomb in Bomb.instance.activeBombs) {
+//			Vector2 bombPosition = bomb.transform.position;
+//
+//			if (bombPosition.Equals (position)) {
+//				Bomb.TriggerExplosion (bomb);
+//			}
+//		}
 	}
 
 	//-------------------------------------------

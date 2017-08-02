@@ -3,18 +3,22 @@ using System.Collections;
 
 public class SoundManager : MonoBehaviour 
 {
-	public AudioSource efxSource;   
-	public AudioSource musicSource;                 
-	public static SoundManager instance = null;  
-
+	public AudioSource efxSource, musicSource;  
 	public AudioClip invalidAction, clickSound;
+	public bool keepAlive;
+
 	bool fxMuted;
+
+	public static SoundManager instance = null;  
 
 	void Awake ()
 	{
 		if (instance == null) {
 			instance = this;
-			DontDestroyOnLoad (gameObject);
+
+			if (keepAlive) {
+				DontDestroyOnLoad (gameObject);
+			}
 		} else if (instance != this) {
 			Destroy (gameObject);
 		}

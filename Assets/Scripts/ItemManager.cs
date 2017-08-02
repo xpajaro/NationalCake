@@ -19,7 +19,7 @@ public class ItemManager : MonoBehaviour {
 		Keeper.itemDropSound = itemDropSound;
 
 		ItemUpdates.itemManager = this;
-		PickupItem.itemManager = this;
+		// PickupItem.itemManager = this;
 		GameControls.itemManager = this;
 
 		holder1State = new IconHolderState (holder1);

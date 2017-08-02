@@ -23,7 +23,7 @@ public class ItemUpdates : MonoBehaviour {
 		newItem.transform.position = pos;
 
 		if (itemID == Constants.ITEM_BOMB) {
-			Bomb.instance.activeBombs.Add (newItem);
+			//Bomb.instance.activeBombs.Add (newItem);
 		}
 
 		SoundManager.instance.PlaySingle (itemDropSound);
