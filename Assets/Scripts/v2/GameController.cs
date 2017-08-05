@@ -12,14 +12,16 @@ public class GameController : NetworkBehaviour {
 
 
 	Vector2 movtStartPosition;
-
-	void Start(){
-	}
+	public static GameController LocalInstance;
 
 	void Update (){
 		//don't allow inputs from enemy character
-		if (!isLocalPlayer || GetPlayerControllerInstance() == null){
+		if (!isLocalPlayer || !GetPlayerControllerInstance()){
 			return;
+		}
+
+		if (!LocalInstance) {
+			LocalInstance = this;
 		}
 
 		HandleTouch ();

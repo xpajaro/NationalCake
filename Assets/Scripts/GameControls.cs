@@ -96,7 +96,7 @@ public class GameControls : MonoBehaviour {
 			GameObject holderTouched = GetHolderTouched (touchPosition);
 
 			if (holderTouched != null) {
-				iconTouched = itemManager.GetIconByHolder (holderTouched); 
+				//iconTouched = itemManager.GetIconByHolder (holderTouched); 
 
 				if (iconTouched != null) {
 					ChangeIconHighlight (iconTouched, 0.5f);
@@ -150,13 +150,13 @@ public class GameControls : MonoBehaviour {
 	}
 
 	void CleanupHolder (int itemType){
-		GameObject holder = itemManager.GetItemHolder (iconTouched).holder;
+		//GameObject holder = itemManager.GetItemHolder (iconTouched).holder;
 
 		//itemManager.RemoveHolderHighlight (holder);
 		ChangeIconHighlight (iconTouched, 2f);
 
 		if (itemType != ActivateItem.INVALID_ICON) {
-			itemManager.RemoveHolderIcon (holder);
+			//itemManager.RemoveHolderIcon (holder);
 
 		} else {
 			SoundManager.instance.PlayWarning ();
@@ -196,7 +196,8 @@ public class GameControls : MonoBehaviour {
 	}
 
 	GameObject GetIconTouched (GameObject holderTouched){
-		return itemManager.GetIconByHolder (holderTouched);
+		return holderTouched;
+		//return itemManager.GetIconByHolder (holderTouched);
 	}
 
 	void ChangeIconHighlight(GameObject icon, float value){

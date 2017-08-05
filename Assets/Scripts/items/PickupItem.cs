@@ -1,18 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PickupItem : NetworkBehaviour {
-	public int itemType ;
 	public float LIFETIME = 7f;
 
 	public AudioClip explosionSound, playerSlipping, powerUpSound;
+	public Button itemButton; //button to click for item activation
 
 	const int EXPLOSION_POWER = -300;
 	const string EXPLOSION_PARAMETER = "touchedByUser";
 
 	void Start(){
-		Invoke ("Disappear", LIFETIME);
+		if (isServer) {
+			Invoke ("Disappear", LIFETIME);
+		}
+
 	}
 
 
@@ -22,7 +26,7 @@ public class PickupItem : NetworkBehaviour {
 
 		//characters pick up bomb
 		if ( (objName.StartsWith (Constants.PLAYER_NAME) || objName.Equals (Constants.ENEMY_NAME))
-			 && itemType == Constants.ITEM_BOMB) {
+			&& name.StartsWith (Constants.ITEM_NAME_BOMB) ) {
 				DetonateBomb (col.gameObject);
 		
 		//characters pick up other items
@@ -38,9 +42,6 @@ public class PickupItem : NetworkBehaviour {
 	}
 
 	void DetonateBomb(GameObject player){
-
-		// Communicator.Instance.ShareItemUse (Constants.ITEM_BOMB, transform.position);
-		// Bomb.TriggerExplosion (gameObject);
 
 		Animator animator = GetComponent<Animator>();
 		animator.SetTrigger (EXPLOSION_PARAMETER);
@@ -60,7 +61,8 @@ public class PickupItem : NetworkBehaviour {
 
 
 	void SaveItem (){
-		// itemManager.SaveItem (itemType);
+		Debug.Log ("about to save");
+		ItemManager.Instance.SaveItem (itemButton);
 	}
 
 	void Disappear (){

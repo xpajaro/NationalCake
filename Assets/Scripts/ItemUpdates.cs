@@ -19,8 +19,8 @@ public class ItemUpdates : MonoBehaviour {
 		int itemID = (int) itemDropped [Deserialization.ITEM_KEY];
 		Vector2 pos = (Vector2) itemDropped [Deserialization.POSITION_KEY];
 
-		GameObject newItem = (GameObject) Instantiate ( itemManager.GetPickupPrefabByID(itemID) );
-		newItem.transform.position = pos;
+		// GameObject newItem = (GameObject) Instantiate ( itemManager.GetPickupPrefabByID(itemID) );
+		// newItem.transform.position = pos;
 
 		if (itemID == Constants.ITEM_BOMB) {
 			//Bomb.instance.activeBombs.Add (newItem);

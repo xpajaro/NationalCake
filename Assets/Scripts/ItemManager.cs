@@ -1,154 +1,48 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class ItemManager : MonoBehaviour {
 
-	public GameObject barrelPickupPrefab, spillPickupPrefab, jujuPickupPrefab, bombPickupPrefab;
-	public GameObject barrelIconPrefab, spillIconPrefab, jujuIconPrefab, bombIconPrefab;
+	Vector2 firstItemPosition = new Vector2 (-860, -440);
+	Vector2 secondItemPosition = new Vector2 (-680, -440);
+	Vector2 scale = new Vector2 (1.4f, 1.4f);
 
-	public GameObject holder1, holder2;
-	public Sprite activeHolderSprite, holderSprite;
-	static public IconHolderState holder1State, holder2State;
+	public Canvas canvas;
 
-	float DROP_ITEM_COOLDOWN = 10f; //change to 40
+	bool holder1Occupied, holder2Occupied;
 
-	public AudioClip itemDropSound;
 
-	// Use this for initialization
-	void Start () {
-		Keeper.itemDropSound = itemDropSound;
+	public static ItemManager Instance = null;    
 
-		ItemUpdates.itemManager = this;
-		// PickupItem.itemManager = this;
-		GameControls.itemManager = this;
+	void Awake ()
+	{
+		if (Instance == null) {
+			Instance = this;
 
-		holder1State = new IconHolderState (holder1);
-		holder2State = new IconHolderState (holder2);
-
-		if (GameSetup.isHost) {
-			InvokeRepeating ("DropItem", 0.0f, DROP_ITEM_COOLDOWN);
+		} else if (Instance != this) {
+			Destroy (gameObject);
 		}
 	}
 
-
-	public void SaveItem (int itemType){
-		if (holder1State.icon == null) {
-			holder1State.icon = SpawnNewItem (itemType, holder1State.holder.transform.position);
+	public void SaveItem (Button itemToSave){
+		if (!holder1Occupied) {
+			CreateButton (itemToSave, firstItemPosition);
+			holder1Occupied = true;
 			
-		} else if (holder2State.icon == null) {
-			holder2State.icon = SpawnNewItem (itemType, holder2State.holder.transform.position);
+		} else if (!holder2Occupied) {
+			CreateButton (itemToSave, secondItemPosition);
+			holder2Occupied = true;
 		}
 	}
 
-	GameObject SpawnNewItem (int itemType, Vector2 position){
-		GameObject itemIcon = (GameObject) Instantiate ( GetIconPrefabByID(itemType) );
-		itemIcon.transform.position = position;
+	void CreateButton(Button buttonPrefab, Vector2 spawnPosition){
+		Button button = Object.Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity) as Button;
+		RectTransform rectTransform = button.GetComponent<RectTransform>();
 
-		return itemIcon;
-	}
-
-	public void HighlightHolder (GameObject holder){
-		//ChangeHolderSprite (holder, activeHolderSprite);
-	}
-
-	public void RemoveHolderHighlight (GameObject holder){
-		//ChangeHolderSprite (holder, holderSprite);
-	}
-
-
-	void ChangeHolderSprite (GameObject holder, Sprite holderStateSprite){
-		SpriteRenderer _renderer = holder.GetComponent<SpriteRenderer>();
-		_renderer.sprite = holderStateSprite;
-	}
-
-	public IconHolderState GetItemHolder (GameObject icon){
-		IconHolderState holderState = null;
-
-		if (icon == holder1State.icon) {
-			holderState =  holder1State;
-
-		} else if (icon == holder2State.icon) {
-			holderState =  holder2State;
-		}
-
-		return holderState;
-	}
-
-	public GameObject GetIconByHolder (GameObject holder){
-		GameObject icon = null;
-
-		if (holder1State.holder == holder ) {
-			icon =  holder1State.icon;
-
-		} else if (holder2State.holder == holder ) {
-			icon =  holder2State.icon;
-		}
-
-		return icon;
-	}
-
-	public void RemoveHolderIcon (GameObject holder){
-		if ( holder == holder1State.holder ) {
-			holder1State.icon = null;
-		} else if ( holder == holder2State.holder) {
-			holder2State.icon = null;
-		}
-	}
-
-	public void DropItem (){
-		System.Random r = new System.Random();
-		int rInt = r.Next(0, 4);
-
-		Vector2 newPos = GetRandomStagePosition ();
-
-		GameObject newItem = (GameObject) Instantiate ( GetPickupPrefabByID(rInt) );
-		newItem.transform.position = newPos;
-
-		Communicator.Instance.ShareItemDrop (rInt, newPos);
-
-		SoundManager.instance.PlaySingle (itemDropSound);
-	}
-
-	Vector2 GetRandomStagePosition(){
-		Vector2 newPos = Utilities.GetRandomStagePosition ();
-		
-		while (!StageManager.isOnStage (newPos)
-			|| Physics2D.OverlapCircle(newPos, .7f)){
-			newPos = Utilities.GetRandomStagePosition ();
-		}
-		return newPos;
-	}
-
-	public GameObject GetPickupPrefabByID (int ID){
-		GameObject pickupPrefab = null ;
-
-		if (ID == 0) {
-			pickupPrefab = barrelPickupPrefab;
-		} else if (ID == 1) {
-			pickupPrefab = spillPickupPrefab;
-		} else if (ID == 2) {
-			pickupPrefab = jujuPickupPrefab;
-		} else if (ID == 3) {
-			pickupPrefab = bombPickupPrefab;
-		} 
-
-		return pickupPrefab;
-	}
-
-	GameObject GetIconPrefabByID (int ID){
-		GameObject iconPrefab = null ;
-
-		if (ID == 0) {
-			iconPrefab = barrelIconPrefab;
-		} else if (ID == 1) {
-			iconPrefab = spillIconPrefab;
-		} else if (ID == 2) {
-			iconPrefab = jujuIconPrefab;
-		} else if (ID == 3) {
-			iconPrefab = bombIconPrefab;
-		} 
-
-		return iconPrefab;
+		rectTransform.SetParent(canvas.transform);
+		rectTransform.localScale = scale;
+		rectTransform.localPosition = spawnPosition;
 	}
 
 
