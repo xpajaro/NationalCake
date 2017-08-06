@@ -4,12 +4,28 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class Cake : NetworkBehaviour {
-	string PLAYER_GOAL = "pGoal";
-	string ENEMY_GOAL = "eGoal";
 
+	public GameObject cakeGhost;
+	SpriteRenderer spriteRenderer, ghostRenderer;
+
+	const string PLAYER_GOAL = "pGoal";
+	const string ENEMY_GOAL = "eGoal";
+	const float GHOST_FX_DURATION = 8;
+
+	[SyncVar]
+	public bool ghostActivated;
+
+	public static Cake LocalInstance;
+
+	void Awake (){
+		if (LocalInstance == null) {
+			LocalInstance = this;
+		}
+	}
 
 	void Start (){
-		
+		spriteRenderer = GetComponent<SpriteRenderer> ();
+		ghostRenderer = cakeGhost.GetComponent<SpriteRenderer> ();
 	}
 
 	void OnCollisionEnter2D (Collision2D col)
@@ -47,6 +63,7 @@ public class Cake : NetworkBehaviour {
 		transform.position = newPos;
 	}
 
+
 	void StopMoving (){
 		GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
 	}
@@ -54,4 +71,20 @@ public class Cake : NetworkBehaviour {
 	void LeaveScene(){
 		GameSetup.LeaveGame ();
 	}
+
+	public void ActivateGhost() {
+		Presenter.Detach (gameObject, spriteRenderer);
+		Presenter.Attach (cakeGhost, ghostRenderer);
+		ghostActivated = true;
+
+		//cakeGhost.transform.position = transform.position;
+		Invoke ("DeactivateGhost", GHOST_FX_DURATION);
+	}
+
+	public void DeactivateGhost (){
+		Presenter.Detach (cakeGhost, ghostRenderer);
+		Presenter.Attach (gameObject, spriteRenderer);
+		ghostActivated = false;
+	}
+
 }

@@ -53,10 +53,10 @@ public class ActivateItem {
 		int iconType = INVALID_ICON;
 
 		if (StageManager.isOnStage (cake.transform.position)) {
-			Communicator.Instance.ShareItemUse (Constants.ITEM_JUJU, Vector2.zero);
+			Communicator.Instance.ShareItemUse (Constants.ITEM_GHOST, Vector2.zero);
 			ActivateJuju ();
 
-			iconType = Constants.ITEM_JUJU;
+			iconType = Constants.ITEM_GHOST;
 		}
 
 		return iconType;
@@ -81,10 +81,10 @@ public class ActivateItem {
 		if (StageManager.isOnStage (position) &&
 			!areaOccupied (position) ) {
 
-			Communicator.Instance.ShareItemUse (Constants.ITEM_BARREL, position);
+			Communicator.Instance.ShareItemUse (Constants.ITEM_BLOC, position);
 			ActivateBarrel (position);
 
-			iconType = Constants.ITEM_BARREL;
+			iconType = Constants.ITEM_BLOC;
 		}
 		return iconType;
 	}

@@ -19,9 +19,9 @@ public class Constants {
 
 	public const string GAME_SCENE = "Main";
 
-	public const int ITEM_BARREL = 0;
+	public const int ITEM_BLOC = 0;
 	public const int ITEM_SPILL = 1;
-	public const int ITEM_JUJU = 2;
+	public const int ITEM_GHOST = 2;
 	public const int ITEM_BOMB = 3;
 
 	public const string JERRY_CAN_NAME = "jerryCan";

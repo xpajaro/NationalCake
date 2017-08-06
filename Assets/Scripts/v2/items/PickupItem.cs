@@ -7,7 +7,7 @@ public class PickupItem : NetworkBehaviour {
 	public float LIFETIME = 7f;
 
 	public AudioClip explosionSound, playerSlipping, powerUpSound;
-	public Button itemButton; //button to click for item activation
+	public int itemToSave;
 
 	const int EXPLOSION_POWER = -300;
 	const string EXPLOSION_PARAMETER = "touchedByUser";
@@ -19,20 +19,21 @@ public class PickupItem : NetworkBehaviour {
 
 	}
 
-
+	//happens only on server
 	void OnTriggerEnter2D (Collider2D col)
 	{	
 		string objName = col.gameObject.name;
+		bool isGameCharacter = objName.StartsWith (Constants.PLAYER_NAME) || 
+			objName.Equals (Constants.ENEMY_NAME);
 
 		//characters pick up bomb
-		if ( (objName.StartsWith (Constants.PLAYER_NAME) || objName.Equals (Constants.ENEMY_NAME))
-			&& name.StartsWith (Constants.ITEM_NAME_BOMB) ) {
-				DetonateBomb (col.gameObject);
+		if ( isGameCharacter && name.StartsWith (Constants.ITEM_NAME_BOMB) ) {
+			DetonateBomb (col.gameObject);
 		
 		//characters pick up other items
-		} else if (objName.StartsWith (Constants.PLAYER_NAME)) {
-			SoundManager.instance.PlaySingle (powerUpSound);
-			SaveItem ();
+		} else if (isGameCharacter) {
+			bool isPlayer = objName.StartsWith (Constants.PLAYER_NAME);
+			ItemManager.Instance.SaveItem (itemToSave, isPlayer);
 			Destroy (gameObject);
 		
 		//hit by anything else
@@ -53,22 +54,17 @@ public class PickupItem : NetworkBehaviour {
 	}
 
 	void FlingPlayer(GameObject player) {
-		if (isServer) {
-			Rigidbody2D actorBody = player.GetComponent<Rigidbody2D> ();
-			actorBody.AddForce (actorBody.velocity.normalized * EXPLOSION_POWER, ForceMode2D.Impulse);
-		}
+		Rigidbody2D actorBody = player.GetComponent<Rigidbody2D> ();
+		actorBody.AddForce (actorBody.velocity.normalized * EXPLOSION_POWER, ForceMode2D.Impulse);
 	}
-
-
-	void SaveItem (){
-		Debug.Log ("about to save");
-		ItemManager.Instance.SaveItem (itemButton);
-	}
-
+		
 	void Disappear (){
 		Destroy (gameObject);
 	}
 
+	void GetItemID (){
+	
+	}
 
 
 }

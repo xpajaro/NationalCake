@@ -19,11 +19,19 @@ public class GameSpawner : NetworkBehaviour {
 
 
 	const float ITEM_SPAWN_INTERVAL = 5f;//20f; //change to 40?
+	const float ITEM_CLEAR_RADIUS = .7f;
 
 	public static GameObject serverPlayerRef, serverEnemyRef, serverCakeRef;
 	public GameObject[] itemPrefabs;
 	public AudioClip itemDropSound;
 
+	public static GameSpawner serverInstance;
+
+	void Awake(){
+		if (!serverInstance) {
+			serverInstance = this;
+		}
+	}
 
 	public override void OnStartServer()
 	{
@@ -89,7 +97,7 @@ public class GameSpawner : NetworkBehaviour {
 
 	public void DropItem (){
 		System.Random r = new System.Random();
-		int itemIndex = 1;//r.Next(0, 4);
+		int itemIndex = 2;//r.Next(0, 4);
 
 		Vector2 newPos = GetRandomStagePosition ();
 
@@ -109,7 +117,7 @@ public class GameSpawner : NetworkBehaviour {
 	Vector2 GetRandomStagePosition(){
 		Vector2 newPos = Stage.Instance.GetRandomStagePosition ();
 
-		while (Physics2D.OverlapCircle(newPos, .7f)){
+		while (Physics2D.OverlapCircle(newPos, ITEM_CLEAR_RADIUS)){
 			newPos = Stage.Instance.GetRandomStagePosition ();
 		}
 

@@ -32,7 +32,7 @@ public class ItemUpdates : MonoBehaviour {
 	public void UseItem (Dictionary<string, object> itemUsed){
 		int itemID = (int) itemUsed [Deserialization.ITEM_KEY];
 
-		if (itemID == Constants.ITEM_JUJU) {
+		if (itemID == Constants.ITEM_GHOST) {
 			itemActivator.ActivateJuju ();
 			Invoke ("DeactivateJuju", ActivateItem.JUJU_COOLDOWN);
 
@@ -40,7 +40,7 @@ public class ItemUpdates : MonoBehaviour {
 			Vector2 pos = (Vector2) itemUsed [Deserialization.POSITION_KEY];
 			itemActivator.ActivateSpill (pos);
 
-		} else if (itemID == Constants.ITEM_BARREL){
+		} else if (itemID == Constants.ITEM_BLOC){
 			Vector2 pos = (Vector2) itemUsed [Deserialization.POSITION_KEY];
 			itemActivator.ActivateBarrel (pos);
 

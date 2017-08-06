@@ -19,7 +19,7 @@ public class GameControls : MonoBehaviour {
 
 	Rigidbody2D playerBody, enemyBody;
 
-	Moving movePlayer;
+	// Moving movePlayer;
 	ActivateItem itemActivator;
 
 	Animator animator, enemyAnimator;
@@ -39,7 +39,7 @@ public class GameControls : MonoBehaviour {
 
 		//classes
 		itemActivator = new ActivateItem (cake, cakeEffigy);
-		movePlayer = new Moving (gameObject, playerRunningSound);
+		// movePlayer = new Moving (gameObject, playerRunningSound);
 	}
 
 	void FixedUpdate (){
@@ -106,7 +106,7 @@ public class GameControls : MonoBehaviour {
 					} 
 				} 
 			} else {
-				movePlayer.MovementInputStarted (touch.position);
+				// movePlayer.MovementInputStarted (touch.position);
 				moving = true;
 			}
 		}
@@ -117,7 +117,7 @@ public class GameControls : MonoBehaviour {
 			if (GameSetup.isHost) {
 				StartCoroutine (WaitForClient ());
 			}
-			movePlayer.MovementInputEnded (touch.position);
+			// movePlayer.MovementInputEnded (touch.position);
 			moving = false;
 		}
 	}
@@ -142,7 +142,7 @@ public class GameControls : MonoBehaviour {
 		Vector2 scaledPosition = Camera.main.ScreenToWorldPoint (position);
 		int itemType = itemActivator.Activate (iconTouched,  scaledPosition);
 
-		if (itemType == Constants.ITEM_JUJU) {
+		if (itemType == Constants.ITEM_GHOST) {
 			Invoke ("DeactivateJuju", ActivateItem.JUJU_COOLDOWN);
 		} 
 

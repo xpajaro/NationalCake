@@ -24,14 +24,14 @@ public class StateUpdates : MonoBehaviour {
 	float nextBroadcastTime = 0;
 	float lastUpdateTime;
 
-	Moving moveEnemy;
+	// Moving moveEnemy;
 	public AudioClip enemyRunningSound, playerFallingSound;
 
 
 	void Start (){
 		Communicator.Instance.stateUpdates = this;
 
-		moveEnemy = new Moving (enemy, enemyRunningSound);
+		// moveEnemy = new Moving (enemy, enemyRunningSound);
 
 		if (!GameSetup.isHost) {
 			LoadRenderers ();
@@ -61,9 +61,9 @@ public class StateUpdates : MonoBehaviour {
 	void FixedUpdate () {
 		if (GameSetup.isHost) {
 			if (Time.time > nextBroadcastTime) {
-				Communicator.Instance.ShareActorState (playerBody, Falling.pFalling, 
-					enemyBody, Falling.eFalling,
-					cakeBody, Falling.cFalling); 
+//				Communicator.Instance.ShareActorState (playerBody, Falling.pFalling, 
+//					enemyBody, Falling.eFalling,
+//					cakeBody, Falling.cFalling); 
 
 
 				nextBroadcastTime = Time.time + TIME_GAP;
@@ -82,7 +82,7 @@ public class StateUpdates : MonoBehaviour {
 			return;
 		}
 
-		moveEnemy.NetworkImpulseReceived (impulse, WineBuzzLevel.EnemyBuzz);
+		// moveEnemy.NetworkImpulseReceived (impulse, WineBuzzLevel.EnemyBuzz);
 	}
 
 

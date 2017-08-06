@@ -22,10 +22,11 @@ public class PlayerController : NetworkBehaviour {
 	public static PlayerController PlayerInstance = null;    
 	public static PlayerController EnemyInstance = null;    
 
-	void Start () {
-
+	void Awake(){
 		SetupInstances ();
+	}
 
+	void Start () {
 		playerBody = GetComponent<Rigidbody2D>();
 		speedManager = GetComponent<SpeedManager> ();
 

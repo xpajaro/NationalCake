@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class GameController : NetworkBehaviour {
+public partial class GameController : NetworkBehaviour {
 
 	protected bool isMoving;
 
@@ -12,6 +12,8 @@ public class GameController : NetworkBehaviour {
 
 
 	Vector2 movtStartPosition;
+	public GameObject itemSelectedForActivation;
+
 	public static GameController LocalInstance;
 
 	void Update (){
@@ -20,7 +22,7 @@ public class GameController : NetworkBehaviour {
 			return;
 		}
 
-		if (!LocalInstance) {
+		if (LocalInstance == null) {
 			LocalInstance = this;
 		}
 
@@ -36,15 +38,15 @@ public class GameController : NetworkBehaviour {
 			switch (touch.phase) {
 
 			case TouchPhase.Began:
-				MovementStarted (touch.position);
+				InputBegan (touch.position);
 				break;
 
 			case TouchPhase.Ended:
-				MovementEnded (touch.position);
+				InputEnded (touch.position);
 				break;
 
 			case TouchPhase.Canceled:
-				MovementCanceled ();
+				InputCanceled ();
 				break;
 
 			}
@@ -53,81 +55,47 @@ public class GameController : NetworkBehaviour {
 
 	protected void HandleMouse(){
 		if (Input.GetMouseButtonDown(0)){
-			if (!isMoving) {
-				MovementStarted (Input.mousePosition);
-			}
+			InputBegan (Input.mousePosition);
+
 		} else if (!MouseInsideBounds()) {
-			MovementCanceled ();
+			InputCanceled ();
 
 		} else if (Input.GetMouseButtonUp(0)){
-			MovementEnded(Input.mousePosition);
-
+			InputEnded (Input.mousePosition);
 		}
 	} 
 
-	bool MouseInsideBounds () {
+	bool MouseInsideBounds (){
 		Rect screenRect = new Rect(0,0, Screen.width, Screen.height);
 		return screenRect.Contains (Input.mousePosition);
 	}
 
-	void MovementStarted (Vector2 pos){
-		isMoving = true;
-		movtStartPosition = pos;
+
+
+	//-------------------------------------------
+	// Input handlers
+	// ( movement in partial class )
+	//-------------------------------------------
+
+	void InputBegan (Vector2 position){
+		if (itemSelectedForActivation) {
+			CmdActivateItem (itemSelectedForActivation, position);
+
+		} else if (!isMoving) {
+			MovementStarted (position);
+		}
 	}
 
-	void MovementEnded (Vector2 pos){
-		if (isMoving) {
-			isMoving = false;
+	void InputEnded (Vector2 position){
+		MovementEnded(position);
+	}
 
-			Vector2 launchDir = CalculateLaunchDirection (pos);
-			launchDir = launchDir / MOVT_CAP_EFFECTIVE_RATIO;
-
-			CmdMove (launchDir, isServer);
-
-		}
+	void InputCanceled (){
+		MovementCanceled();
 	}
 
 	[Command]
-	void CmdMove (Vector2 launchDir, bool movePlayer){
-
-		if (movePlayer) {
-			PlayerController.PlayerInstance.Move (launchDir);
-			
-		} else {
-			PlayerController.EnemyInstance.Move (launchDir);
-		}
-
+	void CmdActivateItem (GameObject item, Vector2 position){
+	
 	}
-
-	void MovementCanceled (){
-		isMoving = false;
-	}
-
-
-	//-------------------------------------------
-	// utilities
-	//-------------------------------------------
-
-	PlayerController GetPlayerControllerInstance (){
-		PlayerController instance;
-
-		if (isServer) {
-			instance = PlayerController.PlayerInstance;
-		} else {
-			instance = PlayerController.EnemyInstance; 
-		}
-
-		return instance;
-	}
-
-	Vector2 CalculateLaunchDirection (Vector2 movtEndPoint){
-		Vector2 launchDir =  movtStartPosition - movtEndPoint ;
-
-		if (launchDir.magnitude > MOVT_CAP) {
-			launchDir = launchDir/ launchDir.magnitude * MOVT_CAP;
-		}
-
-		return launchDir;
-	}
-
 }
