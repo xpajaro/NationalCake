@@ -50,7 +50,6 @@ public class ItemManager : NetworkBehaviour {
 		}
 
 		if (freeSlotIndex != ALL_SLOTS_OCCUPIED) {
-			Debug.Log (freeSlotIndex);
 			RpcSaveToScreen (itemID, isServerPlayer, freeSlotIndex);
 
 		} 
@@ -114,7 +113,7 @@ public class ItemManager : NetworkBehaviour {
 	}
 
 	Button CreateButton(Button buttonPrefab, Vector2 spawnPosition){
-		SoundManager.instance.PlaySingle (powerUpSound);
+		SoundManager.Instance.PlaySingle (powerUpSound);
 
 		Button button = Object.Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity) as Button;
 		RectTransform rectTransform = button.GetComponent<RectTransform>();

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class ActivateGhost : NetworkBehaviour {
-	public AudioClip warningSound;
 	RectTransform rectTransform;
 
 	void Start (){
@@ -13,7 +12,7 @@ public class ActivateGhost : NetworkBehaviour {
 
 	public void Activate () {
 		if (Cake.LocalInstance.ghostActivated) {
-			SoundManager.instance.PlaySingle (warningSound);
+			SoundManager.Instance.PlayWarning();
 			
 		} else {
 			GameController.LocalInstance.ActivateGhost (rectTransform.localPosition);

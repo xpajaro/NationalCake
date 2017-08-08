@@ -46,11 +46,15 @@ public class PickupItem : NetworkBehaviour {
 
 		Animator animator = GetComponent<Animator>();
 		animator.SetTrigger (EXPLOSION_PARAMETER);
-
-		SoundManager.instance.PlaySingle (explosionSound, 1f);
-		SoundManager.instance.PlaySingle (playerSlipping);
+		RpcPlayExplosionSound ();
 
 		FlingPlayer (player);
+	}
+
+	[ClientRpc]
+	void RpcPlayExplosionSound(){
+		SoundManager.Instance.PlaySingle (explosionSound, 1f);
+		SoundManager.Instance.PlaySingle (playerSlipping);
 	}
 
 	void FlingPlayer(GameObject player) {

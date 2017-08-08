@@ -12,7 +12,7 @@ public partial class GameController : NetworkBehaviour {
 
 
 	Vector2 movtStartPosition;
-	public GameObject itemSelectedForActivation;
+	public ActivateAttack selectedItemRef;
 
 	public static GameController LocalInstance;
 
@@ -78,8 +78,10 @@ public partial class GameController : NetworkBehaviour {
 	//-------------------------------------------
 
 	void InputBegan (Vector2 position){
-		if (itemSelectedForActivation) {
-			CmdActivateItem (itemSelectedForActivation, position);
+		if (selectedItemRef != null) {
+			//check itemcontroller file, this is a partial class
+			Vector2 positionInWorld = Camera.main.ScreenToWorldPoint (position);
+			ActivateSelectedItem (positionInWorld);
 
 		} else if (!isMoving) {
 			MovementStarted (position);
@@ -94,8 +96,4 @@ public partial class GameController : NetworkBehaviour {
 		MovementCanceled();
 	}
 
-	[Command]
-	void CmdActivateItem (GameObject item, Vector2 position){
-	
-	}
 }

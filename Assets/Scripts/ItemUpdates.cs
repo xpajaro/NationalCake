@@ -26,7 +26,7 @@ public class ItemUpdates : MonoBehaviour {
 			//Bomb.instance.activeBombs.Add (newItem);
 		}
 
-		SoundManager.instance.PlaySingle (itemDropSound);
+		SoundManager.Instance.PlaySingle (itemDropSound);
 	}
 
 	public void UseItem (Dictionary<string, object> itemUsed){

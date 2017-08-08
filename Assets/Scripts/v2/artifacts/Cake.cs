@@ -77,7 +77,6 @@ public class Cake : NetworkBehaviour {
 		Presenter.Attach (cakeGhost, ghostRenderer);
 		ghostActivated = true;
 
-		//cakeGhost.transform.position = transform.position;
 		Invoke ("DeactivateGhost", GHOST_FX_DURATION);
 	}
 

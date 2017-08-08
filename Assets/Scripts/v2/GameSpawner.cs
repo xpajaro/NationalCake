@@ -22,7 +22,7 @@ public class GameSpawner : NetworkBehaviour {
 	const float ITEM_CLEAR_RADIUS = .7f;
 
 	public static GameObject serverPlayerRef, serverEnemyRef, serverCakeRef;
-	public GameObject[] itemPrefabs;
+	public GameObject[] itemPrefabs, itemAttackPrefabs;
 	public AudioClip itemDropSound;
 
 	public static GameSpawner serverInstance;
@@ -97,7 +97,7 @@ public class GameSpawner : NetworkBehaviour {
 
 	public void DropItem (){
 		System.Random r = new System.Random();
-		int itemIndex = 2;//r.Next(0, 4);
+		int itemIndex = 0;//r.Next(0, 4);
 
 		Vector2 newPos = GetRandomStagePosition ();
 
@@ -106,7 +106,17 @@ public class GameSpawner : NetworkBehaviour {
 
 		NetworkServer.Spawn (newItem);
 
-		SoundManager.instance.PlaySingle (itemDropSound);
+		SoundManager.Instance.PlaySingle (itemDropSound);
+	}
+
+
+	public void DropAttackItem (int itemIndex, Vector2 newPos){
+		GameObject newItem = (GameObject) Instantiate 
+			(itemAttackPrefabs[itemIndex], newPos, Quaternion.identity );
+
+		NetworkServer.Spawn (newItem);
+
+		SoundManager.Instance.PlaySingle (itemDropSound);
 	}
 
 

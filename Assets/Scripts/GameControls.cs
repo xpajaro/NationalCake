@@ -86,11 +86,11 @@ public class GameControls : MonoBehaviour {
 
 		} else if ( TouchingGameObject(soundButton, touchPosition)) {
 			soundOn = changeButton (soundButton, soundOn, soundOnSprite, soundOffSprite);
-			SoundManager.instance.ToggleAllSound (soundOn);
+			SoundManager.Instance.ToggleAllSound (soundOn);
 
 		} else if  ( TouchingGameObject(musicButton, touchPosition))  {
 			musicOn = changeButton (musicButton, musicOn, musicOnSprite, musicOffSprite);
-			SoundManager.instance.ToggleMusic (musicOn);
+			SoundManager.Instance.ToggleMusic (musicOn);
 
 		} else {
 			GameObject holderTouched = GetHolderTouched (touchPosition);
@@ -159,7 +159,7 @@ public class GameControls : MonoBehaviour {
 			//itemManager.RemoveHolderIcon (holder);
 
 		} else {
-			SoundManager.instance.PlayWarning ();
+			SoundManager.Instance.PlayWarning ();
 		}
 
 		iconTouched = null;

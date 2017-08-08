@@ -59,7 +59,7 @@ public class PlayerController : NetworkBehaviour {
 			Vector2 impulse = launchDirection * BASIC_MOVT_FORCE * speedManager.currentSpeed; 
 			playerBody.AddForce (impulse, ForceMode2D.Impulse);
 
-			SoundManager.instance.PlaySingle (actorRunningSound, 1.5f);
+			SoundManager.Instance.PlaySingle (actorRunningSound, 1.5f);
 		}
 	}
 

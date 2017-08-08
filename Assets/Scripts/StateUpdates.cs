@@ -175,7 +175,7 @@ public class StateUpdates : MonoBehaviour {
 			Presenter.Detach (actor, renderer);
 
 			if (actor.name.Equals("player")){
-				SoundManager.instance.PlaySingle (playerFallingSound);
+				SoundManager.Instance.PlaySingle (playerFallingSound);
 			}
 		} else if (!isFalling && localFallingRef){
 			localFallingRef = false;

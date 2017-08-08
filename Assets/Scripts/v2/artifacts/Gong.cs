@@ -43,7 +43,7 @@ public class Gong : MonoBehaviour {
 	}
 
 	public void HandleSwap() {
-		SoundManager.instance.PlaySingle (gongSound);
+		SoundManager.Instance.PlaySingle (gongSound);
 		SwapSides ();
 		Darken ();
 		Invoke ("Revive", COOL_DOWN);

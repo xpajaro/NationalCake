@@ -123,15 +123,15 @@ public class ActivateItem {
 		StageManager.Instantiate ( 
 			Resources.Load( "items/" + Constants.ITEM_NAME_SPILL ), position, Quaternion.identity);
 		
-		SoundManager.instance.PlaySingle (Keeper.itemDropSound);
+		SoundManager.Instance.PlaySingle (Keeper.itemDropSound);
 	}
 
 	public void ActivateBarrel (Vector2 position){
-		GameObject newBarrel = (GameObject) StageManager.Instantiate ( 
-			Resources.Load( "items/" + Constants.ITEM_NAME_BLOC ), position, Quaternion.identity);
-		Bloc.activeBarrels.Add (newBarrel);
+//		GameObject newBarrel = (GameObject) StageManager.Instantiate ( 
+//			Resources.Load( "items/" + Constants.ITEM_NAME_BLOC ), position, Quaternion.identity);
+		//Bloc.activeBarrels.Add (newBarrel);
 
-		SoundManager.instance.PlaySingle (Keeper.itemDropSound);
+		SoundManager.Instance.PlaySingle (Keeper.itemDropSound);
 	}
 
 	public void ActivateBomb (Vector2 position){

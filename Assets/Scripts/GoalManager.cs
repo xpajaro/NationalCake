@@ -36,7 +36,7 @@ public class GoalManager : MonoBehaviour {
 				if (pctDone == 0) {
 					Prepare ();
 					AddSmokeParticles ();
-					SoundManager.instance.PlaySingle (goalMovementSound);
+					SoundManager.Instance.PlaySingle (goalMovementSound);
 					Invoke ("RemoveSmokeParticles", SMOKE_DURATION);
 				} 
 

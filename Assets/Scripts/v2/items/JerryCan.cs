@@ -26,12 +26,11 @@ public class JerryCan : NetworkBehaviour {
 		Invoke("ShowAgain", RESPAWN_TIME);
 
 		if (IsLocalPlayer (objName)) {
-			SoundManager.instance.PlaySingle (gasUpSound);
+			SoundManager.Instance.PlaySingle (gasUpSound);
 		}
 
 		if (( objName.StartsWith (Constants.PLAYER_NAME) ||
-			  objName.StartsWith (Constants.ENEMY_NAME)) &&
-			isServer) {
+			  objName.StartsWith (Constants.ENEMY_NAME)) ) {
 
 			SpeedUp (col.gameObject);
 		}

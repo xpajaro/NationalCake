@@ -9,17 +9,17 @@ public class SoundManager : MonoBehaviour
 
 	bool fxMuted;
 
-	public static SoundManager instance = null;  
+	public static SoundManager Instance = null;  
 
 	void Awake ()
 	{
-		if (instance == null) {
-			instance = this;
+		if (Instance == null) {
+			Instance = this;
 
 			if (keepAlive) {
 				DontDestroyOnLoad (gameObject);
 			}
-		} else if (instance != this) {
+		} else if (Instance != this) {
 			Destroy (gameObject);
 		}
 	}
