@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class Gong : MonoBehaviour {
+public class Gong : NetworkBehaviour {
 
 	public GameObject pGoal, eGoal;
 
@@ -20,7 +21,6 @@ public class Gong : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Communicator.Instance.gong = this;
 		animator = GetComponent<Animator> ();
 
 		spriteRenderer = GetComponent<SpriteRenderer> ();
@@ -31,18 +31,23 @@ public class Gong : MonoBehaviour {
 
 	void OnCollisionEnter2D (Collision2D col)
 	{	
-		if (GameSetup.isHost && !swapped) {
+		if (GameState.gameEnded) {
+			return;
+		}
+
+		if (isServer && !swapped) {
 			string actorName = col.gameObject.name;
 
-			if (actorName.Equals ("player") || actorName.Equals ("enemy")) {
-				Communicator.Instance.ShareGongSwap ();
+			if (actorName.StartsWith (Constants.PLAYER_NAME) || 
+				actorName.StartsWith (Constants.ENEMY_NAME)) {
 
-				HandleSwap ();
+				RpcHandleSwap ();
 			}
 		}
 	}
 
-	public void HandleSwap() {
+	[ClientRpc]
+	void RpcHandleSwap() {
 		SoundManager.Instance.PlaySingle (gongSound);
 		SwapSides ();
 		Darken ();
@@ -52,11 +57,9 @@ public class Gong : MonoBehaviour {
 
 	//handle moving after swap
 	void SwapSides (){
-		if (!GameState.gameEnded) {
-			Vector2 tempPosition = pGoal.transform.position;
-			pGoal.transform.position = eGoal.transform.position;
-			eGoal.transform.position = tempPosition;
-		}
+		Vector2 tempPosition = pGoal.transform.position;
+		pGoal.transform.position = eGoal.transform.position;
+		eGoal.transform.position = tempPosition;
 	}
 
 	void Darken (){

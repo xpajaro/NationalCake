@@ -172,7 +172,7 @@ public class Communicator  {
 			stateUpdates.EndGame ();
 
 		} else if (MESSAGE_TYPE_GONG_STATE.Equals (msgType) ){
-			gong.HandleSwap ();
+			// gong.HandleSwap ();
 
 		} else if (MESSAGE_TYPE_BARREL_HIT.Equals (msgType) ){
 			Dictionary<string, object> barrelHit = Deserialization.GetBarrelHit (dataFields);
