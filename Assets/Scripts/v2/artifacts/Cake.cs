@@ -5,8 +5,8 @@ using System.Collections;
 
 public class Cake : NetworkBehaviour {
 
-	public GameObject cakeGhost;
-	SpriteRenderer spriteRenderer, ghostRenderer;
+	public GameObject cakeGhost, prophet;
+	SpriteRenderer spriteRenderer, ghostRenderer, prophetRenderer;
 
 	const string PLAYER_GOAL = "pGoal";
 	const string ENEMY_GOAL = "eGoal";
@@ -26,6 +26,7 @@ public class Cake : NetworkBehaviour {
 	void Start (){
 		spriteRenderer = GetComponent<SpriteRenderer> ();
 		ghostRenderer = cakeGhost.GetComponent<SpriteRenderer> ();
+		prophetRenderer = prophet.GetComponent<SpriteRenderer> ();
 	}
 
 	void OnCollisionEnter2D (Collision2D col)
@@ -74,15 +75,19 @@ public class Cake : NetworkBehaviour {
 
 	public void ActivateGhost() {
 		Presenter.Detach (gameObject, spriteRenderer);
+
 		Presenter.Attach (cakeGhost, ghostRenderer);
+		Presenter.Attach (prophet, prophetRenderer);
 		ghostActivated = true;
 
 		Invoke ("DeactivateGhost", GHOST_FX_DURATION);
 	}
 
 	public void DeactivateGhost (){
-		Presenter.Detach (cakeGhost, ghostRenderer);
 		Presenter.Attach (gameObject, spriteRenderer);
+
+		Presenter.Detach (cakeGhost, ghostRenderer);
+		Presenter.Detach (prophet, prophetRenderer);
 		ghostActivated = false;
 	}
 
