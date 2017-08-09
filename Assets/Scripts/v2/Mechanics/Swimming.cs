@@ -28,21 +28,26 @@ public class Swimming : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
 		spriteRenderer = GetComponent<SpriteRenderer> ();
-		rigidBody = GetComponent<Rigidbody2D> ();
 
-		startPosition = transform.position;
+		if (isServer) {
+			rigidBody = GetComponent<Rigidbody2D> ();
+			startPosition = transform.position;
 
-		if (ThisIsAPlayer ()) {
-			playerController = GetComponent<PlayerController> ();
-			speedManager = GetComponent<SpeedManager> ();
+			if (ThisIsAPlayer ()) {
+				playerController = GetComponent<PlayerController> ();
+				speedManager = GetComponent<SpeedManager> ();
+			}
 		}
 		
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+		if (!isServer) {
+			return;
+		}
+
 		TriggerFall ();
 		HandleFall ();
 	}
@@ -68,9 +73,8 @@ public class Swimming : NetworkBehaviour {
 		if (fallTriggered){
 
 			if (!isReadyToDropAndSwim ) {
-				Debug.Log (3);
 				CalculateFinalPositions ();
-				Presenter.Detach (gameObject, spriteRenderer);
+				RpcDetachObject ();
 				rigidBody.velocity = Vector2.zero;
 
 			} else if (isDropping) {
@@ -81,16 +85,6 @@ public class Swimming : NetworkBehaviour {
 			
 			} else {
 				ReturnToSpawnPosition ();
-			}
-
-			//fall and drown animation all done
-			//done here because client doesn't do the dropping and swimming
-			if (transform.position.Equals(startPosition) &&
-				isReadyToDropAndSwim){
-				Presenter.Attach (gameObject, spriteRenderer);
-
-				isReadyToDropAndSwim = false;
-				fallTriggered = false;
 
 				if (ThisIsAPlayer ()) {
 					playerController.SetupAfterSpawn ();
@@ -110,11 +104,10 @@ public class Swimming : NetworkBehaviour {
 
 	void DropToWater () {
 
-		if (isServer) { //only server affects transform
-			float translation = SPEED * Time.deltaTime;
-			gameObject.transform.position = Vector2.MoveTowards 
-				(transform.position, placeToDropAt, translation);
-		}
+		float translation = SPEED * Time.deltaTime;
+		gameObject.transform.position = Vector2.MoveTowards 
+			(transform.position, placeToDropAt, translation);
+		
 
 		if (transform.position.Equals (placeToDropAt)) {
 			isDropping = false;
@@ -125,10 +118,9 @@ public class Swimming : NetworkBehaviour {
 	void SwimOff () {
 		float translation = SPEED * Time.deltaTime;
 
-		if (isServer) { //only server affects transform
-			gameObject.transform.position = Vector2.MoveTowards 
-				(transform.position, placeToSwimTo, translation);
-		}
+		gameObject.transform.position = Vector2.MoveTowards 
+			(transform.position, placeToSwimTo, translation);
+		
 
 		if (transform.position.Equals (placeToSwimTo)) {
 			isSwimming = false;
@@ -137,6 +129,11 @@ public class Swimming : NetworkBehaviour {
 
 	void ReturnToSpawnPosition (){
 		transform.position = startPosition;
+
+		RpcAttachObject ();
+
+		isReadyToDropAndSwim = false;
+		fallTriggered = false;
 	}
 
 	//-------------------------------------------
@@ -146,5 +143,15 @@ public class Swimming : NetworkBehaviour {
 	bool ThisIsAPlayer(){
 		return name.StartsWith (Constants.PLAYER_NAME) ||
 			name.StartsWith (Constants.ENEMY_NAME);
+	}
+
+	[ClientRpc]
+	void RpcDetachObject(){
+		Presenter.Detach (gameObject, spriteRenderer);
+	}
+
+	[ClientRpc]
+	void RpcAttachObject(){
+		Presenter.Attach (gameObject, spriteRenderer);
 	}
 }
