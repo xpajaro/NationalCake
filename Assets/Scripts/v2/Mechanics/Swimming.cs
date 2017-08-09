@@ -68,6 +68,7 @@ public class Swimming : NetworkBehaviour {
 		if (fallTriggered){
 
 			if (!isReadyToDropAndSwim ) {
+				Debug.Log (3);
 				CalculateFinalPositions ();
 				Presenter.Detach (gameObject, spriteRenderer);
 				rigidBody.velocity = Vector2.zero;
