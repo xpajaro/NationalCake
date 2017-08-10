@@ -83,8 +83,6 @@ public class GoalManager : MonoBehaviour {
 	}
 
 	void AddSmokeParticles(){
-		Debug.Log("add particles");
-
 		greenSmokeRef = Instantiate (greenSmoke, pGoal.transform.position, greenSmoke.transform.rotation);
 		greenSmokeRef.transform.parent = pGoal.transform;
 
@@ -98,8 +96,6 @@ public class GoalManager : MonoBehaviour {
 	}
 
 	void RemoveSmokeParticles(){
-		Debug.Log("remove particles");
-
 		Destroy (greenSmokeRef);
 		Destroy (redSmokeRef);
 	}

@@ -29,7 +29,7 @@ public class Stage : MonoBehaviour {
 
 	public bool IsOnStage (Vector2 objPosition){
 		bool onStage = true;
-		objPosition = worldConverter.GetPositionInWorld (objPosition);
+		objPosition = worldConverter.GetPositionInWorld (objPosition); 
 
 		if (GetAlphaAtPosition (objPosition) == 0){
 			onStage = false;

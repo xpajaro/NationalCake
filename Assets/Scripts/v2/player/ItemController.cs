@@ -19,13 +19,14 @@ public partial class GameController : NetworkBehaviour {
 	}
 
 	bool IsValidActivation(Vector2 position){
-		bool valid = Stage.Instance.IsOnStage (position);
+		bool onStage = Stage.Instance.IsOnStage (position);
+		bool notColliding = true;
 
 		if (selectedItemRef.itemID == Constants.ITEM_BLOC){
-			valid = BlocSizeAreaAvailable (position);
+			notColliding = BlocSizeAreaAvailable (position);
 		}
 
-		return valid;
+		return onStage && notColliding;
 	}
 
 	void Deselect (){
