@@ -29,6 +29,8 @@ public class Stage : MonoBehaviour {
 
 	public bool IsOnStage (Vector2 objPosition){
 		bool onStage = true;
+
+		objPosition = CompensateForStageShadow (objPosition);
 		objPosition = worldConverter.GetPositionInWorld (objPosition); 
 
 		if (GetAlphaAtPosition (objPosition) == 0){
@@ -36,6 +38,15 @@ public class Stage : MonoBehaviour {
 		} 
 
 		return onStage;
+	}
+
+	Vector2 CompensateForStageShadow(Vector2 oldPos){
+		Vector2 newPos = oldPos;
+		if (oldPos.y < 0) {
+			newPos = oldPos + new Vector2 (0, -0.6f);
+		}
+
+		return newPos;
 	}
 
 	public Vector2 GetRandomStagePosition() {

@@ -18,7 +18,7 @@ public class GameSpawner : NetworkBehaviour {
 	Vector2[] JERRY_CAN_POSITIONS;
 
 
-	const float ITEM_SPAWN_INTERVAL = 8f; //20f; //change to 40?
+	const float ITEM_SPAWN_INTERVAL = 20f; //change to 40?
 	const float ITEM_CLEAR_RADIUS = .7f;
 
 	public static GameObject serverPlayerRef, serverEnemyRef, serverCakeRef;
@@ -97,7 +97,7 @@ public class GameSpawner : NetworkBehaviour {
 
 	public void DropItem (){
 		System.Random r = new System.Random();
-		int itemIndex = 0;//r.Next(0, 4);
+		int itemIndex = r.Next(0, 4);
 
 		Vector2 newPos = GetRandomStagePosition ();
 
