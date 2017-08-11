@@ -31,6 +31,7 @@ public class WardrobeManager : NetworkBehaviour {
 		AnimateCharacters ();
 	}
 
+
 	void SetupCharacters (){
 		if (IsOpponent ()) {
 			spriteRenderer.sprite = enemySprite;

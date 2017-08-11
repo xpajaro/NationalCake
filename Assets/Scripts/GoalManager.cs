@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class GoalManager : MonoBehaviour {
+public class GoalManager : NetworkBehaviour {
 
 	public GameObject pGoal, eGoal, greenSmoke, redSmoke;
 	Vector2 pStart, eStart, pDestination, eDestination;
@@ -19,7 +20,7 @@ public class GoalManager : MonoBehaviour {
 
 
 	void Start () {
-		if (!GameSetup.isHost){ //switch sides
+		if (!isClient){ //switch sides
 			SwitchSides ();
 		}
 	}
@@ -89,7 +90,7 @@ public class GoalManager : MonoBehaviour {
 		redSmokeRef = Instantiate (redSmoke, eGoal.transform.position, redSmoke.transform.rotation);
 		redSmokeRef.transform.parent = eGoal.transform;
 
-		if (!GameSetup.isHost) {
+		if (!isServer) {
 			greenSmokeRef.transform.Rotate(Vector3.up * -180);
 			redSmokeRef.transform.Rotate(Vector3.up * 180);
 		}

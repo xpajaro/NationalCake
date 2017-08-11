@@ -109,7 +109,7 @@ public class Swimming : NetworkBehaviour {
 			(transform.position, placeToDropAt, translation);
 		
 
-		if (transform.position.Equals (placeToDropAt)) {
+		if (Vector2.Distance(transform.position, placeToDropAt) < 0.01f) {
 			isDropping = false;
 			isSwimming = true;
 		}
@@ -118,11 +118,11 @@ public class Swimming : NetworkBehaviour {
 	void SwimOff () {
 		float translation = SPEED * Time.deltaTime;
 
-		gameObject.transform.position = Vector2.MoveTowards 
+		transform.position = Vector2.MoveTowards 
 			(transform.position, placeToSwimTo, translation);
 		
 
-		if (transform.position.Equals (placeToSwimTo)) {
+		if (Vector2.Distance(transform.position, placeToSwimTo) < 0.01f) {
 			isSwimming = false;
 		}
 	}

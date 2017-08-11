@@ -35,6 +35,7 @@ public class Gong : NetworkBehaviour {
 			return;
 		}
 
+		//make sure it's not moving
 		if (isServer && !swapped) {
 			string actorName = col.gameObject.name;
 

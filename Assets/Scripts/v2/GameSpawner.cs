@@ -37,9 +37,9 @@ public class GameSpawner : NetworkBehaviour {
 	{
 		SetupPositions ();
 
-		SpawnPlayer ();
-		SpawnEnemy ();
-		SpawnCake ();
+//		SpawnPlayer ();
+//		SpawnEnemy ();
+//		SpawnCake ();
 		SpawnJerryCans ();
 
 		InvokeRepeating ("DropItem", 0.0f, ITEM_SPAWN_INTERVAL);
