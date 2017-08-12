@@ -12,7 +12,6 @@ public class JerryCan : NetworkBehaviour {
 
 	SpriteRenderer spriteRenderer;
 
-	public AudioClip gasUpSound;
 
 	void Start(){
 		spriteRenderer = GetComponent<SpriteRenderer> ();
@@ -26,7 +25,7 @@ public class JerryCan : NetworkBehaviour {
 		Invoke("ShowAgain", RESPAWN_TIME);
 
 		if (IsLocalPlayer (objName)) {
-			SoundManager.Instance.PlaySingle (gasUpSound);
+			SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.GASSED_UP);
 		}
 
 		if (( objName.StartsWith (Constants.PLAYER_NAME) ||

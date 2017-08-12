@@ -38,7 +38,7 @@ public class UIHandler : MonoBehaviour {
 	}
 
 	public void GoToMenu (){
-		SoundManager.Instance.PlayClick ();
+		//SoundManager.Instance.PlayClick ();
 		UIHandler.GotoMenuScene ();
 	}
 
@@ -47,17 +47,17 @@ public class UIHandler : MonoBehaviour {
 	}
 
 	public void GotoTutorialScene1 (){
-		SoundManager.Instance.PlayClick ();
+		//SoundManager.Instance.PlayClick ();
 		SceneManager.LoadScene (TUTORIAL_SCENE_1);
 	}
 
 	public void GotoTutorialScene2 (){
-		SoundManager.Instance.PlayClick ();
+		//SoundManager.Instance.PlayClick ();
 		SceneManager.LoadScene (TUTORIAL_SCENE_2);
 	}
 
 	public void GotoTutorialScene3 (){
-		SoundManager.Instance.PlayClick ();
+		//SoundManager.Instance.PlayClick ();
 		SceneManager.LoadScene (TUTORIAL_SCENE_3);
 	}
 

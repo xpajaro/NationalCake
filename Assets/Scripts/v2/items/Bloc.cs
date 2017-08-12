@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class Bloc : MonoBehaviour {
 	
 	public Sprite CRACKED_BARREL , BROKEN_BARREL ;
-	public AudioClip barrelHit, barrelBroken;
 
 	int noOfHits = 0;
 	SpriteRenderer spriteRenderer;
@@ -24,14 +23,14 @@ public class Bloc : MonoBehaviour {
 		switch (hitCount) {
 			case 0:
 				spriteRenderer.sprite = CRACKED_BARREL;
-				SoundManager.Instance.PlaySingle (barrelHit);
+				SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.BLOC_HIT);
 				break;
 			case 1:
 				spriteRenderer.sprite = BROKEN_BARREL;
-				SoundManager.Instance.PlaySingle (barrelHit);
+				SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.BLOC_HIT);
 				break;
 			case 2:
-				SoundManager.Instance.PlaySingle (barrelBroken);
+				SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.BLOC_BROKEN);
 				Destroy (gameObject);
 				break;
 			default:

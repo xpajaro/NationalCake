@@ -22,9 +22,6 @@ public class Swimming : NetworkBehaviour {
 	Rigidbody2D rigidBody;
 
 
-	public AudioClip playerFallingSound;
-
-
 
 	// Use this for initialization
 	void Start () {
@@ -64,7 +61,9 @@ public class Swimming : NetworkBehaviour {
 				}
 			}
 
-			//SoundManager.instance.PlaySingle (playerFallingSound);
+			if (isLocalPlayer){
+				SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.PLAYER_IN_DANGER);
+			}
 		}
 	}
 
@@ -143,6 +142,11 @@ public class Swimming : NetworkBehaviour {
 	bool ThisIsAPlayer(){
 		return name.StartsWith (Constants.PLAYER_NAME) ||
 			name.StartsWith (Constants.ENEMY_NAME);
+	}
+
+	bool IsLocalPlayer(){
+		return (isServer && name.StartsWith (Constants.PLAYER_NAME)) ||
+			(!isServer && name.StartsWith (Constants.ENEMY_NAME));
 	}
 
 	[ClientRpc]

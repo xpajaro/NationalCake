@@ -8,11 +8,10 @@ public class GameSpawner : NetworkBehaviour {
 	Vector2[] JERRY_CAN_POSITIONS;
 
 
-	const float ITEM_SPAWN_INTERVAL = 20f; //change to 40?
+	const float ITEM_SPAWN_INTERVAL = 8f; //20f; //change to 40?
 	const float ITEM_CLEAR_RADIUS = .7f;
 
 	public GameObject[] itemPrefabs, itemAttackPrefabs;
-	public AudioClip itemDropSound;
 
 	public static GameSpawner serverInstance;
 
@@ -24,13 +23,13 @@ public class GameSpawner : NetworkBehaviour {
 
 	public override void OnStartServer()
 	{
-		InvokeRepeating ("DropItem", 0.0f, ITEM_SPAWN_INTERVAL);
+		InvokeRepeating ("DropItem", ITEM_SPAWN_INTERVAL, ITEM_SPAWN_INTERVAL);
 	}
 
 
 	public void DropItem (){
 		System.Random r = new System.Random();
-		int itemIndex = r.Next(0, 4);
+		int itemIndex = 1; //r.Next(0, 4);
 
 		Vector2 newPos = GetRandomStagePosition ();
 
@@ -39,7 +38,7 @@ public class GameSpawner : NetworkBehaviour {
 
 		NetworkServer.Spawn (newItem);
 
-		SoundManager.Instance.PlaySingle (itemDropSound);
+		GameController.LocalInstance.RpcPlayItemDropSound ();
 	}
 
 
@@ -49,7 +48,7 @@ public class GameSpawner : NetworkBehaviour {
 
 		NetworkServer.Spawn (newItem);
 
-		SoundManager.Instance.PlaySingle (itemDropSound);
+		GameController.LocalInstance.RpcPlayItemDropSound ();
 	}
 
 

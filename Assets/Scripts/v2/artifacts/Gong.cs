@@ -49,7 +49,7 @@ public class Gong : NetworkBehaviour {
 
 	[ClientRpc]
 	void RpcHandleSwap() {
-		SoundManager.Instance.PlaySingle (gongSound);
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.GONG_HIT);
 		SwapSides ();
 		Darken ();
 		Invoke ("Revive", COOL_DOWN);

@@ -45,15 +45,9 @@ public class SoundManager : MonoBehaviour
 	}
 
 	public void PlaySingle(AudioClip clip, float level) {
-		efxSource.PlayOneShot (clip, level);
+		float volume = fxMuted ? 0 : level;
+		efxSource.PlayOneShot (clip, volume);
 	}
 
-	public void PlayWarning() {
-		float volume = fxMuted ? 0 : 0.5f;
-		PlaySingle (invalidAction, volume);
-	}
-	public void PlayClick() {
-		PlaySingle (clickSound, 1f);
-	}
 
 }

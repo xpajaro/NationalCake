@@ -12,7 +12,6 @@ public class Spill : NetworkBehaviour {
 	Animator animator;
 	string OIL_SPILL_ANIMATION_NAME = "oilSpilling";
 
-	public AudioClip spillSound, playerSlipping;
 
 	// Use this for initialization
 	void Start () {
@@ -35,8 +34,8 @@ public class Spill : NetworkBehaviour {
 	}
 
 	void PlaySounds(){
-		SoundManager.Instance.PlaySingle (Keeper.playerSlipping);
-		SoundManager.Instance.PlaySingle (Keeper.spillSound);
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.PLAYER_IN_DANGER);
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.SLIPPED);
 	}
 
 	bool IsLocalPlayer(string characterName){

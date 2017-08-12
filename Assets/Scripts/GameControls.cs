@@ -159,7 +159,7 @@ public class GameControls : MonoBehaviour {
 			//itemManager.RemoveHolderIcon (holder);
 
 		} else {
-			SoundManager.Instance.PlayWarning ();
+			//SoundManager.Instance.PlayWarning ();
 		}
 
 		iconTouched = null;

@@ -12,7 +12,7 @@ public class ActivateGhost : NetworkBehaviour {
 
 	public void Activate () {
 		if (Cake.LocalInstance.ghostActivated) {
-			SoundManager.Instance.PlayWarning();
+			SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.INVALID_ACTION_TAKEN);
 			
 		} else {
 			GameController.LocalInstance.ActivateGhost (rectTransform.localPosition);

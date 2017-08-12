@@ -21,9 +21,7 @@ public class Friction : MonoBehaviour {
 
 		if (onStage) {
 			dampMovement (rigidBody, MOVT_DAMPING);
-		} else {
-			// rigidBody.velocity = Vector2.zero;
-		}
+		} 
 	}
 
 	Vector2 GetFeetPosition (GameObject _gameObject){

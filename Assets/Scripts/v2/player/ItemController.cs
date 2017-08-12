@@ -30,7 +30,7 @@ public partial class GameController : NetworkBehaviour {
 	}
 
 	void Deselect (){
-		SoundManager.Instance.PlayWarning ();
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.INVALID_ACTION_TAKEN);
 		selectedItemRef.Normalize ();
 		selectedItemRef = null;
 	}
@@ -67,5 +67,11 @@ public partial class GameController : NetworkBehaviour {
 		Vector2 endPos = point - BLOC_DIAGONAL_FROM_CENTER;
 
 		return (Physics2D.OverlapArea (startPos, endPos) == null);
+	}
+
+
+	[ClientRpc]
+	public void RpcPlayItemDropSound (){
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.ITEM_DROPPED);
 	}
 }

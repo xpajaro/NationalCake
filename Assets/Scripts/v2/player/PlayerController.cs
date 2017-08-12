@@ -12,7 +12,6 @@ public class PlayerController : NetworkBehaviour {
 	Vector2 movtStartPosition;
 	Rigidbody2D playerBody;
 	SpeedManager speedManager;
-	public AudioClip actorRunningSound;
 
 	public bool isSwimming; //set in swimming class
 	float currentXPosition;
@@ -59,7 +58,7 @@ public class PlayerController : NetworkBehaviour {
 			Vector2 impulse = launchDirection * BASIC_MOVT_FORCE * speedManager.currentSpeed; 
 			playerBody.AddForce (impulse, ForceMode2D.Impulse);
 
-			SoundManager.Instance.PlaySingle (actorRunningSound, 1.5f);
+			SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.PLAYER_RUNNING);
 		}
 	}
 

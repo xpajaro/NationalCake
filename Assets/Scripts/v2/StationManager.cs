@@ -7,7 +7,6 @@ public class StationManager : NetworkBehaviour {
 
 	public GameObject playerStation, enemyStation, greenSmoke, redSmoke;
 	public Sprite greenStationSprite, redStationSprite;
-	public AudioClip goalMovementSound;
 	public RuntimeAnimatorController redStationAnimator, greenStationAnimator;
 
 	ParticleSystem greenSmokeRef, redSmokeRef;
@@ -83,7 +82,7 @@ public class StationManager : NetworkBehaviour {
 
 	[ClientRpc]
 	void RpcAddFx(){
-		SoundManager.Instance.PlaySingle (goalMovementSound);
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.STATION_MOVING);
 
 		BlowSmoke ();
 		Invoke ("StopSmoke", SMOKE_DURATION);

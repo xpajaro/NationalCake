@@ -6,7 +6,6 @@ using System.Collections;
 public class ItemManager : NetworkBehaviour { 
 
 	public Canvas canvas;
-	public AudioClip powerUpSound;
 	public Button[] storageItems;
 
 	Vector2[] itemPositions;
@@ -113,7 +112,7 @@ public class ItemManager : NetworkBehaviour {
 	}
 
 	Button CreateButton(Button buttonPrefab, Vector2 spawnPosition){
-		SoundManager.Instance.PlaySingle (powerUpSound);
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.POWERED_UP);
 
 		Button button = Object.Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity) as Button;
 		RectTransform rectTransform = button.GetComponent<RectTransform>();

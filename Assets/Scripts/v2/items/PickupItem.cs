@@ -6,7 +6,6 @@ using System.Collections;
 public class PickupItem : NetworkBehaviour {
 	public float LIFETIME = 7f;
 
-	public AudioClip explosionSound, playerSlipping, powerUpSound;
 	public int itemToSave;
 
 	const int EXPLOSION_POWER = -300;
@@ -42,19 +41,22 @@ public class PickupItem : NetworkBehaviour {
 		}
 	}
 
-	void DetonateBomb(GameObject player){
-
-		Animator animator = GetComponent<Animator>();
-		animator.SetTrigger (EXPLOSION_PARAMETER);
+	void DetonateBomb (GameObject player){
+		RpcAnimateExplosion ();
 		RpcPlayExplosionSound ();
-
 		FlingPlayer (player);
 	}
 
 	[ClientRpc]
-	void RpcPlayExplosionSound(){
-		SoundManager.Instance.PlaySingle (explosionSound, 1f);
-		SoundManager.Instance.PlaySingle (playerSlipping);
+	void RpcPlayExplosionSound (){
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.EXPLOSION);
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.PLAYER_IN_DANGER);
+	}
+
+	[ClientRpc]
+	void RpcAnimateExplosion (){
+		Animator animator = GetComponent<Animator>();
+		animator.SetTrigger (EXPLOSION_PARAMETER);
 	}
 
 	void FlingPlayer(GameObject player) {
