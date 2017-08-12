@@ -4,12 +4,11 @@ using System.Collections;
 
 public class Gong : NetworkBehaviour {
 
-	public GameObject pGoal, eGoal;
+	public GameObject playerStation, enemyStation;
 
 	public static bool swapped;
 
 	SpriteRenderer spriteRenderer;
-	float blueColor, greenColor;
 
 	float COOL_DOWN = 10f ;
 
@@ -24,14 +23,17 @@ public class Gong : NetworkBehaviour {
 		animator = GetComponent<Animator> ();
 
 		spriteRenderer = GetComponent<SpriteRenderer> ();
-		blueColor = spriteRenderer.color.b;
-		greenColor = spriteRenderer.color.g;
 	}
 
 
 	void OnCollisionEnter2D (Collision2D col)
 	{	
 		if (GameState.gameEnded) {
+			return;
+		}
+
+		if (isServer && StationManager.stationMovementTriggered) {
+			RpcPlayInvalidGongHitSound ();
 			return;
 		}
 
@@ -56,11 +58,16 @@ public class Gong : NetworkBehaviour {
 		swapped = true;
 	}
 
+	[ClientRpc]
+	void RpcPlayInvalidGongHitSound() {
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.INVALID_GONG_HIT);
+	}
+
 	//handle moving after swap
 	void SwapSides (){
-		Vector2 tempPosition = pGoal.transform.position;
-		pGoal.transform.position = eGoal.transform.position;
-		eGoal.transform.position = tempPosition;
+		Vector2 tempPosition = playerStation.transform.position;
+		playerStation.transform.position = enemyStation.transform.position;
+		enemyStation.transform.position = tempPosition;
 	}
 
 	void Darken (){
@@ -76,8 +83,9 @@ public class Gong : NetworkBehaviour {
 		animator.SetBool (GONG_VIBRATION_PARAMETER, false);
 
 		Color c = spriteRenderer.color;
-		c.b = blueColor;
-		c.g = greenColor;
+		c.r = 255;
+		c.b = 255;
+		c.g = 255;
 		spriteRenderer.color = c;
 	}
 

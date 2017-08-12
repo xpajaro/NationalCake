@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SoundManager : MonoBehaviour 
 {
-	public AudioSource efxSource, musicSource;  
+	public AudioSource efxSource, musicSource, waterAmbienceSource;  
 	public AudioClip invalidAction, clickSound;
 	public bool keepAlive;
 
@@ -32,8 +32,10 @@ public class SoundManager : MonoBehaviour
 	public void ToggleMusic(bool musicOn){
 		if (musicOn) {
 			musicSource.Play ();
+			waterAmbienceSource.Play ();
 		} else {
 			musicSource.Pause ();
+			waterAmbienceSource.Pause ();
 		}
 	}
 

@@ -5,14 +5,15 @@ using UnityEngine.Networking;
 
 public class StationManager : NetworkBehaviour {
 
-	public GameObject playerStation, enemyStation, greenSmoke, redSmoke;
+	public GameObject playerStation, enemyStation, greenSmoke, redSmoke, gong;
 	public Sprite greenStationSprite, redStationSprite;
 	public RuntimeAnimatorController redStationAnimator, greenStationAnimator;
 
 	ParticleSystem greenSmokeRef, redSmokeRef;
-	bool stationMovementTriggered;
+	public static bool stationMovementTriggered;
 	Vector2 playerStationStartPosition, enemyStationStartPosition;
 	int timesMoved = 1;
+	SpriteRenderer gongRenderer;
 
 	Vector2 DISTANCE_TO_MOVE = new Vector2 (1,0);
 	const int TIMES_TO_MOVE = 4;
@@ -34,6 +35,7 @@ public class StationManager : NetworkBehaviour {
 				STATION_MOVEMENT_INTERVAL);
 		}
 
+		gongRenderer = gong.GetComponent<SpriteRenderer> ();
 		AddSmokeParticles ();
 	}
 
@@ -52,10 +54,13 @@ public class StationManager : NetworkBehaviour {
 	}
 
 	void TriggerStationMovement (){
-		if (timesMoved < TIMES_TO_MOVE) {
+		if (Gong.swapped) {
+			return;
+		} else if (timesMoved < TIMES_TO_MOVE) {
 			timesMoved++;
 
 			RpcAddFx ();
+			RpcDarkenGong ();
 			stationMovementTriggered = true;
 		}
 	}
@@ -68,6 +73,7 @@ public class StationManager : NetworkBehaviour {
 			(station.transform.position, destination, translation);
 
 		if (Vector2.Distance(station.transform.position, destination) < 0.01f) {
+			RpcBrightenGong ();
 			stationMovementTriggered = false;
 		}
 	}
@@ -121,6 +127,21 @@ public class StationManager : NetworkBehaviour {
 		redSmokeRef.Stop ();
 	}
 
+	[ClientRpc]
+	void RpcDarkenGong (){
+		Color c = gongRenderer.color;
+		c.r = 0;
+		c.g = 0;
+		gongRenderer.color = c;
+	}
+
+	[ClientRpc]
+	void RpcBrightenGong (){
+		Color c = gongRenderer.color;
+		c.r = 255;
+		c.g = 255;
+		gongRenderer.color = c;
+	}
 
 
 }

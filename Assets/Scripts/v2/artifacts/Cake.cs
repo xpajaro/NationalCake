@@ -10,7 +10,7 @@ public class Cake : NetworkBehaviour {
 
 	const string PLAYER_GOAL = "pGoal";
 	const string ENEMY_GOAL = "eGoal";
-	const float GHOST_FX_DURATION = 8;
+	const float GHOST_FX_DURATION = 8f;
 
 	[SyncVar]
 	public bool ghostActivated;
@@ -41,8 +41,6 @@ public class Cake : NetworkBehaviour {
 				} else {	
 					GameState.gameWon = false;
 				}
-
-				//Communicator.Instance.ShareGameState ();
 
 				GameState.gameEnded = true;
 				StopMoving ();
@@ -80,6 +78,7 @@ public class Cake : NetworkBehaviour {
 		Presenter.Attach (prophet, prophetRenderer);
 		ghostActivated = true;
 
+		SoundPlayer.Instance.Play (SoundPlayer.SOUNDS.GHOST_ACTIVATED);
 		Invoke ("DeactivateGhost", GHOST_FX_DURATION);
 	}
 
