@@ -25,6 +25,8 @@ public class SoundPlayer : MonoBehaviour {
 
 	private AudioClip[] soundCollection;
 
+	const float GHOST_DURATION = 8f;
+
 	public static SoundPlayer Instance = null;    
 
 	void Awake ()
@@ -58,7 +60,32 @@ public class SoundPlayer : MonoBehaviour {
 	}
 
 	public void Play (SOUNDS soundType){
+		switch (soundType){
+			case SOUNDS.GHOST_ACTIVATED:{
+				PlayGhost();
+				break;
+			}
+
+			default: {
+				PlaySound (soundType);
+				break;
+			}
+		}
+	}
+
+	void PlaySound (SOUNDS soundType){
 		AudioClip audio = soundCollection [(int)soundType];
 		SoundManager.Instance.PlaySingle (audio, 1f);
 	}
+
+	public void PlayGhost (){
+		SoundManager.Instance.musicSource.Pause ();
+		SoundManager.Instance.PlaySingle (ghostActivatedSound, 1f);
+		Invoke ("ResumeMusic", GHOST_DURATION);
+	}
+
+	public void ResumeMusic	(){
+		SoundManager.Instance.musicSource.Play ();
+	}
+
 }
