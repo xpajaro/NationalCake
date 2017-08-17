@@ -8,7 +8,7 @@ public class JerryCan : NetworkBehaviour {
 
 	const float RESPAWN_TIME = 10f; 
 	const float SPEED_BOOST = 3f; //3.5 was good
-	const float MAX_BOOST = 20f;
+	public const float MAX_BOOST = 20f;
 
 	SpriteRenderer spriteRenderer;
 
