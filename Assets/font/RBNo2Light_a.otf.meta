@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 9fcd3a6e3c523494195dc4b47557c07d
-timeCreated: 1498399282
+guid: 3685f84b166a442abb03b5df4b0415fb
+timeCreated: 1503060901
 licenseType: Free
 TrueTypeFontImporter:
   serializedVersion: 4
@@ -9,9 +9,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Carla_outline
+  fontName: 'RBNo2 Light Alternative '
   fontNames:
-  - Carla_outline
+  - 'RBNo2 Light Alternative '
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
