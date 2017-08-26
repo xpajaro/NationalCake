@@ -68,7 +68,12 @@ public class Cake : NetworkBehaviour {
 	}
 
 	void LeaveScene(){
-		SceneManager.LoadScene (Constants.GAME_END_SCENE);
+		if (GameState.gameWon) {
+			SceneManager.LoadScene (Constants.GAME_WON_SCENE);
+
+		} else {
+			SceneManager.LoadScene (Constants.GAME_LOST_SCENE);
+		}
 	}
 
 	public void ActivateGhost() {

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;    
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
@@ -6,7 +7,7 @@ using System;
 public class MenuUIHandler : MonoBehaviour {
 
 	public void JoinGame(){
-		MatchMaker.Instance.StartNewMatch ();
+		SceneManager.LoadScene (Constants.STAGING_SCENE);
 	}
 
 }

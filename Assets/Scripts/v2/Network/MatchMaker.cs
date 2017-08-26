@@ -8,8 +8,9 @@ using System;
 
 public class MatchMaker : MonoBehaviour {
 
-	List<MatchInfoSnapshot> matchList = new List<MatchInfoSnapshot>();
-	bool matchCreated;
+	public bool isHost;
+	public MatchInfo currentMatch;
+
 	NetworkMatch matchMaker;
 
 	// remember to change port
@@ -25,16 +26,16 @@ public class MatchMaker : MonoBehaviour {
 		} else if (Instance != this) {
 			Destroy (gameObject);
 		}
-
-		matchMaker = gameObject.AddComponent<NetworkMatch>();
 	}
 
-	void OnGUI()
-	{ }
 
 	public void StartNewMatch(){
+		NetworkManager.singleton.StartMatchMaker ();
+		matchMaker = NetworkManager.singleton.matchMaker;
+
 		JoinOrCreateMatch ();
 	}
+
 
 	private void JoinOrCreateMatch() {
 		const int startPage = 0 , pageSize= 5, skillLevel=0, requestDomain=0;
@@ -56,14 +57,18 @@ public class MatchMaker : MonoBehaviour {
 
 				matchMaker.JoinMatch (matchList [0].networkId, password, publicClientAddress,
 					privateClientAddress, skillLevel, requestDomain, OnMatchJoined);
+
+				isHost = false;
 			
 			} else {
 				Debug.Log(String.Format("No matches available {0}", matchList.Count));
+				NetworkServer.Reset ();
 				CreateMatch ();
 			}
 
 		} else {
 			Debug.Log(String.Format("Match list failed {0}, {1}", success, matchList));
+			NetworkServer.Reset ();
 			CreateMatch ();
 		}
 	}
@@ -72,19 +77,11 @@ public class MatchMaker : MonoBehaviour {
 	private void OnMatchJoined (bool success, string extendedInfo, MatchInfo matchInfo){
 		if (success) {
 			Debug.Log("Join match succeeded");
-
-			if (matchCreated){
-				Debug.LogWarning("Match already set up, aborting...");
-				return;
-			}
+			currentMatch = matchInfo;
 
 			Utility.SetAccessTokenForNetwork(matchInfo.networkId, matchInfo.accessToken);
 
-			NetworkClient myClient = new NetworkClient();
-			myClient.RegisterHandler(MsgType.Connect, OnConnected);
-			myClient.Connect(matchInfo);
-
-			SceneManager.LoadScene (Constants.MAIN_SCENE);
+			NetworkManager.singleton.StartClient ();
 
 
 		} else {
@@ -109,25 +106,55 @@ public class MatchMaker : MonoBehaviour {
 	private void OnMatchCreated(bool success, string extendedInfo, MatchInfo matchInfo) {
 		if (success)
 		{
+			isHost = true;
+
 			Debug.Log("Create match succeeded");
-			matchCreated = true;
+			currentMatch = matchInfo;
 
 			Utility.SetAccessTokenForNetwork(matchInfo.networkId, matchInfo.accessToken);
-			
+
 			NetworkServer.Listen(SERVER_PORT);
+			NetworkManager.singleton.StartHost ();
 
 		} else {
 			Debug.Log(String.Format("Create match failed {0}, {1}", success, matchInfo));
 		}
 	}
 
+	public void DestroyCurrentMatch(){
+		const int requestDomain = 0;
 
-	private void OnConnected(NetworkMessage msg) {
-		Debug.Log("Connected!");
+		if (isHost) {
+			matchMaker.DestroyMatch 
+				(currentMatch.networkId, requestDomain, OnDestroyMatch);
+
+		} else {
+			matchMaker.DropConnection 
+				(currentMatch.networkId, requestDomain, 0, OnDestroyMatch);
+		}
 	}
 
-	private int playerCount = 0;
-	private void OnPlayerConnected(NetworkPlayer player) {
-		Debug.Log("Player " + playerCount + " connected from " + player.ipAddress + ":" + player.port);
+
+	public void OnDestroyMatch(bool success, string extendedInfo){
+		CleanupNetwork ();
+		MatchMaker.Instance.currentMatch = null;
+
+		if (success) {
+			Debug.Log ("Match destroyed - call");
+
+		} else {
+			Debug.Log ("Match not destroyed - call");
+		}
+	}
+		
+	private void CleanupNetwork(){
+		if (isHost) {
+			NetworkManager.singleton.StopHost ();
+		}
+
+		NetworkManager.singleton.StopClient ();
+		NetworkManager.singleton.StopMatchMaker ();
+
+		Network.Disconnect ();
 	}
 }

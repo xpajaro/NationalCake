@@ -42,7 +42,15 @@ public class Constants {
 
 	public const int WELCOM_SCENE = 0;
 	public const int MENU_SCENE = 1;
-	public const int MAIN_SCENE = 2;
-	public const int GAME_END_SCENE = 3;
+	public const int STAGING_SCENE = 2;
+	public const int MAIN_SCENE = 3;
+	public const int GAME_WON_SCENE = 4;
+	public const int GAME_LOST_SCENE = 5;
+
+	public const string MAIN_SCENE_NAME = "main";
+	public const string MENU_SCENE_NAME = "menu";
+	public const string STAGING_SCENE_NAME = "staging";
+	public const string GAME_WON_SCENE_NAME = "gameWon";
+	public const string GAME_LOST_SCENE_NAME = "gameLost";
 
 }
