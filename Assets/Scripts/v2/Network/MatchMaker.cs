@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Types;
 using UnityEngine.Networking.Match;
@@ -83,6 +84,9 @@ public class MatchMaker : MonoBehaviour {
 			myClient.RegisterHandler(MsgType.Connect, OnConnected);
 			myClient.Connect(matchInfo);
 
+			SceneManager.LoadScene (Constants.MAIN_SCENE);
+
+
 		} else {
 			Debug.LogError("Join match failed");
 		}
@@ -97,12 +101,12 @@ public class MatchMaker : MonoBehaviour {
 
 		matchMaker.CreateMatch(roomName, matchSize, advertiseMatch,
 			password, publicClientAddress, privateClientAddress, skillLevel,
-			requestDomain, OnMatchCreate);
+			requestDomain, OnMatchCreated);
 
 	}
 
 
-	private void OnMatchCreate(bool success, string extendedInfo, MatchInfo matchInfo) {
+	private void OnMatchCreated(bool success, string extendedInfo, MatchInfo matchInfo) {
 		if (success)
 		{
 			Debug.Log("Create match succeeded");
@@ -120,5 +124,10 @@ public class MatchMaker : MonoBehaviour {
 
 	private void OnConnected(NetworkMessage msg) {
 		Debug.Log("Connected!");
+	}
+
+	private int playerCount = 0;
+	private void OnPlayerConnected(NetworkPlayer player) {
+		Debug.Log("Player " + playerCount + " connected from " + player.ipAddress + ":" + player.port);
 	}
 }

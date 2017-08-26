@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SignIn : MonoBehaviour {
 
@@ -79,6 +80,8 @@ public class SignIn : MonoBehaviour {
 			SignInAnonymously ();
 		} else {
 			Debug.Log ("you're cleared");
+
+			SceneManager.LoadScene (Constants.MENU_SCENE);
 		}
 	}
 

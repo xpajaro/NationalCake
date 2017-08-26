@@ -40,4 +40,9 @@ public class Constants {
 	public const string CAKE_NAME = "cake";
 	public const string CAKE_COPY_NAME = "cakeEffigy";
 
+	public const int WELCOM_SCENE = 0;
+	public const int MENU_SCENE = 1;
+	public const int MAIN_SCENE = 2;
+	public const int GAME_END_SCENE = 3;
+
 }
