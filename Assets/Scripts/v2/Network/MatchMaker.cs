@@ -5,8 +5,11 @@ using UnityEngine.Networking.Types;
 using UnityEngine.Networking.Match;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 public class MatchMaker : MonoBehaviour {
+
+	public Text lblStatus;
 
 	public bool isHost;
 	public MatchInfo currentMatch;
@@ -20,16 +23,27 @@ public class MatchMaker : MonoBehaviour {
 
 	void Awake() {
 		if (Instance == null) {
+			Debug.Log("awoken");
 			Instance = this;
 			DontDestroyOnLoad (gameObject);
 
 		} else if (Instance != this) {
+			Debug.Log("instance destroyed");
 			Destroy (gameObject);
+		}
+
+	}
+
+	private void SetupStatusLabel(){
+		if (lblStatus == null){
+			lblStatus = GameObject.Find("Canvas/lblStatus").GetComponent<Text>();
 		}
 	}
 
 
 	public void StartNewMatch(){
+		SetupStatusLabel ();
+
 		NetworkManager.singleton.StartMatchMaker ();
 		matchMaker = NetworkManager.singleton.matchMaker;
 
@@ -52,6 +66,8 @@ public class MatchMaker : MonoBehaviour {
 			Debug.Log("Match list succeeded");
 
 			if (matchList.Count > 0) {
+				lblStatus.text = ".. joining a game ..";
+
 				const int matchSize = 2 , skillLevel= 0 , requestDomain= 0;
 				const string password = "" , publicClientAddress= "" , privateClientAddress= "";
 
@@ -76,6 +92,8 @@ public class MatchMaker : MonoBehaviour {
 
 	private void OnMatchJoined (bool success, string extendedInfo, MatchInfo matchInfo){
 		if (success) {
+			lblStatus.text = ".. waiting for opponent ..";
+
 			Debug.Log("Join match succeeded");
 			currentMatch = matchInfo;
 
@@ -91,6 +109,8 @@ public class MatchMaker : MonoBehaviour {
 
 
 	private void CreateMatch() {
+		lblStatus.text = ".. starting a game ..";
+
 		string roomName = Guid.NewGuid ().ToString();
 		const int matchSize = 2, skillLevel = 0, requestDomain =0;
 		const bool advertiseMatch = true;
@@ -104,8 +124,9 @@ public class MatchMaker : MonoBehaviour {
 
 
 	private void OnMatchCreated(bool success, string extendedInfo, MatchInfo matchInfo) {
-		if (success)
-		{
+		if (success){
+			lblStatus.text = ".. waiting for opponent ..";
+
 			isHost = true;
 
 			Debug.Log("Create match succeeded");
@@ -124,13 +145,19 @@ public class MatchMaker : MonoBehaviour {
 	public void DestroyCurrentMatch(){
 		const int requestDomain = 0;
 
-		if (isHost) {
-			matchMaker.DestroyMatch 
+		if (MatchMaker.Instance.currentMatch != null) {
+			if (isHost) {
+				matchMaker.DestroyMatch 
 				(currentMatch.networkId, requestDomain, OnDestroyMatch);
 
-		} else {
-			matchMaker.DropConnection 
+			} else {
+				matchMaker.DropConnection 
 				(currentMatch.networkId, requestDomain, 0, OnDestroyMatch);
+			}
+
+		} else{
+			MatchMaker.Instance.currentMatch = null;
+			CleanupNetwork ();
 		}
 	}
 
