@@ -7,6 +7,8 @@ using UnityEngine.Networking.NetworkSystem;
 
 public class NetworkHelper : NetworkManager {
 
+	const string DISCONNECTION_MESSAGE = "connection failed";
+
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {	
 		base.OnServerAddPlayer(conn, playerControllerId);
 
@@ -16,6 +18,31 @@ public class NetworkHelper : NetworkManager {
 			if (numPlayers == 2) {
 				ServerChangeScene (Constants.MAIN_SCENE_NAME);
 			}
+		}
+	}
+
+	public override void OnClientDisconnect (NetworkConnection conn) {
+		base.OnClientDisconnect (conn);
+
+		Debug.Log ("client disconnected");
+
+		if (SceneManager.GetActiveScene ().name.Equals (Constants.STAGING_SCENE_NAME)) {
+			UIHandler.ReturnToMenu ();
+		}
+
+	}
+
+	public override void OnServerDisconnect (NetworkConnection conn) {
+		base.OnServerDisconnect (conn);
+
+		Debug.Log ("server disconnected");
+
+		PopupModalManager.Instance.Show (DISCONNECTION_MESSAGE, ReturnToMenu, "okay");
+	}
+
+	private void ReturnToMenu(){
+		if (SceneManager.GetActiveScene ().name.Equals (Constants.STAGING_SCENE_NAME)) {
+			UIHandler.ReturnToMenu ();
 		}
 	}
 

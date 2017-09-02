@@ -19,6 +19,12 @@ public class LocalStorage {
 	const string USER_DISPLAY_NAME = "USER_DISPLAY_NAME"; 
 
 
+	public void SaveUserDetails(Firebase.Auth.FirebaseUser user){
+
+		Debug.Log("save user");
+		SaveUserID (user.UserId);
+		SaveUserDisplayName (user.DisplayName);
+	}
 
 	public void SaveUserID(string ID){
 		Debug.Log("save userID - " + ID);

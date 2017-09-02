@@ -85,6 +85,7 @@ public class SignIn : MonoBehaviour {
 		}
 	}
 
+
 	void SignInAnonymously(){
 
 		Debug.Log("anon login");
@@ -99,16 +100,12 @@ public class SignIn : MonoBehaviour {
 			}
 
 			Firebase.Auth.FirebaseUser newUser = task.Result;
-			SaveUserDetails(newUser);
+
+			LocalStorage.Instance.SaveUserDetails(newUser);
+
 			Debug.LogFormat("User signed in successfully: {0} ({1})",
 				newUser.DisplayName, newUser.UserId);
 		});
 	}
 
-	void SaveUserDetails(Firebase.Auth.FirebaseUser user){
-
-		Debug.Log("save user");
-		LocalStorage.Instance.SaveUserID (user.UserId);
-		LocalStorage.Instance.SaveUserDisplayName (user.DisplayName);
-	}
 }

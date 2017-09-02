@@ -9,14 +9,17 @@ public class StagingUIHandler : MonoBehaviour {
 
 	public static bool isAutomatch = true;
 
-	public Text captionText;
+	public Text lblStatus, captionText;
 	ArrayList captions = new ArrayList();
 
+	public static StagingUIHandler Instance;
+
+	const float CONNECTION_TIMEOUT = 90f;
+	const float CANCELING_CONNECTION_UPDATE = 2f;
 
 	void Start () {
 		LoadCaptionOptions ();
-		Invoke ("GoBackToMenu", 60f);
-		Invoke ("StartMatch", 0f);
+		StartMatch ();
 
 		if (isAutomatch) {
 			InvokeRepeating ("RotateCaptions", 0f, 3f);
@@ -24,6 +27,9 @@ public class StagingUIHandler : MonoBehaviour {
 		} else {
 			captionText.text = "";
 		}
+
+
+		Invoke ("ConnectionTimeout", CONNECTION_TIMEOUT);
 	}
 
 	void LoadCaptionOptions (){
@@ -54,7 +60,12 @@ public class StagingUIHandler : MonoBehaviour {
 		MatchMaker.Instance.StartNewMatch ();
 	}
 
-	public void GoBackToMenu(){
-		SceneManager.LoadScene (Constants.MENU_SCENE);
+	public void ConnectionTimeout (){
+		lblStatus.text = ".. canceling connection ..";
+		Invoke ("ReturnToMenu", CANCELING_CONNECTION_UPDATE);
+	}
+
+	public void ReturnToMenu (){
+		UIHandler.ReturnToMenu ();
 	}
 }
