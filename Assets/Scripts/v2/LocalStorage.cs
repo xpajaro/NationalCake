@@ -14,37 +14,16 @@ public class LocalStorage {
 		}
 	}
 
+	const string ACCESS_TOKEN = "ACCESS_TOKEN";
 
-	const string USER_ID = "USER_ID";
-	const string USER_DISPLAY_NAME = "USER_DISPLAY_NAME"; 
-
-
-	public void SaveUserDetails(Firebase.Auth.FirebaseUser user){
-
-		Debug.Log("save user");
-		SaveUserID (user.UserId);
-		SaveUserDisplayName (user.DisplayName);
+	public void SaveAccessToken(string token){
+		Debug.Log("save ACCESS_TOKEN - " + token);
+		PlayerPrefs.SetString(ACCESS_TOKEN, token);
 	}
 
-	public void SaveUserID(string ID){
-		Debug.Log("save userID - " + ID);
-		PlayerPrefs.SetString(USER_ID, ID);
-	}
+	public string GetAccessToken(){
 
-	public string GetUserID(){
-
-		Debug.Log("get userID - x" + PlayerPrefs.GetString (USER_ID) + "x");
-		return PlayerPrefs.GetString (USER_ID);
-	}
-
-	public void SaveUserDisplayName(string displayName){
-		Debug.Log("save display name - " + displayName);
-		PlayerPrefs.SetString(USER_DISPLAY_NAME, displayName);
-	}
-
-	public string GetUserDisplayName(){
-
-		Debug.Log("display name - " + PlayerPrefs.GetString (USER_DISPLAY_NAME));
-		return PlayerPrefs.GetString (USER_DISPLAY_NAME);
+		Debug.Log("get ACCESS_TOKEN - x" + PlayerPrefs.GetString (ACCESS_TOKEN) + "x");
+		return PlayerPrefs.GetString (ACCESS_TOKEN);
 	}
 }

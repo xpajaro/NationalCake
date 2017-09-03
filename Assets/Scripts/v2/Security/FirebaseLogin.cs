@@ -3,14 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SignIn : MonoBehaviour {
+public class FirebaseLogin : MonoBehaviour {
 
 	Firebase.Auth.FirebaseAuth auth ;
 	Firebase.DependencyStatus dependencyStatus ;
 	Firebase.Auth.FirebaseUser user = null;
 
-	//TODO:
-	//save sign in and sign out to DB
+	FacebookLogin facebookLogin;
+
+	public static FirebaseLogin Instance;
+
+	void Awake() {
+		if (Instance == null) {
+			Instance = this;
+			DontDestroyOnLoad (gameObject);
+
+		} else if (Instance != this) {
+			Destroy (gameObject);
+		}
+
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -21,14 +33,8 @@ public class SignIn : MonoBehaviour {
 		} else {
 			InitializeFirebase ();
 		}
+	}
 
-		BeginOnboarding ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
 	void LoadFirebaseDependencies(){
 		Debug.Log("Loading dependencies");
@@ -49,7 +55,11 @@ public class SignIn : MonoBehaviour {
 		auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
 		auth.StateChanged += AuthStateChanged;
 		AuthStateChanged(this, null);
-		Debug.Log("fb init");
+
+		facebookLogin = new FacebookLogin ();
+		facebookLogin.Init ();
+
+		Debug.Log("fireb init");
 	}
 
 	void AuthStateChanged(object sender, System.EventArgs eventArgs) {
@@ -65,47 +75,47 @@ public class SignIn : MonoBehaviour {
 
 			user = auth.CurrentUser;
 
+
 			if (signedIn) {
-				Debug.Log("Signed in " + user.UserId);
+				Debug.Log("Signed in " + user.UserId +  " " + user.DisplayName + " " );
 			}
 		}
 	}
 
 
-	void BeginOnboarding() {
-		Debug.Log("on boarding");
-		if (LocalStorage.Instance.GetUserID () == string.Empty) {
+	public void Login(string accessToken){
 
-			Debug.Log ("sign in");
-			SignInAnonymously ();
-		} else {
-			Debug.Log ("you're cleared");
+		Debug.Log("logging into firebase");
+		Firebase.Auth.Credential credential =
+			Firebase.Auth.FacebookAuthProvider.GetCredential(accessToken);
 
-			SceneManager.LoadScene (Constants.MENU_SCENE);
-		}
-	}
-
-
-	void SignInAnonymously(){
-
-		Debug.Log("anon login");
-		auth.SignInAnonymouslyAsync().ContinueWith(task => {
+		auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
 			if (task.IsCanceled) {
-				Debug.LogError("SignInAnonymouslyAsync was canceled.");
+				Debug.LogError("Firebase Facebook login was canceled.");
 				return;
 			}
 			if (task.IsFaulted) {
-				Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
+				Debug.LogError("Firebase Facebook login encountered an error: " + task.Exception);
 				return;
 			}
 
 			Firebase.Auth.FirebaseUser newUser = task.Result;
 
-			LocalStorage.Instance.SaveUserDetails(newUser);
-
 			Debug.LogFormat("User signed in successfully: {0} ({1})",
 				newUser.DisplayName, newUser.UserId);
+			
+			HandleLoginSuccess();
+
 		});
 	}
 
+	private void HandleLoginSuccess(){
+		if (SceneManager.GetActiveScene ().Equals (Constants.WELCOME_SCENE_NAME)) {
+			SceneManager.LoadScene (Constants.MENU_SCENE);
+		
+		} else if (SceneManager.GetActiveScene ().Equals (Constants.MENU_SCENE_NAME)) {
+			//load stuff
+			//hide login panel
+		}
+	}
 }

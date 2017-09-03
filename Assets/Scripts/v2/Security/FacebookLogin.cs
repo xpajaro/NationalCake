@@ -1,20 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Facebook.Unity;
 
-public class FacebookSignIn : MonoBehaviour {
+public class FacebookLogin {
 
-	Firebase.Auth.FirebaseAuth auth ;
-
-	public void Init(Firebase.Auth.FirebaseAuth _auth){
-		this.auth = _auth;
-
+	public void Init(){
 		FB.Init(this.OnInitComplete, this.OnHideUnity);
 		Debug.Log( "FB.Init() called with " + FB.AppId);
 	}
 
-	private void CallFBLogin(){
+
+	public void CallFBLogin(){
+		Debug.Log ("Logging into facebook");
+
 		FB.LogInWithReadPermissions(
 			new List<string>() { "public_profile", "email", "user_friends" }, 
 			this.HandleResult);
@@ -29,9 +29,15 @@ public class FacebookSignIn : MonoBehaviour {
 			"OnInitCompleteCalled IsLoggedIn='{0}' IsInitialized='{1}'",
 			FB.IsLoggedIn,
 			FB.IsInitialized);
-		
+
+		Debug.Log (logMessage);
+
 		if (AccessToken.CurrentAccessToken != null) {
-			Debug.Log(AccessToken.CurrentAccessToken.ToString());
+			FirebaseLogin.Instance.Login (AccessToken.CurrentAccessToken.ToString ());
+
+		} else {
+			SceneManager.LoadScene (Constants.MENU_SCENE_NAME);
+			Debug.Log ("facebook access token is null");
 		}
 	}
 
@@ -57,6 +63,9 @@ public class FacebookSignIn : MonoBehaviour {
 		} else if (!string.IsNullOrEmpty(result.RawResult)) {
 			Debug.Log("Success Response:\n" + result.RawResult);
 
+			LocalStorage.Instance.SaveAccessToken (AccessToken.CurrentAccessToken.ToString ());
+			FirebaseLogin.Instance.Login (AccessToken.CurrentAccessToken.ToString ());
+
 		} else {
 			Debug.Log("Empty Response\n");
 		}
@@ -64,30 +73,5 @@ public class FacebookSignIn : MonoBehaviour {
 		Debug.Log(result.ToString());
 	}
 
-
-	void FirebaseFacebookLogin(string accessToken){
-
-		Debug.Log("anon login");
-		Firebase.Auth.Credential credential =
-			Firebase.Auth.FacebookAuthProvider.GetCredential(accessToken);
-
-		auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
-			if (task.IsCanceled) {
-				Debug.LogError("SignInAnonymouslyAsync was canceled.");
-				return;
-			}
-			if (task.IsFaulted) {
-				Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
-				return;
-			}
-
-			Firebase.Auth.FirebaseUser newUser = task.Result;
-
-			LocalStorage.Instance.SaveUserDetails(newUser);
-
-			Debug.LogFormat("User signed in successfully: {0} ({1})",
-				newUser.DisplayName, newUser.UserId);
-		});
-	}
 
 }

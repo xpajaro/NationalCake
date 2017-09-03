@@ -23,12 +23,10 @@ public class MatchMaker : MonoBehaviour {
 
 	void Awake() {
 		if (Instance == null) {
-			Debug.Log("awoken");
 			Instance = this;
 			DontDestroyOnLoad (gameObject);
 
 		} else if (Instance != this) {
-			Debug.Log("instance destroyed");
 			Destroy (gameObject);
 		}
 
