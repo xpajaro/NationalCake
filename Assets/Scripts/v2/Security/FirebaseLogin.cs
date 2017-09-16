@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class FirebaseLogin : MonoBehaviour {
+	const float SPLASH_SCREEN_ANIMATION_DURATION = 5f;
 
 	Firebase.Auth.FirebaseAuth auth ;
 	Firebase.DependencyStatus dependencyStatus ;
@@ -26,6 +27,10 @@ public class FirebaseLogin : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Invoke ("StartLogin", SPLASH_SCREEN_ANIMATION_DURATION);
+	}
+
+	void StartLogin(){
 		dependencyStatus = Firebase.FirebaseApp.CheckDependencies();
 
 		if (dependencyStatus != Firebase.DependencyStatus.Available) {
