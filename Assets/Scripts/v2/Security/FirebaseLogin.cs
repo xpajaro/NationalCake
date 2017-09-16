@@ -6,11 +6,13 @@ using UnityEngine.SceneManagement;
 public class FirebaseLogin : MonoBehaviour {
 	const float SPLASH_SCREEN_ANIMATION_DURATION = 5f;
 
+	public GameObject loginPanel;
+
 	Firebase.Auth.FirebaseAuth auth ;
 	Firebase.DependencyStatus dependencyStatus ;
 	Firebase.Auth.FirebaseUser user = null;
 
-	FacebookLogin facebookLogin;
+	public FacebookLogin facebookLogin;
 
 	public static FirebaseLogin Instance;
 
@@ -115,12 +117,13 @@ public class FirebaseLogin : MonoBehaviour {
 	}
 
 	private void HandleLoginSuccess(){
-		if (SceneManager.GetActiveScene ().Equals (Constants.WELCOME_SCENE_NAME)) {
+		if (SceneManager.GetActiveScene ().name.Equals (Constants.WELCOME_SCENE_NAME)) {
 			SceneManager.LoadScene (Constants.MENU_SCENE);
 		
-		} else if (SceneManager.GetActiveScene ().Equals (Constants.MENU_SCENE_NAME)) {
+		} else if (SceneManager.GetActiveScene ().name.Equals (Constants.MENU_SCENE_NAME)) {
 			//load stuff
 			//hide login panel
+			loginPanel.SetActive(false);
 		}
 	}
 }

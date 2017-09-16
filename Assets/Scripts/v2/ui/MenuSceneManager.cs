@@ -4,17 +4,19 @@ using UnityEngine;
 using Facebook.Unity;
 
 public class MenuSceneManager : MonoBehaviour {
-	GameObject loginPanel;
+	public GameObject loginPanel;
 
 	void Start () {
 		LoginIfNewUser ();
 	}
-	
-	// Update is called once per frame
+
+
 	void LoginIfNewUser () {
 
 		if (AccessToken.CurrentAccessToken == null) {
 			loginPanel.SetActive (true);
+			FirebaseLogin.Instance.loginPanel = loginPanel;
+
 		} else {
 			loginPanel.SetActive (false);
 		}

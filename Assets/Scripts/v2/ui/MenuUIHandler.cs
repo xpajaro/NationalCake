@@ -44,9 +44,9 @@ public class MenuUIHandler : MonoBehaviour {
 		}
 	}
 
-//	public LoginToFacebook(){
-////		FirebaseLogin.Instance.
-//	}
+	public void LoginToFacebook(){
+		FirebaseLogin.Instance.facebookLogin.CallFBLogin ();
+	}
 
 }
 
