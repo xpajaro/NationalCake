@@ -8,6 +8,7 @@ public class MenuSceneManager : MonoBehaviour {
 
 	void Start () {
 		LoginIfNewUser ();
+		SoundManager.Instance.waterAmbienceSource.Play ();
 	}
 
 
