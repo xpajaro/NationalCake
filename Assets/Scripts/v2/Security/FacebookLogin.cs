@@ -33,7 +33,7 @@ public class FacebookLogin {
 		Debug.Log (logMessage);
 
 		if (AccessToken.CurrentAccessToken != null) {
-			FirebaseLogin.Instance.Login (AccessToken.CurrentAccessToken.ToString ());
+			FirebaseLogin.Instance.Login (AccessToken.CurrentAccessToken.TokenString );
 
 		} else {
 			SceneManager.LoadScene (Constants.MENU_SCENE_NAME);
@@ -63,8 +63,8 @@ public class FacebookLogin {
 		} else if (!string.IsNullOrEmpty(result.RawResult)) {
 			Debug.Log("Success Response:\n" + result.RawResult);
 
-			LocalStorage.Instance.SaveAccessToken (AccessToken.CurrentAccessToken.ToString ());
-			FirebaseLogin.Instance.Login (AccessToken.CurrentAccessToken.ToString ());
+			LocalStorage.Instance.SaveAccessToken (AccessToken.CurrentAccessToken.TokenString );
+			FirebaseLogin.Instance.Login (AccessToken.CurrentAccessToken.TokenString );
 
 		} else {
 			Debug.Log("Empty Response\n");

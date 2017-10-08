@@ -1,11 +1,10 @@
 fileFormatVersion: 2
-guid: 7071e68748dd4451b57000a3cdc74b76
-time_created: 1480838400
+guid: eb6493d06f694693888e177b06deba2e
 labels:
 - gvh
 - gvh_manifest
-- gvh_v4.0.2
-DefaultImporter:
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+- gvh_version-4.2.0
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

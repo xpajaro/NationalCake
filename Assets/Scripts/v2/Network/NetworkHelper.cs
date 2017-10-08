@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
+using UnityEngine.Networking.Match;
 
 public class NetworkHelper : NetworkManager {
 
 	const string DISCONNECTION_MESSAGE = "connection failed";
+
 
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {	
 		base.OnServerAddPlayer(conn, playerControllerId);
@@ -20,6 +22,12 @@ public class NetworkHelper : NetworkManager {
 			}
 		}
 	}
+
+	public override void OnClientError(NetworkConnection conn, int errorCode) {
+		base.OnClientError (conn, errorCode);
+		Debug.Log ("client connection error - " + errorCode);
+	}
+
 
 	public override void OnClientDisconnect (NetworkConnection conn) {
 		base.OnClientDisconnect (conn);

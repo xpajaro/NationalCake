@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="firebase_database_url" translatable="false">https://national-cake.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">1038615921051</string>
+  <string name="google_storage_bucket" translatable="false">national-cake.appspot.com</string>
+  <string name="project_id" translatable="false">national-cake</string>
+  <string name="google_api_key" translatable="false">AIzaSyD_gatqtbhUOjO56PMjfdbRTbX_9-BknUo</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyD_gatqtbhUOjO56PMjfdbRTbX_9-BknUo</string>
+  <string name="google_app_id" translatable="false">1:1038615921051:android:3ef4f0b9c4427768</string>
+  <string name="default_web_client_id" translatable="false">1038615921051-2phf53jt5rlpqolmnob4bo8gm82o6ims.apps.googleusercontent.com</string>
+</resources>

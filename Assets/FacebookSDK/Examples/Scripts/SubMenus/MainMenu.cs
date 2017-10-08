@@ -33,7 +33,7 @@ namespace Facebook.Unity.Example
 
         protected override void GetGui()
         {
-			GUILayout.BeginVertical();
+            GUILayout.BeginVertical();
 
             bool enabled = GUI.enabled;
             if (this.Button("FB.Init"))

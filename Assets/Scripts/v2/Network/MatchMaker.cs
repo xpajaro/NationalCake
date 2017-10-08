@@ -92,12 +92,10 @@ public class MatchMaker : MonoBehaviour {
 		if (success) {
 			lblStatus.text = ".. waiting for opponent ..";
 
-			Debug.Log("Join match succeeded");
-			currentMatch = matchInfo;
+			Debug.Log("Join match succeeded " + matchInfo.address + ":" + matchInfo.port);
 
-			Utility.SetAccessTokenForNetwork(matchInfo.networkId, matchInfo.accessToken);
-
-			NetworkManager.singleton.StartClient ();
+			MatchInfo hostInfo = matchInfo;
+			NetworkManager.singleton.StartClient(hostInfo);
 
 
 		} else {
@@ -130,10 +128,11 @@ public class MatchMaker : MonoBehaviour {
 			Debug.Log("Create match succeeded");
 			currentMatch = matchInfo;
 
-			Utility.SetAccessTokenForNetwork(matchInfo.networkId, matchInfo.accessToken);
+			// Utility.SetAccessTokenForNetwork(matchInfo.networkId, matchInfo.accessToken);
+			MatchInfo hostInfo = matchInfo;
+			NetworkServer.Listen(hostInfo, SERVER_PORT);
 
-			NetworkServer.Listen(SERVER_PORT);
-			NetworkManager.singleton.StartHost ();
+			NetworkManager.singleton.StartHost(hostInfo);
 
 		} else {
 			Debug.Log(String.Format("Create match failed {0}, {1}", success, matchInfo));

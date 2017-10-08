@@ -1,9 +1,8 @@
 fileFormatVersion: 2
-guid: b3b5839a9bfc4d1c8b644fb732a3d38f
+guid: 45cc086bdae147e8b3d73262bcc0647d
 labels:
 - gvh
-- gvh_manifest
-- gvh_v4.0.2
+- gvh_version-4.2.0
 TextScriptImporter:
   userData: 
   assetBundleName: 

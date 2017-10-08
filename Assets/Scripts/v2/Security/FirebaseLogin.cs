@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class FirebaseLogin : MonoBehaviour {
-	const float SPLASH_SCREEN_ANIMATION_DURATION = 5f;
+	const float SPLASH_SCREEN_ANIMATION_DURATION = 3f;
 
 	public GameObject loginPanel;
 
