@@ -48,13 +48,10 @@ public class FirebaseDB : MonoBehaviour{
 			});
 	}
 
-	public void CreatePlayer (Player player){
+	public void SavePlayer (Player player){
 		string jsonPlayer = JsonUtility.ToJson (player);
 
 		dbRef.Child ("Players").Child (player.Id).SetRawJsonValueAsync (jsonPlayer);
 	}
 
-	public void UpdatePlayer (string playerId, string field, string value){
-		dbRef.Child ("Players").Child (playerId).Child(field).SetValueAsync (value);
-	}
 }

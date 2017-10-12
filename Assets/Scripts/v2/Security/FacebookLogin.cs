@@ -63,7 +63,7 @@ public class FacebookLogin {
 		} else if (!string.IsNullOrEmpty(result.RawResult)) {
 			Debug.Log("Success Response:\n" + result.RawResult);
 
-			LocalStorage.Instance.SaveAccessToken (AccessToken.CurrentAccessToken.TokenString );
+			// LocalStorage.Instance.SaveAccessToken (AccessToken.CurrentAccessToken.TokenString );
 			FirebaseLogin.Instance.Login (AccessToken.CurrentAccessToken.TokenString );
 
 		} else {
