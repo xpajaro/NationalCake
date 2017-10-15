@@ -1,6 +1,9 @@
 fileFormatVersion: 2
 guid: f0622f57cb624b15ba19660bf804eda5
-time_created: 1480838400
 labels:
 - gvh
-- gvh_v4.2.0
+- gvh_version-4.2.0
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

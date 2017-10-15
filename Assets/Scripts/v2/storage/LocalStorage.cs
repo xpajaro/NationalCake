@@ -7,11 +7,13 @@ using UnityEngine;
 public class LocalStorage:  MonoBehaviour{
 
 	public static LocalStorage Instance;
-	static string FILE_PATH = Application.persistentDataPath + "/playerInfo.dat";
+	string FILE_PATH;
 
 	void Awake() {
 		if (Instance == null) {
 			Instance = this;
+			FILE_PATH = Application.persistentDataPath + "/playerInfo.dat";
+
 			DontDestroyOnLoad (gameObject);
 
 		} else if (Instance != this) {
@@ -20,7 +22,7 @@ public class LocalStorage:  MonoBehaviour{
 
 	}
 
-	public static void Save(Player playerData) {
+	public void Save(Player playerData) {
 
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file = File.Open (FILE_PATH, FileMode.OpenOrCreate, FileAccess.Write); 
@@ -30,7 +32,7 @@ public class LocalStorage:  MonoBehaviour{
 
 	}    
 
-	public static Player Load(string gameToLoad) {
+	public Player Load() {
 		Player playerData = null;
 
 		if(File.Exists(FILE_PATH)) {

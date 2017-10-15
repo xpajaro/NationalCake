@@ -54,4 +54,6 @@ public class Constants {
 	public const string GAME_WON_SCENE_NAME = "gameWon";
 	public const string GAME_LOST_SCENE_NAME = "gameLost";
 
+	public const string NO_DATA = "---";
+
 }

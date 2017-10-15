@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class FirebaseLogin : MonoBehaviour {
 	const float SPLASH_SCREEN_ANIMATION_DURATION = 3f;
 
 	public GameObject loginPanel;
+
 
 	Firebase.Auth.FirebaseAuth auth ;
 	Firebase.DependencyStatus dependencyStatus ;
@@ -125,5 +128,19 @@ public class FirebaseLogin : MonoBehaviour {
 			//hide login panel
 			loginPanel.SetActive(false);
 		}
+
+		UpdateLogs ();
+		MenuSceneManager.Instance.UpdateAchievements ();
+	}
+
+	public void UpdateLogs(){
+		Player player = LocalStorage.Instance.Load ();
+
+		if (player == null) {
+			player = new Player ();
+		}
+
+		player.LastLogin = DateTime.Now;
+		LocalStorage.Instance.Save (player);
 	}
 }
