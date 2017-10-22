@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class WelcomeUIHandler : MonoBehaviour {
 
-	const float LOAD_MENU_COUNTDOWN = 2f;
+	const float LOAD_MENU_COUNTDOWN = 5f;
 
 	void Start () {
 		Invoke ("LoadMenu", LOAD_MENU_COUNTDOWN);

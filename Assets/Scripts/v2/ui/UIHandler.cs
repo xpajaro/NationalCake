@@ -37,5 +37,9 @@ public class UIHandler : MonoBehaviour {
 		SceneManager.LoadScene (Constants.BRAG_SCENE);
 	}
 
+	public void GoToLobbyScene(){
+		SceneManager.LoadScene (Constants.LOBBY_SCENE);
+	}
+
 
 }
