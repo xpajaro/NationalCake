@@ -11,11 +11,11 @@ public class UIHandler : MonoBehaviour {
 	}
 
 	public static void ReturnToMenu(){
-		if (SceneManager.GetActiveScene ().name.Equals (Constants.STAGING_SCENE_NAME)) {
+		if (SceneManager.GetActiveScene ().name.Equals (Constants.STAGING_SCENE_NAME) ||
+			SceneManager.GetActiveScene ().name.Equals (Constants.MAIN_SCENE_NAME) ) {
 			MatchMaker.Instance.DestroyCurrentMatch ();
 
-			SceneManager.LoadScene (Constants.MENU_SCENE);
-		}
+		} 
 
 		SceneManager.LoadScene (Constants.MENU_SCENE);
 		
@@ -29,6 +29,13 @@ public class UIHandler : MonoBehaviour {
 		SceneManager.LoadScene (Constants.MAIN_SCENE);
 	}
 
+	public void GoToGameScoresScene(){
+		SceneManager.LoadScene (Constants.GAME_SCORES_SCENE);
+	}
+
+	public void GoToBragScene(){
+		SceneManager.LoadScene (Constants.BRAG_SCENE);
+	}
 
 
 }

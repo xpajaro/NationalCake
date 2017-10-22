@@ -7,7 +7,7 @@ using System;
 
 public class MenuSceneManager : MonoBehaviour {
 	public GameObject loginPanel;
-	public Text txtCountdown, txtRank, txtRevenue;
+	public Text txtCountdown, txtRank, txtRevenue, txtHello;
 	public Image meterFiller;
 
 	public static MenuSceneManager Instance;
@@ -54,6 +54,8 @@ public class MenuSceneManager : MonoBehaviour {
 		player = LocalStorage.Instance.Load ();
 
 		if (player != null) {
+			txtHello.text = "hello " + player.Name + ".";
+
 			if (!player.LastLogin.Date.Equals (DateTime.Now.Date)) {
 				player.currentScore = new Score ();
 

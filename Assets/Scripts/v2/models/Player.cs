@@ -16,4 +16,71 @@ public class Player  {
 		highScore = new Score ();
 	}
 
+	public void SavePlayer(){
+		LocalStorage.Instance.Save (this);
+	}
+
+	public Player LoadPlayer(){
+		return LocalStorage.Instance.Load ();
+	}
+
+	public void UpdateHighScore(){
+		UpdateLocalHighScore ();
+		UpdateServerHighScore ();
+	}
+
+	public void UpdateLocalHighScore(){
+		if (currentScore.Revenue > highScore.Revenue) {
+			highScore = currentScore;
+		}
+		LocalStorage.Instance.Save (this);
+	}
+
+	public void UpdateServerHighScore(){
+		FirebaseDB.Instance.GetHighscore (SaveNewHighscore);
+	}
+
+	private void SaveNewHighscore(int serverHighscore){
+		if (currentScore.Revenue > serverHighscore) {
+			FirebaseDB.Instance.SaveHighscore (currentScore.Revenue);
+		}
+	}
+
+	public string CalculateRank(int serverHighscore){
+		string rank ;
+
+		float ratio = Math.Max ((float)currentScore.Revenue / serverHighscore, 1);
+		int rankValue = (int)Math.Round(ratio * 5);
+
+		switch (rankValue) {
+		case 5: 
+			rank = "revolutionalist" ;
+			break;
+		case 4: 
+			rank = "leader" ;
+			break;
+		case 3: 
+			rank = "influencer" ;
+			break;
+		case 2: 
+			rank = "activist" ;
+			break;
+		case 1: 
+			rank = "volunteer" ;
+			break;
+		default: 
+			rank = "JJC" ;
+			break;
+		}
+
+		return rank;
+	}
+
+	public int CalculateScore(int opponentWincount){
+
+		float ratio = Math.Max ((float)WinCount / opponentWincount, 1);
+		float newScore = Math.Max(1 / ratio, 5) * 2;
+
+		return (int)newScore;
+	}
 }
