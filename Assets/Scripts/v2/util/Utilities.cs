@@ -24,6 +24,11 @@ public class Utilities {
 	public static DateTime DateTimeFromUnixTimestamp(long millis) {
 		return UnixEpoch.AddMilliseconds(millis);
 	}
+
+	public static string FormatMoney(int amount){
+		return String.Format("$ {0} billion", amount);
+	}
+
 }
 
 

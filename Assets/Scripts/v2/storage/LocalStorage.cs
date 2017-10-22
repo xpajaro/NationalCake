@@ -22,7 +22,7 @@ public class LocalStorage:  MonoBehaviour{
 
 	}
 
-	public void Save(Player playerData) {
+	public void Save(PlayerData playerData) {
 
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file = File.Open (FILE_PATH, FileMode.OpenOrCreate, FileAccess.Write); 
@@ -32,15 +32,21 @@ public class LocalStorage:  MonoBehaviour{
 
 	}    
 
-	public Player Load() {
-		Player playerData = null;
+	public PlayerData Load() {
+		PlayerData playerData = null;
 
 		if(File.Exists(FILE_PATH)) {
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open(FILE_PATH, FileMode.Open);
+			FileStream file = File.Open(FILE_PATH, FileMode.Open, FileAccess.Read);
 
-			playerData = (Player)bf.Deserialize(file);
+			playerData = (PlayerData)bf.Deserialize(file);
 			file.Close();
+		}
+
+		if (playerData == null) {
+			playerData = new PlayerData ();
+			playerData.Revenue = 10;
+			Save (playerData);
 		}
 
 		return playerData;

@@ -10,4 +10,8 @@ public class GameState
 		get; set;
 	}
 
+	public static Room gameRoom {
+		get; set;
+	}
+
 }

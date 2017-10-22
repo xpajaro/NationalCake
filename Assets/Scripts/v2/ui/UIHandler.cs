@@ -22,7 +22,18 @@ public class UIHandler : MonoBehaviour {
 	}
 
 	public void GotoStagingScene (){
-		SceneManager.LoadScene (Constants.STAGING_SCENE);
+		int reserves = SessionManager.Instance.playerData.Revenue;
+		int cost = SessionManager.Instance.currentRoom.Budget;
+
+		if (cost < reserves) {
+			SceneManager.LoadScene (Constants.STAGING_SCENE);
+
+		} else {
+			PopupModalManager.Instance.Show ("Insufficient funds", DoNothing, "okay");
+		}
+	}
+
+	public void DoNothing(){
 	}
 
 	public void GotoMainScene (){

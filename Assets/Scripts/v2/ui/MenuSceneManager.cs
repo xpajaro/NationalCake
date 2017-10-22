@@ -5,17 +5,16 @@ using UnityEngine.UI;
 using System;
 
 public class MenuSceneManager : MonoBehaviour {
-	public GameObject loginPanel;
-	public Text  txtReserves, txtHello;
-	public Image meterFiller;
-
-	public static MenuSceneManager Instance;
-
-	Player player;
+	public Text  txtReserves;
 
 
 	void Start () {
 		SoundManager.Instance.waterAmbienceSource.Play ();
+		ShowRevenue ();
+	}
+
+	void ShowRevenue(){
+		txtReserves.text = SessionManager.Instance.playerData.formattedRevenue ;
 	}
 
 

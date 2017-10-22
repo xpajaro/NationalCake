@@ -19,7 +19,8 @@ public class LobbySceneManager : MonoBehaviour {
 		}
 
 	}
-	// Use this for initialization
+
+
 	void Start () {
 		UpdateRoom ();
 	}
@@ -45,8 +46,9 @@ public class LobbySceneManager : MonoBehaviour {
 
 		txtRoomName.text = currRoom.Name;
 		txtRoomDesc.text = currRoom.Description;
-		txtRoomCost.text = currRoom.Budget;
-		txtRoomReward.text = currRoom.Recovery;
+		txtRoomCost.text = Utilities.FormatMoney( currRoom.Budget);
+		txtRoomReward.text = Utilities.FormatMoney( currRoom.Recovery);
 
+		SessionManager.Instance.currentRoom = currRoom;
 	}
 }
