@@ -9,11 +9,15 @@ public class WardrobeManager : NetworkBehaviour {
 	const string ENEMY_VELOCITY_PARAMETER = "enemyVelocity";
 
 	Animator animator;
-	public RuntimeAnimatorController enemyAnimator;
+	public RuntimeAnimatorController blueEnemyAnimator, blackEnemyAnimator, 
+	redEnemyAnimator, whiteEnemyAnimator;
+
 	SpriteRenderer spriteRenderer;
 	Rigidbody2D playerBody;
 
-	public Sprite enemySprite;
+	public Sprite blueEnemySprite, blackEnemySprite, 
+	whiteEnemySprite, redEnemySprite;
+
 	public GameObject marker;
 
 	// Use this for initialization
@@ -34,12 +38,57 @@ public class WardrobeManager : NetworkBehaviour {
 
 	void SetupCharacters (){
 		if (IsOpponent ()) {
-			spriteRenderer.sprite = enemySprite;
-			animator.runtimeAnimatorController = enemyAnimator;
+			spriteRenderer.sprite = GetSprite();
+			animator.runtimeAnimatorController = GetAnimator();
 
 		} else {
 			PlaceMarker ();
 		}
+	}
+
+	Sprite GetSprite(){
+		Sprite newSprite;
+
+		switch (SessionManager.Instance.currentRoom.ID) {
+		case 0:
+			newSprite = blueEnemySprite;
+			break;
+		case 1:
+			newSprite = redEnemySprite;
+			break;
+		case 2:
+			newSprite = blackEnemySprite;
+			break;
+		default:
+			newSprite = whiteEnemySprite;
+			break;
+
+		}
+
+		return newSprite;
+	
+	}
+
+	RuntimeAnimatorController GetAnimator(){
+		RuntimeAnimatorController newAnimator;
+
+		switch (SessionManager.Instance.currentRoom.ID) {
+		case 0:
+			newAnimator = blueEnemyAnimator;
+			break;
+		case 1:
+			newAnimator = redEnemyAnimator;
+			break;
+		case 2:
+			newAnimator = blackEnemyAnimator;
+			break;
+		default:
+			newAnimator = whiteEnemyAnimator;
+			break;
+
+		}
+
+		return newAnimator;
 	}
 
 	void AnimateCharacters (){
