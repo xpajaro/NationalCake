@@ -21,6 +21,16 @@ public class UIHandler : MonoBehaviour {
 		
 	}
 
+	public static void GoToWinnerScreen(){
+		MatchMaker.Instance.DestroyCurrentMatch ();
+		SceneManager.LoadScene (Constants.GAME_WON_SCENE);
+	}
+
+	public static void GoToLoserScreen(){
+		MatchMaker.Instance.DestroyCurrentMatch ();
+		SceneManager.LoadScene (Constants.GAME_LOST_SCENE);
+	}
+
 	public void GotoStagingScene (){
 		int reserves = SessionManager.Instance.playerData.Revenue;
 		int cost = SessionManager.Instance.currentRoom.Budget;
@@ -38,14 +48,6 @@ public class UIHandler : MonoBehaviour {
 
 	public void GotoMainScene (){
 		SceneManager.LoadScene (Constants.MAIN_SCENE);
-	}
-
-	public void GoToGameScoresScene(){
-		SceneManager.LoadScene (Constants.GAME_SCORES_SCENE);
-	}
-
-	public void GoToBragScene(){
-		SceneManager.LoadScene (Constants.BRAG_SCENE);
 	}
 
 	public void GoToLobbyScene(){

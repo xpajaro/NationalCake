@@ -8,8 +8,8 @@ public class Cake : NetworkBehaviour {
 	public GameObject cakeGhost, prophet;
 	SpriteRenderer spriteRenderer, ghostRenderer, prophetRenderer;
 
-	const string PLAYER_GOAL = "pGoal";
-	const string ENEMY_GOAL = "eGoal";
+	const string PLAYER_GOAL = "playerStation";
+	const string ENEMY_GOAL = "enemyStation";
 	const float GHOST_FX_DURATION = 8f;
 
 	[SyncVar]
@@ -29,8 +29,7 @@ public class Cake : NetworkBehaviour {
 		prophetRenderer = prophet.GetComponent<SpriteRenderer> ();
 	}
 
-	void OnCollisionEnter2D (Collision2D col)
-	{
+	void OnTriggerEnter2D (Collider2D col){
 		if (isServer) {
 			string cause = col.gameObject.name;
 
@@ -51,6 +50,7 @@ public class Cake : NetworkBehaviour {
 		}
 
 	}
+
 
 	void LockOnGoal (GameObject goal){
 		float GOAL_RADIUS = 0.36f;

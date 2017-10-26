@@ -50,7 +50,8 @@ public class MatchMaker : MonoBehaviour {
 
 
 	private void JoinOrCreateMatch() {
-		const int startPage = 0 , pageSize= 5, skillLevel=0, requestDomain=0;
+		const int startPage = 0 , pageSize= 5, requestDomain=0;
+		int skillLevel = SessionManager.Instance.currentRoom.ID;
 		bool showPrivateMatches = false;
 		const string nameFilter= "";
 
@@ -66,7 +67,8 @@ public class MatchMaker : MonoBehaviour {
 			if (matchList.Count > 0) {
 				lblStatus.text = ".. joining a game ..";
 
-				const int matchSize = 2 , skillLevel= 0 , requestDomain= 0;
+				const int matchSize = 2, requestDomain= 0;
+				int skillLevel = SessionManager.Instance.currentRoom.ID;
 				const string password = "" , publicClientAddress= "" , privateClientAddress= "";
 
 				matchMaker.JoinMatch (matchList [0].networkId, password, publicClientAddress,
@@ -108,7 +110,8 @@ public class MatchMaker : MonoBehaviour {
 		lblStatus.text = ".. starting a game ..";
 
 		string roomName = Guid.NewGuid ().ToString();
-		const int matchSize = 2, skillLevel = 0, requestDomain =0;
+		const int matchSize = 2, requestDomain =0;
+		int skillLevel = SessionManager.Instance.currentRoom.ID;
 		const bool advertiseMatch = true;
 		const string password = "", publicClientAddress = "", privateClientAddress = "";
 

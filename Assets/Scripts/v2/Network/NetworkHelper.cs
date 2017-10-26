@@ -51,6 +51,12 @@ public class NetworkHelper : NetworkManager {
 	private void ReturnToMenu(){
 		if (SceneManager.GetActiveScene ().name.Equals (Constants.STAGING_SCENE_NAME)) {
 			UIHandler.ReturnToMenu ();
+		} else {
+			if (GameState.gameWon) {
+				UIHandler.GoToWinnerScreen ();
+			} else {
+				UIHandler.GoToLoserScreen ();
+			}
 		}
 	}
 
