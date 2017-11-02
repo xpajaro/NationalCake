@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System;
 using UnityEngine;
 
 public class LocalStorage:  MonoBehaviour{
@@ -45,7 +46,8 @@ public class LocalStorage:  MonoBehaviour{
 
 		if (playerData == null) {
 			playerData = new PlayerData ();
-			playerData.Revenue = 10;
+			playerData.LastLogin = DateTime.Now;
+			playerData.Revenue = 30;
 			Save (playerData);
 		}
 

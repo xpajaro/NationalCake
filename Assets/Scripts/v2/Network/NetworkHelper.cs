@@ -8,7 +8,7 @@ using UnityEngine.Networking.Match;
 
 public class NetworkHelper : NetworkManager {
 
-	const string DISCONNECTION_MESSAGE = "connection failed";
+	const string DISCONNECTION_MESSAGE = "Opponent left the game.";
 
 
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {	
@@ -33,17 +33,18 @@ public class NetworkHelper : NetworkManager {
 		base.OnClientDisconnect (conn);
 
 		Debug.Log ("client disconnected");
+		GameState.gameEnded = true;
+		GameState.gameWon = true;
 
-		if (SceneManager.GetActiveScene ().name.Equals (Constants.STAGING_SCENE_NAME)) {
-			UIHandler.ReturnToMenu ();
-		}
-
+		PopupModalManager.Instance.Show (DISCONNECTION_MESSAGE, ReturnToMenu, "okay");
 	}
 
 	public override void OnServerDisconnect (NetworkConnection conn) {
 		base.OnServerDisconnect (conn);
 
 		Debug.Log ("server disconnected");
+		GameState.gameEnded = true;
+		GameState.gameWon = true;
 
 		PopupModalManager.Instance.Show (DISCONNECTION_MESSAGE, ReturnToMenu, "okay");
 	}
@@ -51,6 +52,7 @@ public class NetworkHelper : NetworkManager {
 	private void ReturnToMenu(){
 		if (SceneManager.GetActiveScene ().name.Equals (Constants.STAGING_SCENE_NAME)) {
 			UIHandler.ReturnToMenu ();
+
 		} else {
 			if (GameState.gameWon) {
 				UIHandler.GoToWinnerScreen ();

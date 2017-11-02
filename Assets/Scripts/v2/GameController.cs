@@ -16,6 +16,13 @@ public partial class GameController : NetworkBehaviour {
 
 	public static GameController LocalInstance;
 
+
+	void Start(){
+		GameState.gameEnded = false;
+		GameState.gameWon = false;
+	}
+
+
 	void Update (){
 		//don't allow inputs from enemy character
 		if (!isLocalPlayer || !GetPlayerControllerInstance()){

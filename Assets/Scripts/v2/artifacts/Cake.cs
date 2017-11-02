@@ -34,14 +34,15 @@ public class Cake : NetworkBehaviour {
 			string cause = col.gameObject.name;
 
 			if (cause.Equals (PLAYER_GOAL) || cause.Equals (ENEMY_GOAL)) {	
-			
+
+				GameState.gameEnded = true;
+
 				if (cause.Equals (PLAYER_GOAL)) {
 					GameState.gameWon = true;
 				} else {	
 					GameState.gameWon = false;
 				}
 
-				GameState.gameEnded = true;
 				StopMoving ();
 				LockOnGoal (col.gameObject);
 

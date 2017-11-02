@@ -14,7 +14,11 @@ public class MenuSceneManager : MonoBehaviour {
 	}
 
 	void ShowRevenue(){
-		txtReserves.text = SessionManager.Instance.playerData.formattedRevenue ;
+		if (SessionManager.Instance.playerData != null) {
+			SessionManager.Instance.LoadPlayerData ();
+		} 
+
+		txtReserves.text = SessionManager.Instance.playerData.formattedRevenue;
 	}
 
 

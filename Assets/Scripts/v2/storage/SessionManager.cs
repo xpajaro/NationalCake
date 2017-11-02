@@ -21,6 +21,10 @@ public class SessionManager : MonoBehaviour {
 
 
 	void Start () {
+		LoadPlayerData ();
+	}
+
+	public void LoadPlayerData(){
 		playerData = LocalStorage.Instance.Load ();
 	}
 
