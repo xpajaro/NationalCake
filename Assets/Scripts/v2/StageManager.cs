@@ -23,10 +23,10 @@ public class StageManager : MonoBehaviour {
 			newSprite = lvl1Sprite;
 			break;
 		case 1:
-			newSprite = lvl3Sprite;
+			newSprite = lvl2Sprite;
 			break;
 		case 2:
-			newSprite = lvl2Sprite;
+			newSprite = lvl3Sprite;
 			break;
 		default:
 			newSprite = lvl1Sprite;

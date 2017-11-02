@@ -35,7 +35,7 @@ public class UIHandler : MonoBehaviour {
 		int reserves = SessionManager.Instance.playerData.Revenue;
 		int cost = SessionManager.Instance.currentRoom.Budget;
 
-		if (cost < reserves) {
+		if (cost <= reserves) {
 			SceneManager.LoadScene (Constants.STAGING_SCENE);
 
 		} else {
