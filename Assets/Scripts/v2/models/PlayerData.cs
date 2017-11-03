@@ -30,12 +30,5 @@ public class PlayerData  {
 		return player;
 	}
 
-	public int CalculateScore(int opponentWincount){
-
-		float ratio = Math.Max ((float)WinCount / opponentWincount, 1);
-		float newScore = Math.Max(1 / ratio, 5) * 2;
-
-		return (int)newScore;
-	}
 
 }

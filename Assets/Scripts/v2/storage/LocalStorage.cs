@@ -9,6 +9,7 @@ public class LocalStorage:  MonoBehaviour{
 
 	public static LocalStorage Instance;
 	string FILE_PATH;
+	public const int DAILY_REVENUE = 7;
 
 	void Awake() {
 		if (Instance == null) {
@@ -46,11 +47,22 @@ public class LocalStorage:  MonoBehaviour{
 
 		if (playerData == null) {
 			playerData = new PlayerData ();
-			playerData.LastLogin = DateTime.Now;
 			playerData.Revenue = 30;
-			Save (playerData);
 		}
 
+		UpdatePlayerData (playerData);
+
 		return playerData;
+	}
+
+	public void UpdatePlayerData(PlayerData playerData){
+
+		if (playerData.LastLogin.Date < DateTime.Now.Date) {
+			playerData.Revenue += DAILY_REVENUE;
+		}
+
+		playerData.LastLogin = DateTime.Now;
+
+		Save (playerData);
 	}
 }
