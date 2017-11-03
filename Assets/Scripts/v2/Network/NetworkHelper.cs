@@ -33,20 +33,26 @@ public class NetworkHelper : NetworkManager {
 		base.OnClientDisconnect (conn);
 
 		Debug.Log ("client disconnected");
-		GameState.gameEnded = true;
-		GameState.gameWon = true;
 
-		PopupModalManager.Instance.Show (DISCONNECTION_MESSAGE, ReturnToMenu, "okay");
+		if (GameState.gameEnded == false) {
+			SessionManager.Instance.UpdateReserves (true);
+			PopupModalManager.Instance.Show (DISCONNECTION_MESSAGE, ReturnToMenu, "okay");
+		}
+
+		GameState.gameEnded = true;
 	}
 
 	public override void OnServerDisconnect (NetworkConnection conn) {
 		base.OnServerDisconnect (conn);
 
 		Debug.Log ("server disconnected");
-		GameState.gameEnded = true;
-		GameState.gameWon = true;
 
-		PopupModalManager.Instance.Show (DISCONNECTION_MESSAGE, ReturnToMenu, "okay");
+		if (GameState.gameEnded == false) {
+			SessionManager.Instance.UpdateReserves (true);
+			PopupModalManager.Instance.Show (DISCONNECTION_MESSAGE, ReturnToMenu, "okay");
+		}
+
+		GameState.gameEnded = true;
 	}
 
 	private void ReturnToMenu(){
@@ -54,11 +60,7 @@ public class NetworkHelper : NetworkManager {
 			UIHandler.ReturnToMenu ();
 
 		} else {
-			if (GameState.gameWon) {
-				UIHandler.GoToWinnerScreen ();
-			} else {
-				UIHandler.GoToLoserScreen ();
-			}
+			UIHandler.GoToWinnerScreen ();
 		}
 	}
 

@@ -18,8 +18,18 @@ public partial class GameController : NetworkBehaviour {
 
 
 	void Start(){
+		InitGameState ();
+	}
+
+	void InitGameState(){
 		GameState.gameEnded = false;
 		GameState.gameWon = false;
+
+		PlayerData playerData = SessionManager.Instance.playerData;
+		playerData.GameCount++;
+
+		LocalStorage.Instance.Save (playerData);
+	
 	}
 
 

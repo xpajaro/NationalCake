@@ -28,4 +28,16 @@ public class SessionManager : MonoBehaviour {
 		playerData = LocalStorage.Instance.Load ();
 	}
 
+	public void UpdateReserves(bool localPlayerWonGame){
+
+		if (localPlayerWonGame) {
+			playerData.Revenue += currentRoom.Recovery;
+			playerData.WinCount++;
+		} else {
+			playerData.Revenue -= currentRoom.Budget;
+		}
+
+		LocalStorage.Instance.Save (playerData);
+	}
+
 }

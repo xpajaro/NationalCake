@@ -8,9 +8,9 @@ public class Room
 	public int Budget {get; set;}
 	public int Recovery {get; set;}
 
-	private static Room beginnerRoom = new Room(0, "codename small fish", "investigate the local corridor", 1, 2);
-	private static Room intermediateRoom = new Room(1, "codename private pirate", "audit the V.I. naira highway", 5, 12);
-	private static Room proRoom = new Room(2, "codename cabo cabana", "recover stolen swiss accounts", 10, 25);
+	private static Room beginnerRoom = new Room(0, "codename small fish", "investigate the local corridor", 1, 1);
+	private static Room intermediateRoom = new Room(1, "codename private pirate", "audit the V.I. naira highway", 5, 6);
+	private static Room proRoom = new Room(2, "codename cabo cabana", "recover stolen swiss accounts", 10, 15);
 
 	private static Room[] rooms = {beginnerRoom, intermediateRoom, proRoom};
 

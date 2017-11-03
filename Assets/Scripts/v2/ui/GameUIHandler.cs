@@ -8,6 +8,8 @@ public class GameUIHandler : MonoBehaviour {
 		GameState.gameEnded = true;
 		GameState.gameWon = false;
 
+		SessionManager.Instance.UpdateReserves (false);
+
 		UIHandler.GoToLoserScreen ();
 	}
 

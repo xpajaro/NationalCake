@@ -46,7 +46,7 @@ public class Cake : NetworkBehaviour {
 				StopMoving ();
 				LockOnGoal (col.gameObject);
 
-				Invoke ("LeaveScene", 5f);
+				RpcConcludeGame (GameState.gameWon);
 			}
 		}
 
@@ -68,8 +68,25 @@ public class Cake : NetworkBehaviour {
 		GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
 	}
 
-	void LeaveScene(){
-		if (GameState.gameWon) {
+
+	[ClientRpc] 
+	void RpcConcludeGame(bool serverWonGame){
+		bool localPlayerWonGame = false;
+		if (isServer && serverWonGame || !isServer && !serverWonGame) {
+			localPlayerWonGame = true;
+		}
+
+		SessionManager.Instance.UpdateReserves (localPlayerWonGame);
+		StartCoroutine (LeaveScene (localPlayerWonGame));
+	}
+
+
+
+	IEnumerator LeaveScene(bool localPlayerWonGame){
+
+		yield return new WaitForSeconds(5f);
+
+		if (localPlayerWonGame) {
 			SceneManager.LoadScene (Constants.GAME_WON_SCENE);
 
 		} else {
