@@ -47,6 +47,7 @@ public class Constants {
 	public const int MAIN_SCENE = 4;
 	public const int GAME_WON_SCENE = 5;
 	public const int GAME_LOST_SCENE = 6;
+	public const int INFORMATION_SCENE = 7;
 
 	public const string WELCOME_SCENE_NAME = "welcome";
 	public const string MAIN_SCENE_NAME = "main";
@@ -55,6 +56,7 @@ public class Constants {
 	public const string GAME_WON_SCENE_NAME = "gameWon";
 	public const string GAME_LOST_SCENE_NAME = "gameLost";
 	public const string LOBBY_SCENE_NAME = "lobby";
+	public const string INFORMATION_SCENE_NAME = "information";
 
 	public const string NO_DATA = "---";
 

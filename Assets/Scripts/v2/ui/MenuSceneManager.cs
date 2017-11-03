@@ -6,11 +6,11 @@ using System;
 
 public class MenuSceneManager : MonoBehaviour {
 	public Text  txtReserves;
-
+	const int REVENUE_REFRESH_RATE = 50;
 
 	void Start () {
 		SoundManager.Instance.waterAmbienceSource.Play ();
-		ShowRevenue ();
+		InvokeRepeating("ShowRevenue", 0, REVENUE_REFRESH_RATE);
 	}
 
 	void ShowRevenue(){

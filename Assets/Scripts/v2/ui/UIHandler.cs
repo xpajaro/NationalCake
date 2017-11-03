@@ -54,5 +54,9 @@ public class UIHandler : MonoBehaviour {
 		SceneManager.LoadScene (Constants.LOBBY_SCENE);
 	}
 
+	public void GoToInformationScene(){
+		SceneManager.LoadScene (Constants.INFORMATION_SCENE);
+	}
+
 
 }
