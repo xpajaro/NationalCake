@@ -25,10 +25,8 @@ public partial class GameController : NetworkBehaviour {
 		GameState.gameEnded = false;
 		GameState.gameWon = false;
 
-		PlayerData playerData = SessionManager.Instance.playerData;
-		playerData.GameCount++;
-
-		LocalStorage.Instance.Save (playerData);
+		SessionManager.Instance.playerData.GameCount++;
+		SessionManager.Instance.Save ();
 	
 	}
 

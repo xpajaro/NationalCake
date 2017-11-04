@@ -11,6 +11,11 @@ public class MenuUIHandler : MonoBehaviour {
 		SceneManager.LoadScene (Constants.STAGING_SCENE);
 	}
 
+	public void ShowRewardedAds(){
+		PopupModalManager.Instance.Confirm (
+			"Watch 2 video ads for $ reward", 
+			AdManager.Instance.ShowAd);
+	}
 
 }
 

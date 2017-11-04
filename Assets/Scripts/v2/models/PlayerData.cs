@@ -15,20 +15,5 @@ public class PlayerData  {
 
 	public PlayerData(){ }
 
-	public void SavePlayer(){
-		LocalStorage.Instance.Save (this);
-	}
-
-	public PlayerData LoadPlayer(){
-		PlayerData player =  LocalStorage.Instance.Load ();
-
-		if (player == null) {
-			player = new PlayerData ();
-			LocalStorage.Instance.Save (player);
-		}
-
-		return player;
-	}
-
 
 }

@@ -6,7 +6,7 @@ using System;
 
 public class MenuSceneManager : MonoBehaviour {
 	public Text  txtReserves;
-	const int REVENUE_REFRESH_RATE = 50;
+	const int REVENUE_REFRESH_RATE = 2;
 
 	void Start () {
 		SoundManager.Instance.waterAmbienceSource.Play ();

@@ -40,4 +40,8 @@ public class SessionManager : MonoBehaviour {
 		LocalStorage.Instance.Save (playerData);
 	}
 
+	public void Save(){
+		LocalStorage.Instance.Save (playerData);
+	}
+
 }

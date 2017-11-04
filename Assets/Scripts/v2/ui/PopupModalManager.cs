@@ -6,9 +6,9 @@ using UnityEngine.Events;
 
 public class PopupModalManager : MonoBehaviour {
 
-	public GameObject modalPanel;
-	public Button btnAction ;
-	public Text lblMessage, txtAction;
+	public GameObject modalPanel, modalPanelConfirm;
+	public Button btnAction, btnOK, btnCancel;
+	public Text lblMessage,  txtAction, lblQuestion;
 
 	public static PopupModalManager Instance;
 
@@ -24,8 +24,6 @@ public class PopupModalManager : MonoBehaviour {
 	}
 
 	public void Show (string message, UnityAction action, string actionCaption){
-
-		Debug.Log ("showing");
 		modalPanel.SetActive (true);
 
 		lblMessage.text = message;
@@ -37,8 +35,22 @@ public class PopupModalManager : MonoBehaviour {
 		btnAction.onClick.AddListener (ClosePanel);
 	}
 
+	public void Confirm (string question, UnityAction action){
+		modalPanelConfirm.SetActive (true);
+
+		lblQuestion.text = question;
+
+		btnOK.onClick.RemoveAllListeners();
+		btnOK.onClick.AddListener (action);
+		btnOK.onClick.AddListener (ClosePanel);
+
+		btnCancel.onClick.RemoveAllListeners ();
+		btnCancel.onClick.AddListener (ClosePanel);
+	}
+
 
 	void ClosePanel () {
 		modalPanel.SetActive (false); 
+		modalPanelConfirm.SetActive (false); 
 	}
 }
