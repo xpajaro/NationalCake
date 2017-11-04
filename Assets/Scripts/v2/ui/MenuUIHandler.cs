@@ -12,8 +12,10 @@ public class MenuUIHandler : MonoBehaviour {
 	}
 
 	public void ShowRewardedAds(){
+		int adsLeft = AdManager.ADS_BEFORE_REWARD - AdManager.Instance.adWatchCount;
+
 		PopupModalManager.Instance.Confirm (
-			"Watch 2 video ads for $ reward", 
+			String.Format("Watch {0} video ads for $2bn reward", adsLeft), 
 			AdManager.Instance.ShowAd);
 	}
 

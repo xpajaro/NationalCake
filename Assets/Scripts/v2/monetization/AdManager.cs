@@ -18,7 +18,8 @@ public class AdManager : MonoBehaviour{
 
 	public static AdManager Instance;
 
-	private int adWatchCount;
+	public int adWatchCount;
+	public const int ADS_BEFORE_REWARD = 5;
 
 	void Awake (){
 		if (Instance == null) {
@@ -45,13 +46,11 @@ public class AdManager : MonoBehaviour{
 
 			adWatchCount++;
 
-			if (adWatchCount == 2) {
+			if (adWatchCount == ADS_BEFORE_REWARD) {
 				RewardUser ();
 				adWatchCount = 0;
 
-			} else {
-				ShowAd ();
-			}
+			} 
 
 		}else if(result == ShowResult.Skipped) {
 			Debug.LogWarning("Video was skipped - Do NOT reward the player");
