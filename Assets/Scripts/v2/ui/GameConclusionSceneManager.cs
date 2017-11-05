@@ -12,6 +12,9 @@ public class GameConclusionSceneManager : MonoBehaviour {
 			SessionManager.Instance.currentRoom.Budget;
 		
 		txtScore.text = gameScore + "billion dolarsss";
+
+
+		MatchMaker.Instance.DestroyCurrentMatch ();
 	}
 	
 	// Update is called once per frame

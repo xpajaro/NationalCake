@@ -11,10 +11,12 @@ public class UIHandler : MonoBehaviour {
 	}
 
 	public static void ReturnToMenu(){
-		if (SceneManager.GetActiveScene ().name.Equals (Constants.STAGING_SCENE_NAME) ||
-			SceneManager.GetActiveScene ().name.Equals (Constants.MAIN_SCENE_NAME) ) {
-			MatchMaker.Instance.DestroyCurrentMatch ();
+		string currScene = SceneManager.GetActiveScene ().name;
 
+		if (currScene.Equals (Constants.STAGING_SCENE_NAME) ||
+			currScene.Equals (Constants.MAIN_SCENE_NAME) ) {
+
+			MatchMaker.Instance.DestroyCurrentMatch ();
 		} 
 
 		SceneManager.LoadScene (Constants.MENU_SCENE);

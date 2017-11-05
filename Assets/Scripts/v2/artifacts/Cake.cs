@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -7,6 +8,8 @@ public class Cake : NetworkBehaviour {
 
 	public GameObject cakeGhost, prophet;
 	SpriteRenderer spriteRenderer, ghostRenderer, prophetRenderer;
+
+	public GameObject gameOverPanel;
 
 	const string PLAYER_GOAL = "playerStation";
 	const string ENEMY_GOAL = "enemyStation";
@@ -34,22 +37,25 @@ public class Cake : NetworkBehaviour {
 			string cause = col.gameObject.name;
 
 			if (cause.Equals (PLAYER_GOAL) || cause.Equals (ENEMY_GOAL)) {	
-
-				GameState.gameEnded = true;
+				bool gameWon = false;
+				gameOverPanel.SetActive (true);
 
 				if (cause.Equals (PLAYER_GOAL)) {
-					GameState.gameWon = true;
-				} else {	
-					GameState.gameWon = false;
-				}
+					gameWon = true;
+				} 
 
 				StopMoving ();
 				LockOnGoal (col.gameObject);
 
-				RpcConcludeGame (GameState.gameWon);
+				RpcConcludeGame (gameWon);
 			}
 		}
 
+	}
+
+
+	void StopMoving (){
+		GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
 	}
 
 
@@ -64,16 +70,15 @@ public class Cake : NetworkBehaviour {
 	}
 
 
-	void StopMoving (){
-		GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
-	}
-
 
 	[ClientRpc] 
 	void RpcConcludeGame(bool serverWonGame){
+		GameState.gameEnded = true;
+
 		bool localPlayerWonGame = false;
 		if (isServer && serverWonGame || !isServer && !serverWonGame) {
 			localPlayerWonGame = true;
+			GameState.gameWon = true;
 		}
 
 		SessionManager.Instance.UpdateReserves (localPlayerWonGame);
