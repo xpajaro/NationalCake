@@ -15,8 +15,14 @@ public class MenuUIHandler : MonoBehaviour {
 		int adsLeft = AdManager.ADS_BEFORE_REWARD - AdManager.Instance.adWatchCount;
 
 		PopupModalManager.Instance.Confirm (
-			String.Format("Watch {0} video ads for $2bn reward", adsLeft), 
+			String.Format("Watch {0} video ads for $2bn reward?", adsLeft), 
 			AdManager.Instance.ShowAd);
+	}
+
+	public void BuyBailoutPackage(){
+		PopupModalManager.Instance.Confirm (
+			"Buy $10 billion bailout package?", 
+			IAPManager.Instance.BuyProduct);
 	}
 
 }

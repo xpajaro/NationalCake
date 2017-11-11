@@ -60,5 +60,9 @@ public class UIHandler : MonoBehaviour {
 		SceneManager.LoadScene (Constants.INFORMATION_SCENE);
 	}
 
+	public void GoToTutorialScene(){
+		SceneManager.LoadScene (Constants.TUTORIAL_SCENE);
+	}
+
 
 }

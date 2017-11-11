@@ -8,18 +8,16 @@ using UnityEngine.Advertisements;
 
 public class AdManager : MonoBehaviour{
 
-	#if UNITY_IOS
-	private string gameId = "1597503";
-	#elif UNITY_ANDROID
-	private string gameId = "1597504";
-	#endif
+	private string gameId = "";
+
 
 	private string placementId = "rewardedVideo";
 
-	public static AdManager Instance;
 
 	public int adWatchCount;
 	public const int ADS_BEFORE_REWARD = 5;
+
+	public static AdManager Instance;
 
 	void Awake (){
 		if (Instance == null) {
@@ -27,7 +25,14 @@ public class AdManager : MonoBehaviour{
 		}
 	}
 
-	void Start () {    
+	void Start () {   
+
+		#if UNITY_IOS
+		gameId = "1597503";
+		#elif UNITY_ANDROID
+		gameId = "1597504";
+		#endif
+
 		if (Advertisement.isSupported) {
 			Advertisement.Initialize (gameId, true);
 		}
