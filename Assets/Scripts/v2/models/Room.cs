@@ -8,11 +8,12 @@ public class Room
 	public int Budget {get; set;}
 	public int Recovery {get; set;}
 
-	private static Room beginnerRoom = new Room(0, "local liasons", "developing grassroots infrastructure", 1, 1);
-	private static Room intermediateRoom = new Room(1, "the wire", "funding small business enterprises", 5, 6);
-	private static Room proRoom = new Room(2, "power play", "ramping up commodity production", 10, 15);
+	public static Room demoRoom = new Room(0, "practice grounds", "learning the ropes", 0, 0);
+	public static Room beginnerRoom = new Room(1, "local liasons", "developing grassroots infrastructure", 1, 1);
+	public static Room intermediateRoom = new Room(2, "the wire", "funding small business enterprises", 5, 6);
+	public static Room proRoom = new Room(3, "power play", "ramping up commodity production", 10, 15);
 
-	private static Room[] rooms = {beginnerRoom, intermediateRoom, proRoom};
+	private static Room[] rooms = {demoRoom, beginnerRoom, intermediateRoom, proRoom};
 
 	public Room () { }
 

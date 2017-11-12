@@ -11,7 +11,7 @@ public class GameConclusionSceneManager : MonoBehaviour {
 		int gameScore = GameState.gameWon ? SessionManager.Instance.currentRoom.Recovery :
 			SessionManager.Instance.currentRoom.Budget;
 		
-		txtScore.text = gameScore + "billion dolarsss";
+		txtScore.text = gameScore + " billion dolarsss";
 
 
 		MatchMaker.Instance.DestroyCurrentMatch ();
