@@ -38,7 +38,6 @@ public class Cake : NetworkBehaviour {
 
 			if (cause.Equals (PLAYER_GOAL) || cause.Equals (ENEMY_GOAL)) {	
 				bool gameWon = false;
-				gameOverPanel.SetActive (true);
 
 				if (cause.Equals (PLAYER_GOAL)) {
 					gameWon = true;
@@ -73,6 +72,9 @@ public class Cake : NetworkBehaviour {
 
 	[ClientRpc] 
 	void RpcConcludeGame(bool serverWonGame){
+
+		gameOverPanel.SetActive (true);
+
 		GameState.gameEnded = true;
 
 		bool localPlayerWonGame = false;

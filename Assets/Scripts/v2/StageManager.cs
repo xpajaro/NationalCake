@@ -20,12 +20,13 @@ public class StageManager : MonoBehaviour {
 
 		switch (SessionManager.Instance.currentRoom.ID) {
 		case 0:
+		case 1:
 			newSprite = lvl1Sprite;
 			break;
-		case 1:
+		case 2:
 			newSprite = lvl2Sprite;
 			break;
-		case 2:
+		case 3:
 			newSprite = lvl3Sprite;
 			break;
 		default:
