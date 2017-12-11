@@ -17,8 +17,8 @@ public class NetworkHelper : NetworkManager {
 		Debug.Log ("players added");
 
 		if (SceneManager.GetActiveScene ().name.Equals (Constants.STAGING_SCENE_NAME)) {
-			if ((numPlayers == 1 && SessionManager.Instance.currentRoom == Room.demoRoom) ||
-				numPlayers == 2) {
+//			if ((numPlayers == 1 && SessionManager.Instance.currentRoom == Room.demoRoom) ||
+			if(	numPlayers == 2) {
 				ServerChangeScene (Constants.MAIN_SCENE_NAME);
 			}
 		}

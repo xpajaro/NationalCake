@@ -30,7 +30,7 @@ public class GameSpawner : NetworkBehaviour {
 	public void DropItem (){
 		System.Random r = new System.Random();
 
-		int itemDifficulty = SessionManager.Instance.currentRoom.ID + 2;
+		int itemDifficulty = SessionManager.Instance.currentRoom.ID + 1;
 		int itemIndex = r.Next(0, itemDifficulty);
 
 		Vector2 newPos = GetRandomStagePosition ();
