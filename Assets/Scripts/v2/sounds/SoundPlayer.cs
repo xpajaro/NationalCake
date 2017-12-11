@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SoundPlayer : MonoBehaviour {
 
+	bool musicPausedForGhost;
+
 	public AudioClip ghostActivatedSound, 
 	playerDangerSound, playerRunningSound,
 	itemDropSound, powerUpSound, gasUpSound,
@@ -80,13 +82,17 @@ public class SoundPlayer : MonoBehaviour {
 	}
 
 	public void PlayGhost (){
+		musicPausedForGhost = SoundManager.Instance.musicMuted;
+
 		SoundManager.Instance.musicSource.Pause ();
 		SoundManager.Instance.PlaySingle (ghostActivatedSound, 1f);
 		Invoke ("ResumeMusic", GHOST_DURATION);
 	}
 
-	public void ResumeMusic	(){
-		SoundManager.Instance.musicSource.Play ();
+	void ResumeMusic	(){
+		if (musicPausedForGhost) {
+			SoundManager.Instance.musicSource.Play ();
+		}
 	}
 
 }

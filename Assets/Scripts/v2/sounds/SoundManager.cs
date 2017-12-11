@@ -5,7 +5,7 @@ public class SoundManager : MonoBehaviour
 {
 	public AudioSource efxSource, musicSource, waterAmbienceSource;  
 	public AudioClip invalidAction, clickSound;
-	public bool keepAlive;
+	public bool keepAlive, musicMuted;
 
 	bool fxMuted;
 
@@ -31,9 +31,11 @@ public class SoundManager : MonoBehaviour
 
 	public void ToggleMusic(bool musicOn){
 		if (musicOn) {
+			musicMuted = true;
 			musicSource.Play ();
 			waterAmbienceSource.Play ();
 		} else {
+			musicMuted = false;
 			musicSource.Pause ();
 			waterAmbienceSource.Pause ();
 		}

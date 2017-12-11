@@ -21,8 +21,7 @@ public class GameSpawner : NetworkBehaviour {
 		}
 	}
 
-	public override void OnStartServer()
-	{
+	public override void OnStartServer(){
 		InvokeRepeating ("DropItem", ITEM_SPAWN_INTERVAL, ITEM_SPAWN_INTERVAL);
 	}
 

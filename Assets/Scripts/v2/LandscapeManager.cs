@@ -18,13 +18,12 @@ public class LandscapeManager : MonoBehaviour {
 
 		switch (SessionManager.Instance.currentRoom.ID) {
 		case 0:
-		case 1:
 			newAnimator = lvl1Animator;
 			break;
-		case 2:
+		case 1:
 			newAnimator = lvl2Animator;
 			break;
-		case 3:
+		case 2:
 			newAnimator = lvl3Animator;
 			break;
 		default:
