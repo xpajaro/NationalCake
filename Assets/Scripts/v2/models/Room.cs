@@ -13,7 +13,7 @@ public class Room
 	public static Room intermediateRoom = new Room(1, "the wire", "funding small business enterprises", 5, 6);
 	public static Room proRoom = new Room(2, "power play", "ramping up commodity production", 10, 15);
 
-	private static Room[] rooms = {demoRoom, beginnerRoom, intermediateRoom, proRoom};
+	private static Room[] rooms = {beginnerRoom, intermediateRoom, proRoom};
 
 	public Room () { }
 
